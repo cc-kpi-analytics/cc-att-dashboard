@@ -52,10 +52,11 @@ function fmtPct(n) {
   return (n * 100).toFixed(1) + '%';
 }
 
+// Attendance % = 100% − (Non-discretionary shrinkage ÷ Sched hours). Higher is better.
 function pctBadgeClass(n) {
   if (n === null || n === undefined || isNaN(n)) return 'att-good';
-  if (n <= 0.05) return 'att-good';
-  if (n <= 0.15) return 'att-warn';
+  if (n >= 0.95) return 'att-good';
+  if (n >= 0.85) return 'att-warn';
   return 'att-bad';
 }
 
@@ -222,7 +223,7 @@ function aggregateOverview(filter) {
   }
   const out = Array.from(byAgent.values()).map(a => ({
     ...a,
-    pct: a.sched > 0 ? a.absence / a.sched : null,
+    pct: a.sched > 0 ? 1 - (a.absence / a.sched) : null,
   }));
   out.sort((a,b) => a.agent.localeCompare(b.agent));
   return out;
@@ -243,9 +244,9 @@ function aggregateWatchlist(filter) {
     a.absence += r.nonDisc;
   }
   const out = Array.from(byAgent.values())
-    .map(a => ({ ...a, pct: a.sched > 0 ? a.absence / a.sched : null }))
+    .map(a => ({ ...a, pct: a.sched > 0 ? 1 - (a.absence / a.sched) : null }))
     .filter(a => a.pct !== null);
-  out.sort((a,b) => b.pct - a.pct);
+  out.sort((a,b) => a.pct - b.pct); // lowest attendance % (worst) first
   return out.slice(0, 10);
 }
 
