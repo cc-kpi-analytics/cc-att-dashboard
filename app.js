@@ -250,6 +250,25 @@ function aggregateWatchlist(filter) {
   return out.slice(0, 10);
 }
 
+// Per-agent Attendance % for a given year/month window (no supervisor/program
+// filter) — used to annotate the Daily Log with each agent's period attendance.
+function attendancePctByAgent(year, month) {
+  const byAgent = new Map();
+  for (const r of STATE.records) {
+    if (year !== '' && r.year !== year) continue;
+    if (month !== '' && r.month !== month) continue;
+    let a = byAgent.get(r.agent);
+    if (!a) { a = { sched: 0, absence: 0 }; byAgent.set(r.agent, a); }
+    a.sched += r.schedAdj;
+    a.absence += r.nonDisc;
+  }
+  const out = new Map();
+  byAgent.forEach((a, agent) => {
+    out.set(agent, a.sched > 0 ? 1 - (a.absence / a.sched) : null);
+  });
+  return out;
+}
+
 function filterDailyLog(filter) {
   const q = filter.search.trim().toLowerCase();
   return STATE.dailyGroups.filter(g => {
@@ -335,16 +354,21 @@ function renderDailyLog() {
   }
   ensureTable('view-dailylog', 'dl-tbody');
 
+  const pctMap = attendancePctByAgent(STATE.dailylog.year, STATE.dailylog.month);
   const MAX_ROWS = 2000;
   const shown = rows.slice(0, MAX_ROWS);
 
-  tbody.innerHTML = shown.map(g => `
+  tbody.innerHTML = shown.map(g => {
+    const pct = pctMap.has(g.agent) ? pctMap.get(g.agent) : null;
+    return `
     <tr>
       <td class="mono">${fmtDate(g.date)}</td>
       <td class="name-cell">${esc(g.agent)}</td>
       <td class="status-cell">${statusCellHtml(g.status)}</td>
+      <td class="num"><span class="att-badge ${pctBadgeClass(pct)}">${fmtPct(pct)}</span></td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
 
   if (rows.length > MAX_ROWS) {
     document.getElementById('dl-count').textContent =

@@ -25,8 +25,9 @@ Groups records by agent (after Year/Month/Supervisor filters) and computes:
   `UPL`, `FMLA`, `PFML`, `Bereavement`, or `Alt Holiday` are treated as **0** per
   your instructions (these aren't real working schedule time).
 - **Absence hours** — sum of `Non-discretionary shrinkage`.
-- **Attendance %** — Absence hours ÷ Sched hours. Shown as `N/A` when Sched
-  hours is 0 for that agent/period (can't divide by zero).
+- **Attendance %** — 100% minus (Absence hours ÷ Sched hours). Higher is
+  better. Shown as `N/A` when Sched hours is 0 for that agent/period (can't
+  divide by zero).
 
 ### Section 2 — Daily Log
 For each agent + date, collects every exception-type row (`PTO`, `UPL`, `FMLA`,
@@ -40,18 +41,20 @@ If an agent has no exceptions that day but does have both Sched hours and Work
 hours, the status shows **Present**. Days with no data at all for an agent are
 simply not shown (they weren't scheduled).
 
+Each row also shows the agent's **Attendance %** for the selected Year/Month —
+the same figure as Section 1, so you can see a given day's status alongside
+that agent's overall attendance for the period. It's repeated on every row for
+that agent (not a per-day metric, since attendance % only makes sense over a
+period).
+
 The Employee Search box filters by a "contains" match as you type, and the
 dropdown suggestion list lets you jump straight to one agent.
 
 ### Section 3 — Watchlist
 Same aggregation as Section 1, filtered by Program instead of Supervisor, then
-sorted so the **highest** Absence÷Sched ratio (worst attendance) is first, and
-capped to the top 10. Agents with no Sched hours in the period (ratio undefined)
+sorted so the **lowest** Attendance % (worst attendance) is first, and capped
+to the top 10. Agents with no Sched hours in the period (percentage undefined)
 are excluded from ranking, since there's nothing to rank.
-
-> Note: the field is labeled "Attendance %" per your spec, but mechanically it's
-> a *shrinkage ratio* — higher = worse attendance. The Watchlist surfaces the
-> highest values first (worst attendance), per your confirmation.
 
 ### Data quirks handled
 - 2 agents (`Baguyo, Shane`, `Nee, Emily`) appear in `raw` but aren't in the
