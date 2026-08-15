@@ -178,11 +178,13 @@ function buildDailyGroups() {
     let g = map.get(key);
     if (!g) {
       g = { agent: r.agent, supervisor: r.supervisor, program: r.program, date: r.date, dkey: r.dkey, year: r.year, month: r.month,
-            events: [], workHoursSum: 0, schedRawSum: 0 };
+            events: [], workHoursSum: 0, schedRawSum: 0, schedAdjSum: 0, nonDiscSum: 0 };
       map.set(key, g);
     }
     g.workHoursSum += r.workHours;
     g.schedRawSum += r.schedRaw;
+    g.schedAdjSum += r.schedAdj;
+    g.nonDiscSum += r.nonDisc;
     if (EXCEPTION_TYPES.has(r.eventType)) {
       g.events.push({ type: r.eventType, hours: r.schedRaw });
     }
@@ -199,7 +201,11 @@ function buildDailyGroups() {
     } else {
       continue; // no work, no exception, no real shift info — skip
     }
-    groups.push({ agent: g.agent, supervisor: g.supervisor, program: g.program, date: g.date, dkey: g.dkey, year: g.year, month: g.month, status });
+    groups.push({
+      agent: g.agent, supervisor: g.supervisor, program: g.program,
+      date: g.date, dkey: g.dkey, year: g.year, month: g.month, status,
+      pct: g.schedAdjSum > 0 ? 1 - (g.nonDiscSum / g.schedAdjSum) : null,
+    });
   }
   groups.sort((a,b) => (a.date - b.date) || a.agent.localeCompare(b.agent));
   STATE.dailyGroups = groups;
@@ -250,24 +256,7 @@ function aggregateWatchlist(filter) {
   return out.slice(0, 10);
 }
 
-// Per-agent Attendance % for a given year/month window (no supervisor/program
-// filter) — used to annotate the Daily Log with each agent's period attendance.
-function attendancePctByAgent(year, month) {
-  const byAgent = new Map();
-  for (const r of STATE.records) {
-    if (year !== '' && r.year !== year) continue;
-    if (month !== '' && r.month !== month) continue;
-    let a = byAgent.get(r.agent);
-    if (!a) { a = { sched: 0, absence: 0 }; byAgent.set(r.agent, a); }
-    a.sched += r.schedAdj;
-    a.absence += r.nonDisc;
-  }
-  const out = new Map();
-  byAgent.forEach((a, agent) => {
-    out.set(agent, a.sched > 0 ? 1 - (a.absence / a.sched) : null);
-  });
-  return out;
-}
+// (per-date Attendance % is now computed directly in buildDailyGroups)
 
 function filterDailyLog(filter) {
   const q = filter.search.trim().toLowerCase();
@@ -355,12 +344,10 @@ function renderDailyLog() {
   }
   ensureTable('view-dailylog', 'dl-tbody');
 
-  const pctMap = attendancePctByAgent(STATE.dailylog.year, STATE.dailylog.month);
   const MAX_ROWS = 2000;
   const shown = rows.slice(0, MAX_ROWS);
 
   tbody.innerHTML = shown.map(g => {
-    const pct = pctMap.has(g.agent) ? pctMap.get(g.agent) : null;
     return `
     <tr>
       <td class="mono">${fmtDate(g.date)}</td>
@@ -368,7 +355,7 @@ function renderDailyLog() {
       <td>${esc(g.supervisor)}</td>
       <td>${esc(g.program)}</td>
       <td class="status-cell">${statusCellHtml(g.status)}</td>
-      <td class="num"><span class="att-badge ${pctBadgeClass(pct)}">${fmtPct(pct)}</span></td>
+      <td class="num"><span class="att-badge ${pctBadgeClass(g.pct)}">${fmtPct(g.pct)}</span></td>
     </tr>
   `;
   }).join('');
