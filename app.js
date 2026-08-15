@@ -177,7 +177,7 @@ function buildDailyGroups() {
     const key = r.agent + '||' + r.dkey;
     let g = map.get(key);
     if (!g) {
-      g = { agent: r.agent, date: r.date, dkey: r.dkey, year: r.year, month: r.month,
+      g = { agent: r.agent, supervisor: r.supervisor, program: r.program, date: r.date, dkey: r.dkey, year: r.year, month: r.month,
             events: [], workHoursSum: 0, schedRawSum: 0 };
       map.set(key, g);
     }
@@ -199,7 +199,7 @@ function buildDailyGroups() {
     } else {
       continue; // no work, no exception, no real shift info — skip
     }
-    groups.push({ agent: g.agent, date: g.date, dkey: g.dkey, year: g.year, month: g.month, status });
+    groups.push({ agent: g.agent, supervisor: g.supervisor, program: g.program, date: g.date, dkey: g.dkey, year: g.year, month: g.month, status });
   }
   groups.sort((a,b) => (a.date - b.date) || a.agent.localeCompare(b.agent));
   STATE.dailyGroups = groups;
@@ -324,6 +324,7 @@ function renderWatchlist() {
       <td class="rank-cell"><span class="rank-num">${i+1}</span></td>
       <td class="name-cell">${esc(a.agent)}</td>
       <td>${esc(a.supervisor)}</td>
+      <td>${esc(a.program)}</td>
       <td class="num hours">${fmtHours(a.sched)}</td>
       <td class="num hours">${fmtHours(a.absence)}</td>
       <td class="num"><span class="att-badge ${pctBadgeClass(a.pct)}">${fmtPct(a.pct)}</span></td>
@@ -364,6 +365,8 @@ function renderDailyLog() {
     <tr>
       <td class="mono">${fmtDate(g.date)}</td>
       <td class="name-cell">${esc(g.agent)}</td>
+      <td>${esc(g.supervisor)}</td>
+      <td>${esc(g.program)}</td>
       <td class="status-cell">${statusCellHtml(g.status)}</td>
       <td class="num"><span class="att-badge ${pctBadgeClass(pct)}">${fmtPct(pct)}</span></td>
     </tr>
