@@ -273,7 +273,6 @@ function filterDailyLog(filter) {
 function renderOverview() {
   const rows = aggregateOverview(STATE.overview);
   const tbody = document.getElementById('ov-tbody');
-  document.getElementById('ov-count').textContent = rows.length.toLocaleString() + (rows.length === 1 ? ' agent' : ' agents');
 
   if (rows.length === 0) {
     tbody.innerHTML = '';
@@ -298,7 +297,6 @@ function renderOverview() {
 function renderWatchlist() {
   const rows = aggregateWatchlist(STATE.watchlist);
   const tbody = document.getElementById('wl-tbody');
-  document.getElementById('wl-count').textContent = rows.length.toLocaleString() + (rows.length === 1 ? ' agent' : ' agents');
 
   if (rows.length === 0) {
     tbody.innerHTML = '';
@@ -334,7 +332,6 @@ function statusCellHtml(status) {
 function renderDailyLog() {
   const rows = filterDailyLog(STATE.dailylog);
   const tbody = document.getElementById('dl-tbody');
-  document.getElementById('dl-count').textContent = rows.length.toLocaleString() + (rows.length === 1 ? ' row' : ' rows');
 
   if (rows.length === 0) {
     tbody.innerHTML = '';
@@ -361,8 +358,11 @@ function renderDailyLog() {
   }).join('');
 
   if (rows.length > MAX_ROWS) {
-    document.getElementById('dl-count').textContent =
+    document.getElementById('dl-note').textContent =
       `Showing first ${MAX_ROWS.toLocaleString()} of ${rows.length.toLocaleString()} rows — narrow filters to see more`;
+  } else {
+    document.getElementById('dl-note').textContent =
+      "Attendance % is calculated per date (that day's absence hours ÷ that day's adjusted sched hours)";
   }
 }
 
