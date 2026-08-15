@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Attendance Ops Console</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spin"></div>
+  <div class="msg" id="loadingMsg">READING attendance_raw.xlsx …</div>
+</div>
+
+<div class="err-banner" id="errBanner"></div>
+
+<div class="app">
+
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <div>
+        <div class="brand-text">ATTENDANCE CONSOLE</div>
+        <div class="brand-sub">WORKFORCE OPS</div>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-view="overview"><span class="idx">01</span>Overview</button>
+      <button class="tab-btn" data-view="dailylog"><span class="idx">02</span>Daily Log</button>
+      <button class="tab-btn" data-view="watchlist"><span class="idx">03</span>Watchlist</button>
+    </nav>
+    <div class="header-status"><span class="dot"></span><span id="recordCount">—</span></div>
+  </header>
+
+  <!-- ===================== SECTION 1: OVERVIEW ===================== -->
+  <section class="view active" id="view-overview">
+    <div class="view-head">
+      <div class="view-title-wrap">
+        <span class="view-eyebrow">Section 01</span>
+        <span class="view-title">Attendance Overview</span>
+        <span class="view-desc">Scheduled vs. absence hours by agent, with non-discretionary shrinkage as a share of adjusted scheduled hours.</span>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="field">
+        <label for="ov-year">Year</label>
+        <select id="ov-year"></select>
+      </div>
+      <div class="field">
+        <label for="ov-month">Month</label>
+        <select id="ov-month"></select>
+      </div>
+      <div class="field">
+        <label for="ov-supervisor">Supervisor</label>
+        <select id="ov-supervisor"></select>
+      </div>
+      <button class="clear-btn" id="ov-clear">Reset filters</button>
+      <div class="filter-meta" id="ov-meta"></div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Agent Name</th>
+              <th>Supervisor</th>
+              <th>Program</th>
+              <th class="num">Sched Hours</th>
+              <th class="num">Absence Hours</th>
+              <th class="num">Attendance %</th>
+            </tr>
+          </thead>
+          <tbody id="ov-tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <span id="ov-count">0 agents</span>
+        <span>Attendance % = non‑discretionary shrinkage ÷ adjusted sched hours</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SECTION 2: DAILY LOG ===================== -->
+  <section class="view" id="view-dailylog">
+    <div class="view-head">
+      <div class="view-title-wrap">
+        <span class="view-eyebrow">Section 02</span>
+        <span class="view-title">Daily Log</span>
+        <span class="view-desc">Day-by-day status per agent — exceptions with hours, or Present when scheduled and worked with no exceptions.</span>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="field">
+        <label for="dl-year">Year</label>
+        <select id="dl-year"></select>
+      </div>
+      <div class="field">
+        <label for="dl-month">Month</label>
+        <select id="dl-month"></select>
+      </div>
+      <div class="field search-wrap">
+        <label for="dl-search">Employee search</label>
+        <input type="text" id="dl-search" placeholder="Start typing a name…" autocomplete="off" />
+        <div class="search-suggest" id="dl-suggest"></div>
+      </div>
+      <button class="clear-btn" id="dl-clear">Reset filters</button>
+      <div class="filter-meta" id="dl-meta"></div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:110px;">Date</th>
+              <th>Agent Name</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="dl-tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <span id="dl-count">0 rows</span>
+        <span>Search an agent to see their day-by-day record</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SECTION 3: WATCHLIST ===================== -->
+  <section class="view" id="view-watchlist">
+    <div class="view-head">
+      <div class="view-title-wrap">
+        <span class="view-eyebrow">Section 03</span>
+        <span class="view-title">Watchlist — 10 Lowest Attendance</span>
+        <span class="view-desc">Agents with the highest non‑discretionary shrinkage relative to scheduled hours — the 10 most in need of attention.</span>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="field">
+        <label for="wl-year">Year</label>
+        <select id="wl-year"></select>
+      </div>
+      <div class="field">
+        <label for="wl-month">Month</label>
+        <select id="wl-month"></select>
+      </div>
+      <div class="field">
+        <label for="wl-program">Program</label>
+        <select id="wl-program"></select>
+      </div>
+      <button class="clear-btn" id="wl-clear">Reset filters</button>
+      <div class="filter-meta" id="wl-meta"></div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:36px;">#</th>
+              <th>Agent Name</th>
+              <th>Supervisor</th>
+              <th class="num">Sched Hours</th>
+              <th class="num">Absence Hours</th>
+              <th class="num">Attendance %</th>
+            </tr>
+          </thead>
+          <tbody id="wl-tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <span id="wl-count">0 agents</span>
+        <span>Ranked by attendance % — highest shrinkage ratio first</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
