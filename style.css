@@ -323,6 +323,20 @@ table {
   font-size: 12.5px;
 }
 
+/* Watchlist: keep the rank column tight against Agent Name; let the
+   remaining columns (Supervisor, Program, Sched, Absence, Attendance %)
+   share the leftover width evenly. */
+#view-watchlist th:first-child,
+#view-watchlist td:first-child {
+  width: 44px;
+  padding-right: 6px;
+}
+
+#view-watchlist th:nth-child(2),
+#view-watchlist td:nth-child(2) {
+  padding-left: 6px;
+}
+
 thead th {
   position: sticky;
   top: 0;
