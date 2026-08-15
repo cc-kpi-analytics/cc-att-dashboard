@@ -338,6 +338,7 @@ body {
 
 table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 12.5px;
 }
@@ -354,7 +355,8 @@ thead th {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 10px 14px;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: break-word;
   z-index: 5;
 }
 
@@ -364,7 +366,8 @@ tbody td {
   padding: 9px 14px;
   border-bottom: 1px solid var(--line-soft);
   color: var(--text);
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 tbody tr:hover td { background: #faf9f5; }
@@ -379,7 +382,6 @@ td.num, td.hours { font-family: 'IBM Plex Mono', monospace; font-variant-numeric
   font-family: 'IBM Plex Mono', monospace;
   color: var(--text-faint);
   font-size: 11px;
-  width: 30px;
 }
 
 /* status pills */
