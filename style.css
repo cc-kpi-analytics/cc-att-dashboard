@@ -124,12 +124,6 @@ body {
   transition: color 0.15s ease;
 }
 
-.tab-btn .idx {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: rgba(255,255,255,0.3);
-}
-
 .tab-btn:hover { color: rgba(255,255,255,0.85); }
 
 .tab-btn.active { color: #fff; }
@@ -184,25 +178,11 @@ body {
 
 .view-title-wrap { display: flex; flex-direction: column; gap: 3px; }
 
-.view-eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  color: var(--text-faint);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .view-title {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
   font-size: 20px;
   color: var(--ink);
-}
-
-.view-desc {
-  font-size: 12.5px;
-  color: var(--text-dim);
-  max-width: 480px;
 }
 
 /* ---------- Filter bar ---------- */
