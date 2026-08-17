@@ -287,8 +287,6 @@ function renderOverview() {
       <td class="name-cell">${esc(a.agent)}</td>
       <td>${esc(a.supervisor)}</td>
       <td>${esc(a.program)}</td>
-      <td class="num hours">${fmtHours(a.sched)}</td>
-      <td class="num hours">${fmtHours(a.absence)}</td>
       <td class="num"><span class="att-badge ${pctBadgeClass(a.pct)}">${fmtPct(a.pct)}</span></td>
     </tr>
   `).join('');
@@ -312,8 +310,6 @@ function renderWatchlist() {
       <td class="name-cell">${esc(a.agent)}</td>
       <td>${esc(a.supervisor)}</td>
       <td>${esc(a.program)}</td>
-      <td class="num hours">${fmtHours(a.sched)}</td>
-      <td class="num hours">${fmtHours(a.absence)}</td>
       <td class="num"><span class="att-badge ${pctBadgeClass(a.pct)}">${fmtPct(a.pct)}</span></td>
     </tr>
   `).join('');

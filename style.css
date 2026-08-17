@@ -381,7 +381,7 @@ tbody tr:hover td { background: #faf9f5; }
 
 tbody tr:last-child td { border-bottom: none; }
 
-td.num, td.hours { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+td.num { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
 
 .name-cell { font-weight: 600; color: var(--ink); }
 
