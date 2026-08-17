@@ -37,6 +37,7 @@ let STATE = {
   overview: { year: '', month: '', supervisor: '' },
   dailylog: { year: '', month: '', search: '' },
   watchlist: { year: '', month: '', program: '' },
+  showHours: false,
 };
 
 /* ---------------- helpers ---------------- */
@@ -287,6 +288,7 @@ function renderOverview() {
       <td class="name-cell">${esc(a.agent)}</td>
       <td>${esc(a.supervisor)}</td>
       <td>${esc(a.program)}</td>
+      ${STATE.showHours ? `<td class="num">${fmtHours(a.sched)}</td><td class="num">${fmtHours(a.absence)}</td>` : ''}
       <td class="num"><span class="att-badge ${pctBadgeClass(a.pct)}">${fmtPct(a.pct)}</span></td>
     </tr>
   `).join('');
@@ -310,6 +312,7 @@ function renderWatchlist() {
       <td class="name-cell">${esc(a.agent)}</td>
       <td>${esc(a.supervisor)}</td>
       <td>${esc(a.program)}</td>
+      ${STATE.showHours ? `<td class="num">${fmtHours(a.sched)}</td><td class="num">${fmtHours(a.absence)}</td>` : ''}
       <td class="num"><span class="att-badge ${pctBadgeClass(a.pct)}">${fmtPct(a.pct)}</span></td>
     </tr>
   `).join('');
@@ -545,6 +548,60 @@ function updateMeta(prefix) {
 
 /* ---------------- tabs ---------------- */
 
+/* ---------------- secret hours toggle ----------------
+   Type "hours" anywhere on the page (outside a text field) to show/hide
+   the Sched Hours and Absence Hours columns in Overview and Watchlist.
+   No visible button/menu on purpose — type it again to hide. */
+
+function updateHoursHeaders() {
+  const rows = [document.getElementById('ov-head-row'), document.getElementById('wl-head-row')];
+  rows.forEach(row => {
+    if (!row) return;
+    row.querySelectorAll('.hours-th').forEach(el => el.remove());
+    if (STATE.showHours) {
+      const anchor = row.querySelector('.attendance-th');
+      const schedTh = document.createElement('th');
+      schedTh.className = 'num hours-th';
+      schedTh.textContent = 'Sched Hours';
+      const absTh = document.createElement('th');
+      absTh.className = 'num hours-th';
+      absTh.textContent = 'Absence Hours';
+      anchor.parentNode.insertBefore(schedTh, anchor);
+      anchor.parentNode.insertBefore(absTh, anchor);
+    }
+  });
+}
+
+function showToast(msg) {
+  const el = document.getElementById('secretToast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => el.classList.remove('show'), 1400);
+}
+
+function toggleHoursColumns() {
+  STATE.showHours = !STATE.showHours;
+  updateHoursHeaders();
+  renderOverview();
+  renderWatchlist();
+  showToast(STATE.showHours ? 'Hours columns: shown' : 'Hours columns: hidden');
+}
+
+function setupSecretToggle() {
+  let buffer = '';
+  document.addEventListener('keydown', (e) => {
+    const t = e.target;
+    const isTyping = t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA');
+    if (isTyping || e.key.length !== 1) return;
+    buffer = (buffer + e.key).slice(-10).toLowerCase();
+    if (buffer.endsWith('hours')) {
+      toggleHoursColumns();
+      buffer = '';
+    }
+  });
+}
+
 function setupTabs() {
   const btns = document.querySelectorAll('.tab-btn');
   btns.forEach(btn => {
@@ -566,6 +623,7 @@ async function boot() {
       STATE.records.length.toLocaleString() + ' rows · ' + STATE.agentNames.length + ' agents';
 
     setupTabs();
+    setupSecretToggle();
     setupOverviewFilters();
     setupDailyLogFilters();
     setupWatchlistFilters();

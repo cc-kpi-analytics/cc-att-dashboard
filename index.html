@@ -14,6 +14,7 @@
 </div>
 
 <div class="err-banner" id="errBanner"></div>
+<div class="toast" id="secretToast"></div>
 
 <div class="app">
 
@@ -62,11 +63,11 @@
       <div class="table-scroll">
         <table>
           <thead>
-            <tr>
+            <tr id="ov-head-row">
               <th>Agent Name</th>
               <th>Supervisor</th>
               <th>Program</th>
-              <th class="num">Attendance %</th>
+              <th class="num attendance-th">Attendance %</th>
             </tr>
           </thead>
           <tbody id="ov-tbody"></tbody>
@@ -157,12 +158,12 @@
       <div class="table-scroll">
         <table>
           <thead>
-            <tr>
+            <tr id="wl-head-row">
               <th>#</th>
               <th>Agent Name</th>
               <th>Supervisor</th>
               <th>Program</th>
-              <th class="num">Attendance %</th>
+              <th class="num attendance-th">Attendance %</th>
             </tr>
           </thead>
           <tbody id="wl-tbody"></tbody>
