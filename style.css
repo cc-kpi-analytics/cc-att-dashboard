@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --ink: #161b33;
-  --ink-soft: #232a4d;
+  --ink: #1e2a47;
+  --ink-soft: #2a3b61;
   --paper: #f2f3f6;
   --card: #ffffff;
   --line: #e2e4ea;
@@ -10,8 +10,8 @@
   --text: #1d2233;
   --text-dim: #6b7280;
   --text-faint: #9aa0ae;
-  --accent: #e0a72e;
-  --accent-ink: #7a5711;
+  --accent: #14b8a6;
+  --accent-ink: #0f6b60;
   --good: #2f9e63;
   --good-bg: #e7f6ee;
   --warn: #dd9a1f;
@@ -79,7 +79,7 @@ body {
   height: 9px;
   border-radius: 2px;
   background: var(--accent);
-  box-shadow: 0 0 0 3px rgba(224,167,46,0.18);
+  box-shadow: 0 0 0 3px rgba(20,184,166,0.18);
   flex: none;
 }
 
@@ -233,7 +233,7 @@ body {
 .field select:focus, .field input[type="text"]:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(224,167,46,0.15);
+  box-shadow: 0 0 0 3px rgba(20,184,166,0.15);
 }
 
 .field input[type="text"] { min-width: 220px; cursor: text; background-image: none; padding-right: 10px; }
