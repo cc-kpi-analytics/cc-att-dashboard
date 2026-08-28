@@ -5,12 +5,14 @@
 const MONTH_NAMES = ['January','February','March','April','May','June',
                       'July','August','September','October','November','December'];
 
-// Event types whose "Sched hours" value should NOT count toward an agent's
-// scheduled hours total (they are breaks / full-day absence line items).
+// Event types whose duration should NOT count toward an agent's scheduled
+// hours total (they are breaks / full-day absence line items).
 const EXCLUDE_FROM_SCHED = new Set(['Lunch','PTO','UPL','FMLA','PFML','Bereavement','Alt Holiday']);
 
-// Event types treated as attendance exceptions in the Daily Log.
+// Event types treated as attendance exceptions in the Daily Log, and whose
+// duration counts as "non-discretionary shrinkage" (the Absence hours figure).
 const EXCEPTION_TYPES = new Set(['PTO','UPL','FMLA','PFML','Late','Left Early','UTO','Bereavement','Alt Holiday','NCNS']);
+const NON_DISCRETIONARY_TYPES = new Set(['Late', 'Left Early', 'UTO', 'NCNS']);
 
 // Pill styling per exception type.
 const PILL_CLASS = {
@@ -26,18 +28,43 @@ const PILL_CLASS = {
   'Alt Holiday': 'violet',
 };
 
+function isWorkLikeType(type) {
+  return type.startsWith('Work -') || type === 'Meeting' || type === 'Training' || type === 'Admin';
+}
+
+/* ---------------- weekly data source config ---------------- */
+
+const DATA_DIR = './data/';
+
+// How far back/forward to look for weekly files when auto-discovering what's
+// available. Widen these if you have older history or need to see further
+// into the future — see README.
+const DISCOVERY_YEARS_BACK = 2;
+const DISCOVERY_DAYS_FORWARD = 120;
+const DISCOVERY_CONCURRENCY = 16;
+
 let STATE = {
-  records: [],          // one entry per raw row, enriched
-  dailyGroups: [],       // one entry per agent+date
-  years: [],
-  monthsByYear: new Map(),
+  supMap: new Map(),
+  progMap: new Map(),
+  agentNames: [],
   supervisors: [],
   programs: [],
-  agentNames: [],
+
+  availableWeeks: [],     // [{ sunday, saturday, filename, key }], sorted ascending
+  weekPromises: new Map(),// key -> Promise<enriched records[]>, doubles as a cache
+
+  records: [],            // flattened enriched interval records from every fetched week
+  dailyGroups: [],        // one entry per agent+date, rebuilt whenever records grow
+
+  years: [],
+  monthsByYear: new Map(),
+
   overview: { year: '', month: '', supervisor: '' },
   dailylog: { year: '', month: '', search: '' },
   watchlist: { year: '', month: '', program: '' },
   showHours: false,
+
+  renderGen: { overview: 0, watchlist: 0, dailylog: 0 },
 };
 
 /* ---------------- helpers ---------------- */
@@ -84,27 +111,28 @@ function setLoading(msg) {
   document.getElementById('loadingMsg').textContent = msg;
 }
 
-/* ---------------- data loading ---------------- */
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s === null || s === undefined ? '' : String(s);
+  return d.innerHTML;
+}
 
-async function loadWorkbook() {
+/* ---------------- roster (supervisor / program mapping) ---------------- */
+
+async function loadRoster() {
   setLoading('READING attendance_raw.xlsx …');
   const resp = await fetch('./attendance_raw.xlsx');
   if (!resp.ok) throw new Error('Could not fetch attendance_raw.xlsx (HTTP ' + resp.status + '). Make sure the file sits in the same folder as index.html.');
   const buf = await resp.arrayBuffer();
 
-  setLoading('PARSING workbook …');
+  setLoading('PARSING roster …');
   const wb = XLSX.read(buf, { type: 'array', cellDates: true });
-
-  const need = ['raw', 'supervisor', 'program'];
-  for (const s of need) {
+  for (const s of ['supervisor', 'program']) {
     if (!wb.SheetNames.includes(s)) throw new Error('Workbook is missing the required "' + s + '" sheet.');
   }
-
-  const rawRows = XLSX.utils.sheet_to_json(wb.Sheets['raw'], { defval: null });
   const supRows = XLSX.utils.sheet_to_json(wb.Sheets['supervisor'], { defval: null });
   const progRows = XLSX.utils.sheet_to_json(wb.Sheets['program'], { defval: null });
 
-  setLoading('BUILDING agent / program index …');
   const supMap = new Map();
   supRows.forEach(r => {
     const name = r['Name'];
@@ -119,58 +147,163 @@ async function loadWorkbook() {
     if (sup) progMap.set(String(sup).trim(), prog !== null && prog !== undefined ? String(prog).trim() : 'Unassigned');
   });
 
-  setLoading('PROCESSING ' + rawRows.length.toLocaleString() + ' rows …');
-  const records = [];
-  const yearSet = new Set();
-  const monthsByYear = new Map();
-  const supSet = new Set();
-  const progSet = new Set();
-  const agentSet = new Set();
+  STATE.supMap = supMap;
+  STATE.progMap = progMap;
+  STATE.agentNames = Array.from(new Set(supRows.map(r => r['Name']).filter(Boolean).map(n => String(n).trim()))).sort();
+  STATE.supervisors = Array.from(new Set(supRows.map(r => { const s = r['Supervisor']; return s ? String(s).trim() : 'Unassigned'; }))).sort();
+  STATE.programs = Array.from(new Set(progRows.map(r => { const p = r['Program']; return p !== null && p !== undefined ? String(p).trim() : 'Unassigned'; }))).sort();
+}
 
-  for (const row of rawRows) {
-    const agent = row['Agent Name'] ? String(row['Agent Name']).trim() : null;
-    if (!agent) continue;
-    const dateVal = row['Date'];
-    if (!dateVal || !(dateVal instanceof Date) || isNaN(dateVal.getTime())) continue;
+/* ---------------- weekly file discovery ---------------- */
 
-    const eventType = row['Event type'] ? String(row['Event type']).trim() : '';
-    const schedRaw = Number(row['Sched hours']) || 0;
-    const workHours = Number(row['Work hours']) || 0;
-    const nonDisc = Number(row['Non-discretionary shrinkage']) || 0;
+function weekFilenameFor(sunday) {
+  const yyyy = sunday.getFullYear();
+  const mm = String(sunday.getMonth() + 1).padStart(2, '0');
+  const dd = String(sunday.getDate()).padStart(2, '0');
+  return `WB_${yyyy}_${mm}_${dd}.mhtml`;
+}
 
-    const supervisor = supMap.get(agent) || 'Unassigned';
-    const program = progMap.get(supervisor) || 'Unassigned';
-    const schedAdj = EXCLUDE_FROM_SCHED.has(eventType) ? 0 : schedRaw;
+function computeCandidateSundays() {
+  const start = new Date(new Date().getFullYear() - DISCOVERY_YEARS_BACK, 0, 1);
+  while (start.getDay() !== 0) start.setDate(start.getDate() + 1); // roll to first Sunday
+  const end = new Date();
+  end.setDate(end.getDate() + DISCOVERY_DAYS_FORWARD);
 
-    const year = dateVal.getFullYear();
-    const month = dateVal.getMonth() + 1;
+  const list = [];
+  const cur = new Date(start);
+  while (cur <= end) {
+    list.push(new Date(cur));
+    cur.setDate(cur.getDate() + 7);
+  }
+  return list;
+}
 
-    records.push({
-      agent, supervisor, program, eventType,
-      schedRaw, schedAdj, workHours, nonDisc,
-      date: dateVal, year, month, dkey: dateKey(dateVal),
-    });
+async function headExists(url) {
+  try {
+    const resp = await fetch(url, { method: 'HEAD', cache: 'no-store' });
+    return resp.ok;
+  } catch (e) {
+    return false;
+  }
+}
 
-    yearSet.add(year);
-    if (!monthsByYear.has(year)) monthsByYear.set(year, new Set());
-    monthsByYear.get(year).add(month);
-    supSet.add(supervisor);
-    progSet.add(program);
-    agentSet.add(agent);
+async function discoverAvailableWeeks(progressCb) {
+  const candidates = computeCandidateSundays();
+  const found = [];
+  let idx = 0;
+  let checked = 0;
+
+  async function worker() {
+    while (idx < candidates.length) {
+      const my = idx++;
+      const sunday = candidates[my];
+      const filename = weekFilenameFor(sunday);
+      const ok = await headExists(DATA_DIR + filename);
+      checked++;
+      if (progressCb) progressCb(checked, candidates.length);
+      if (ok) {
+        const saturday = new Date(sunday);
+        saturday.setDate(saturday.getDate() + 6);
+        found.push({ sunday, saturday, filename, key: dateKey(sunday) });
+      }
+    }
   }
 
-  STATE.records = records;
-  STATE.years = Array.from(yearSet).sort((a,b)=>a-b);
-  STATE.monthsByYear = monthsByYear;
-  STATE.supervisors = Array.from(supSet).sort();
-  STATE.programs = Array.from(progSet).sort();
-  STATE.agentNames = Array.from(agentSet).sort();
+  const workers = [];
+  for (let i = 0; i < DISCOVERY_CONCURRENCY; i++) workers.push(worker());
+  await Promise.all(workers);
 
-  setLoading('GROUPING daily records …');
-  buildDailyGroups();
-
-  setLoading(null);
+  found.sort((a, b) => a.sunday - b.sunday);
+  return found;
 }
+
+function computeYearMonthIndex(weeks) {
+  const yearSet = new Set();
+  const monthsByYear = new Map();
+  weeks.forEach(w => {
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(w.sunday);
+      d.setDate(d.getDate() + i);
+      const y = d.getFullYear(), m = d.getMonth() + 1;
+      yearSet.add(y);
+      if (!monthsByYear.has(y)) monthsByYear.set(y, new Set());
+      monthsByYear.get(y).add(m);
+    }
+  });
+  return { years: Array.from(yearSet).sort((a, b) => a - b), monthsByYear };
+}
+
+function weeksOverlapping(year, month) {
+  if (year === '') return STATE.availableWeeks.slice();
+  let rangeStart, rangeEnd;
+  if (month === '') {
+    rangeStart = new Date(year, 0, 1);
+    rangeEnd = new Date(year, 11, 31);
+  } else {
+    rangeStart = new Date(year, month - 1, 1);
+    rangeEnd = new Date(year, month, 0); // last day of that month
+  }
+  return STATE.availableWeeks.filter(w => w.saturday >= rangeStart && w.sunday <= rangeEnd);
+}
+
+/* ---------------- weekly file fetch + parse + cache ---------------- */
+
+function fetchAndParseWeek(weekMeta) {
+  if (STATE.weekPromises.has(weekMeta.key)) return STATE.weekPromises.get(weekMeta.key);
+
+  const p = (async () => {
+    const resp = await fetch(DATA_DIR + weekMeta.filename);
+    if (!resp.ok) throw new Error('Failed to fetch ' + weekMeta.filename + ' (HTTP ' + resp.status + ').');
+    const text = await resp.text();
+    const intervals = parseWeeklyMhtml(text); // from mhtml-parser.js
+
+    const enriched = [];
+    for (const iv of intervals) {
+      const agent = iv.agent;
+      const supervisor = STATE.supMap.get(agent) || 'Unassigned';
+      const program = STATE.progMap.get(supervisor) || 'Unassigned';
+      const schedAdj = EXCLUDE_FROM_SCHED.has(iv.type) ? 0 : iv.duration;
+      const nonDisc = NON_DISCRETIONARY_TYPES.has(iv.type) ? iv.duration : 0;
+      const workHours = isWorkLikeType(iv.type) ? iv.duration : 0;
+      const year = iv.date.getFullYear();
+      const month = iv.date.getMonth() + 1;
+
+      enriched.push({
+        agent, supervisor, program, eventType: iv.type,
+        schedRaw: iv.duration, schedAdj, workHours, nonDisc,
+        date: iv.date, year, month, dkey: dateKey(iv.date),
+      });
+    }
+
+    STATE.records = STATE.records.concat(enriched);
+    buildDailyGroups();
+    return enriched;
+  })();
+
+  STATE.weekPromises.set(weekMeta.key, p);
+  return p;
+}
+
+/** Fetches any not-yet-loaded weeks in weekMetas, showing progress inside the given view's table. */
+async function ensureWeeksLoadedForView(viewId, weekMetas) {
+  const toFetch = weekMetas.filter(w => !STATE.weekPromises.has(w.key));
+  if (toFetch.length > 0) {
+    const label = toFetch.length === 1 ? '1 new week' : toFetch.length + ' new weeks';
+    setTableMessage(viewId, `Loading ${label} of data…`, `0 / ${toFetch.length} fetched`, viewId + '-loadprog');
+  }
+  let done = 0;
+  await Promise.all(weekMetas.map(async w => {
+    const wasCached = STATE.weekPromises.has(w.key);
+    await fetchAndParseWeek(w);
+    if (!wasCached) {
+      done++;
+      const el = document.getElementById(viewId + '-loadprog');
+      if (el) el.textContent = `${done} / ${toFetch.length} fetched`;
+    }
+  }));
+}
+
+/* ---------------- daily grouping ---------------- */
 
 function buildDailyGroups() {
   const map = new Map();
@@ -179,7 +312,7 @@ function buildDailyGroups() {
     let g = map.get(key);
     if (!g) {
       g = { agent: r.agent, supervisor: r.supervisor, program: r.program, date: r.date, dkey: r.dkey, year: r.year, month: r.month,
-            events: [], workHoursSum: 0, schedRawSum: 0, schedAdjSum: 0, nonDiscSum: 0 };
+            eventHours: new Map(), workHoursSum: 0, schedRawSum: 0, schedAdjSum: 0, nonDiscSum: 0 };
       map.set(key, g);
     }
     g.workHoursSum += r.workHours;
@@ -187,14 +320,18 @@ function buildDailyGroups() {
     g.schedAdjSum += r.schedAdj;
     g.nonDiscSum += r.nonDisc;
     if (EXCEPTION_TYPES.has(r.eventType)) {
-      g.events.push({ type: r.eventType, hours: r.schedRaw });
+      // Merge same-type exceptions split across multiple intervals the same day
+      // (e.g. FMLA taken in a morning block and an afternoon block) into one total.
+      g.eventHours.set(r.eventType, (g.eventHours.get(r.eventType) || 0) + r.schedRaw);
     }
   }
 
   const groups = [];
   for (const g of map.values()) {
     let status;
-    const realEvents = g.events.filter(e => e.hours > 0); // drop zero-hour placeholder rows (e.g. a 0-hr PTO stub alongside a real Late entry)
+    const realEvents = Array.from(g.eventHours.entries())
+      .map(([type, hours]) => ({ type, hours }))
+      .filter(e => e.hours > 0); // drop zero-hour placeholder rows
     if (realEvents.length > 0) {
       status = realEvents;
     } else if (g.workHoursSum > 0 && g.schedRawSum > 0) {
@@ -208,7 +345,7 @@ function buildDailyGroups() {
       pct: g.schedAdjSum > 0 ? 1 - (g.nonDiscSum / g.schedAdjSum) : null,
     });
   }
-  groups.sort((a,b) => (a.date - b.date) || a.agent.localeCompare(b.agent));
+  groups.sort((a, b) => (a.date - b.date) || a.agent.localeCompare(b.agent));
   STATE.dailyGroups = groups;
 }
 
@@ -232,7 +369,7 @@ function aggregateOverview(filter) {
     ...a,
     pct: a.sched > 0 ? 1 - (a.absence / a.sched) : null,
   }));
-  out.sort((a,b) => a.agent.localeCompare(b.agent));
+  out.sort((a, b) => a.agent.localeCompare(b.agent));
   return out;
 }
 
@@ -253,11 +390,9 @@ function aggregateWatchlist(filter) {
   const out = Array.from(byAgent.values())
     .map(a => ({ ...a, pct: a.sched > 0 ? 1 - (a.absence / a.sched) : null }))
     .filter(a => a.pct !== null);
-  out.sort((a,b) => a.pct - b.pct); // lowest attendance % (worst) first
+  out.sort((a, b) => a.pct - b.pct); // lowest attendance % (worst) first
   return out.slice(0, 10);
 }
-
-// (per-date Attendance % is now computed directly in buildDailyGroups)
 
 function filterDailyLog(filter) {
   const q = filter.search.trim().toLowerCase();
@@ -271,18 +406,50 @@ function filterDailyLog(filter) {
 
 /* ---------------- rendering ---------------- */
 
-function renderOverview() {
-  const rows = aggregateOverview(STATE.overview);
-  const tbody = document.getElementById('ov-tbody');
+function colCountFor(section) {
+  if (section === 'overview') return STATE.showHours ? 6 : 4;
+  if (section === 'watchlist') return STATE.showHours ? 7 : 5;
+  return 6; // daily log
+}
 
-  if (rows.length === 0) {
-    tbody.innerHTML = '';
-    document.querySelector('#view-overview .table-scroll').innerHTML =
-      '<div class="empty-state"><div class="big">No records match these filters</div><div class="small">Try a different year, month, or supervisor.</div></div>';
+/** Replaces a table's <tbody> with a single spanning message row (loading/empty states). */
+function setTableMessage(viewId, bigText, smallText, smallId) {
+  const section = viewId === 'view-overview' ? 'overview' : viewId === 'view-watchlist' ? 'watchlist' : 'dailylog';
+  const tbodyId = viewId === 'view-overview' ? 'ov-tbody' : viewId === 'view-watchlist' ? 'wl-tbody' : 'dl-tbody';
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  const colspan = colCountFor(section);
+  tbody.innerHTML = `<tr><td colspan="${colspan}"><div class="empty-state"><div class="big">${esc(bigText)}</div>` +
+    (smallText ? `<div class="small"${smallId ? ` id="${esc(smallId)}"` : ''}>${esc(smallText)}</div>` : '') +
+    `</div></td></tr>`;
+}
+
+async function renderOverview() {
+  const myGen = ++STATE.renderGen.overview;
+  const filter = STATE.overview;
+  const needed = weeksOverlapping(filter.year, filter.month);
+
+  if (needed.length === 0) {
+    setTableMessage('view-overview', 'No data available for this period', 'No weekly files were found for this year/month.');
     return;
   }
-  ensureTable('view-overview', 'ov-tbody');
 
+  try {
+    await ensureWeeksLoadedForView('view-overview', needed);
+  } catch (err) {
+    if (myGen !== STATE.renderGen.overview) return;
+    setTableMessage('view-overview', 'Could not load data for this period', err.message || 'Try again in a moment.');
+    return;
+  }
+  if (myGen !== STATE.renderGen.overview) return; // a newer filter change superseded this render
+
+  const rows = aggregateOverview(filter);
+  if (rows.length === 0) {
+    setTableMessage('view-overview', 'No records match these filters', 'Try a different year, month, or supervisor.');
+    return;
+  }
+
+  const tbody = document.getElementById('ov-tbody');
   tbody.innerHTML = rows.map(a => `
     <tr>
       <td class="name-cell">${esc(a.agent)}</td>
@@ -294,18 +461,32 @@ function renderOverview() {
   `).join('');
 }
 
-function renderWatchlist() {
-  const rows = aggregateWatchlist(STATE.watchlist);
-  const tbody = document.getElementById('wl-tbody');
+async function renderWatchlist() {
+  const myGen = ++STATE.renderGen.watchlist;
+  const filter = STATE.watchlist;
+  const needed = weeksOverlapping(filter.year, filter.month);
 
-  if (rows.length === 0) {
-    tbody.innerHTML = '';
-    document.querySelector('#view-watchlist .table-scroll').innerHTML =
-      '<div class="empty-state"><div class="big">No ranked agents for these filters</div><div class="small">Try a different year, month, or program.</div></div>';
+  if (needed.length === 0) {
+    setTableMessage('view-watchlist', 'No data available for this period', 'No weekly files were found for this year/month.');
     return;
   }
-  ensureTable('view-watchlist', 'wl-tbody');
 
+  try {
+    await ensureWeeksLoadedForView('view-watchlist', needed);
+  } catch (err) {
+    if (myGen !== STATE.renderGen.watchlist) return;
+    setTableMessage('view-watchlist', 'Could not load data for this period', err.message || 'Try again in a moment.');
+    return;
+  }
+  if (myGen !== STATE.renderGen.watchlist) return;
+
+  const rows = aggregateWatchlist(filter);
+  if (rows.length === 0) {
+    setTableMessage('view-watchlist', 'No ranked agents for these filters', 'Try a different year, month, or program.');
+    return;
+  }
+
+  const tbody = document.getElementById('wl-tbody');
   tbody.innerHTML = rows.map((a, i) => `
     <tr>
       <td class="rank-cell"><span class="rank-num">${i+1}</span></td>
@@ -328,23 +509,35 @@ function statusCellHtml(status) {
   }).join(' ');
 }
 
-function renderDailyLog() {
-  const rows = filterDailyLog(STATE.dailylog);
-  const tbody = document.getElementById('dl-tbody');
+async function renderDailyLog() {
+  const myGen = ++STATE.renderGen.dailylog;
+  const filter = STATE.dailylog;
+  const needed = weeksOverlapping(filter.year, filter.month);
 
-  if (rows.length === 0) {
-    tbody.innerHTML = '';
-    document.querySelector('#view-dailylog .table-scroll').innerHTML =
-      '<div class="empty-state"><div class="big">No daily records match these filters</div><div class="small">Try a different year, month, or search term.</div></div>';
+  if (needed.length === 0) {
+    setTableMessage('view-dailylog', 'No data available for this period', 'No weekly files were found for this year/month.');
     return;
   }
-  ensureTable('view-dailylog', 'dl-tbody');
+
+  try {
+    await ensureWeeksLoadedForView('view-dailylog', needed);
+  } catch (err) {
+    if (myGen !== STATE.renderGen.dailylog) return;
+    setTableMessage('view-dailylog', 'Could not load data for this period', err.message || 'Try again in a moment.');
+    return;
+  }
+  if (myGen !== STATE.renderGen.dailylog) return;
+
+  const rows = filterDailyLog(filter);
+  if (rows.length === 0) {
+    setTableMessage('view-dailylog', 'No daily records match these filters', 'Try a different year, month, or search term.');
+    return;
+  }
 
   const MAX_ROWS = 2000;
   const shown = rows.slice(0, MAX_ROWS);
-
-  tbody.innerHTML = shown.map(g => {
-    return `
+  const tbody = document.getElementById('dl-tbody');
+  tbody.innerHTML = shown.map(g => `
     <tr>
       <td class="mono">${fmtDate(g.date)}</td>
       <td class="name-cell">${esc(g.agent)}</td>
@@ -353,8 +546,7 @@ function renderDailyLog() {
       <td class="status-cell">${statusCellHtml(g.status)}</td>
       <td class="num"><span class="att-badge ${pctBadgeClass(g.pct)}">${fmtPct(g.pct)}</span></td>
     </tr>
-  `;
-  }).join('');
+  `).join('');
 
   if (rows.length > MAX_ROWS) {
     document.getElementById('dl-note').textContent =
@@ -363,20 +555,6 @@ function renderDailyLog() {
     document.getElementById('dl-note').textContent =
       "Attendance % is calculated per date (that day's absence hours ÷ that day's adjusted sched hours)";
   }
-}
-
-function ensureTable(viewId, tbodyId) {
-  // Re-inject the table markup if an empty-state replaced it.
-  const scroll = document.querySelector('#' + viewId + ' .table-scroll');
-  if (!document.getElementById(tbodyId)) {
-    location.reload(); // safety net, shouldn't normally trigger
-  }
-}
-
-function esc(s) {
-  const d = document.createElement('div');
-  d.textContent = s === null || s === undefined ? '' : String(s);
-  return d.innerHTML;
 }
 
 /* ---------------- filter UI wiring ---------------- */
@@ -388,12 +566,13 @@ function opt(value, label) {
   return o;
 }
 
-function populateYearMonth(prefix, onChange) {
+function populateYearMonth(prefix, currentFilter, onChange) {
   const yearSel = document.getElementById(prefix + '-year');
   const monthSel = document.getElementById(prefix + '-month');
 
   yearSel.appendChild(opt('', 'All years'));
   STATE.years.forEach(y => yearSel.appendChild(opt(y, y)));
+  yearSel.value = currentFilter.year === '' ? '' : String(currentFilter.year);
 
   function refreshMonths() {
     const yVal = yearSel.value;
@@ -410,13 +589,14 @@ function populateYearMonth(prefix, onChange) {
     monthNums.sort((a,b)=>a-b).forEach(m => monthSel.appendChild(opt(m, MONTH_NAMES[m-1])));
   }
   refreshMonths();
+  monthSel.value = currentFilter.month === '' ? '' : String(currentFilter.month);
 
   yearSel.addEventListener('change', () => { refreshMonths(); onChange(); });
   monthSel.addEventListener('change', onChange);
 }
 
 function setupOverviewFilters() {
-  populateYearMonth('ov', () => {
+  populateYearMonth('ov', STATE.overview, () => {
     STATE.overview.year = document.getElementById('ov-year').value === '' ? '' : Number(document.getElementById('ov-year').value);
     STATE.overview.month = document.getElementById('ov-month').value === '' ? '' : Number(document.getElementById('ov-month').value);
     renderOverview();
@@ -436,7 +616,7 @@ function setupOverviewFilters() {
     document.getElementById('ov-year').value = '';
     document.getElementById('ov-year').dispatchEvent(new Event('change'));
     supSel.value = '';
-    STATE.overview = { year: '', month: '', supervisor: '' };
+    STATE.overview.supervisor = '';
     renderOverview();
     updateMeta('ov');
   });
@@ -445,7 +625,7 @@ function setupOverviewFilters() {
 }
 
 function setupWatchlistFilters() {
-  populateYearMonth('wl', () => {
+  populateYearMonth('wl', STATE.watchlist, () => {
     STATE.watchlist.year = document.getElementById('wl-year').value === '' ? '' : Number(document.getElementById('wl-year').value);
     STATE.watchlist.month = document.getElementById('wl-month').value === '' ? '' : Number(document.getElementById('wl-month').value);
     renderWatchlist();
@@ -465,7 +645,7 @@ function setupWatchlistFilters() {
     document.getElementById('wl-year').value = '';
     document.getElementById('wl-year').dispatchEvent(new Event('change'));
     progSel.value = '';
-    STATE.watchlist = { year: '', month: '', program: '' };
+    STATE.watchlist.program = '';
     renderWatchlist();
     updateMeta('wl');
   });
@@ -474,7 +654,7 @@ function setupWatchlistFilters() {
 }
 
 function setupDailyLogFilters() {
-  populateYearMonth('dl', () => {
+  populateYearMonth('dl', STATE.dailylog, () => {
     STATE.dailylog.year = document.getElementById('dl-year').value === '' ? '' : Number(document.getElementById('dl-year').value);
     STATE.dailylog.month = document.getElementById('dl-month').value === '' ? '' : Number(document.getElementById('dl-month').value);
     renderDailyLog();
@@ -483,9 +663,8 @@ function setupDailyLogFilters() {
 
   const searchInput = document.getElementById('dl-search');
   const suggestBox = document.getElementById('dl-suggest');
-  let hiIndex = -1;
 
-  function closeSuggest() { suggestBox.classList.remove('open'); suggestBox.innerHTML = ''; hiIndex = -1; }
+  function closeSuggest() { suggestBox.classList.remove('open'); suggestBox.innerHTML = ''; }
 
   function openSuggest(matches) {
     if (matches.length === 0) {
@@ -524,7 +703,7 @@ function setupDailyLogFilters() {
     document.getElementById('dl-year').value = '';
     document.getElementById('dl-year').dispatchEvent(new Event('change'));
     searchInput.value = '';
-    STATE.dailylog = { year: '', month: '', search: '' };
+    STATE.dailylog.search = '';
     closeSuggest();
     renderDailyLog();
     updateMeta('dl');
@@ -545,8 +724,6 @@ function updateMeta(prefix) {
   if (prefix === 'dl' && s.search) parts.push('"' + s.search + '"');
   el.textContent = parts.length ? parts.join(' · ') : 'All records';
 }
-
-/* ---------------- tabs ---------------- */
 
 /* ---------------- secret hours toggle ----------------
    Type "hours" anywhere on the page (outside a text field) to show/hide
@@ -602,6 +779,8 @@ function setupSecretToggle() {
   });
 }
 
+/* ---------------- tabs ---------------- */
+
 function setupTabs() {
   const btns = document.querySelectorAll('.tab-btn');
   btns.forEach(btn => {
@@ -618,15 +797,41 @@ function setupTabs() {
 
 async function boot() {
   try {
-    await loadWorkbook();
+    await loadRoster();
+
+    setLoading('DISCOVERING weekly files …');
+    STATE.availableWeeks = await discoverAvailableWeeks((checked, total) => {
+      setLoading(`DISCOVERING weekly files … (${checked}/${total})`);
+    });
+
+    if (STATE.availableWeeks.length === 0) {
+      throw new Error('No weekly data files were found in ./data/. Upload at least one WB_YYYY_MM_DD.mhtml file to get started.');
+    }
+
+    const idx = computeYearMonthIndex(STATE.availableWeeks);
+    STATE.years = idx.years;
+    STATE.monthsByYear = idx.monthsByYear;
+
+    // Default every section to the most recently available week's period,
+    // rather than "All", so first paint only has to fetch 1-2 weeks.
+    const latest = STATE.availableWeeks[STATE.availableWeeks.length - 1];
+    const defaultYear = latest.sunday.getFullYear();
+    const defaultMonth = latest.sunday.getMonth() + 1;
+    STATE.overview.year = defaultYear; STATE.overview.month = defaultMonth;
+    STATE.watchlist.year = defaultYear; STATE.watchlist.month = defaultMonth;
+    STATE.dailylog.year = defaultYear; STATE.dailylog.month = defaultMonth;
+
     document.getElementById('recordCount').textContent =
-      STATE.records.length.toLocaleString() + ' rows · ' + STATE.agentNames.length + ' agents';
+      STATE.availableWeeks.length.toLocaleString() + (STATE.availableWeeks.length === 1 ? ' week' : ' weeks') +
+      ' available · ' + STATE.agentNames.length.toLocaleString() + ' agents';
 
     setupTabs();
     setupSecretToggle();
     setupOverviewFilters();
     setupDailyLogFilters();
     setupWatchlistFilters();
+
+    setLoading(null);
 
     renderOverview();
     renderDailyLog();
