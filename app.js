@@ -16,9 +16,11 @@ const EXCLUDE_FROM_SCHED = new Set([
 ]);
 
 // Event types treated as attendance/absence statuses in the Daily Log.
+// Note: 'Admin' here means the plain "Admin" type only — "Work - Admin" is
+// real work and is never treated as a status.
 const EXCEPTION_TYPES = new Set([
   'PTO', 'UPL', 'FMLA', 'PFML', 'Late', 'Left Early', 'UTO', 'Bereavement',
-  'Alt Holiday', 'NCNS', 'Traumatic Leave', 'Jury Duty',
+  'Alt Holiday', 'NCNS', 'Traumatic Leave', 'Jury Duty', 'Admin',
 ]);
 
 // "Unapproved shrink" — the numerator of Attendance %.
@@ -35,6 +37,7 @@ const PILL_CLASS = {
   'FMLA': 'info',
   'PFML': 'info',
   'Jury Duty': 'info',
+  'Admin': 'info',
   'Bereavement': 'violet',
   'Alt Holiday': 'violet',
   'Traumatic Leave': 'violet',
