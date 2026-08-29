@@ -6,15 +6,25 @@ const MONTH_NAMES = ['January','February','March','April','May','June',
                       'July','August','September','October','November','December'];
 
 // Event types whose duration should NOT count toward an agent's scheduled
-// hours total (they are breaks / full-day absence line items).
-const EXCLUDE_FROM_SCHED = new Set(['Lunch','PTO','UPL','FMLA','PFML','Bereavement','Alt Holiday']);
+// hours total — these are unscheduled/non-working time (approved leave
+// types, unpaid personal time, admin time, and lunch).
+// NOTE: 'Admin' here is the plain "Admin" type, distinct from "Work - Admin"
+// (which IS real work and counts toward Sched hours as normal).
+const EXCLUDE_FROM_SCHED = new Set([
+  'Lunch', 'PTO', 'UPL', 'FMLA', 'PFML', 'Bereavement', 'Alt Holiday',
+  'Jury Duty', 'Admin', 'Traumatic Leave',
+]);
 
-// Event types treated as attendance exceptions in the Daily Log, and whose
-// duration counts as "non-discretionary shrinkage" (the Absence hours figure).
-const EXCEPTION_TYPES = new Set(['PTO','UPL','FMLA','PFML','Late','Left Early','UTO','Bereavement','Alt Holiday','NCNS']);
+// Event types treated as attendance/absence statuses in the Daily Log.
+const EXCEPTION_TYPES = new Set([
+  'PTO', 'UPL', 'FMLA', 'PFML', 'Late', 'Left Early', 'UTO', 'Bereavement',
+  'Alt Holiday', 'NCNS', 'Traumatic Leave', 'Jury Duty',
+]);
+
+// "Unapproved shrink" — the numerator of Attendance %.
 const NON_DISCRETIONARY_TYPES = new Set(['Late', 'Left Early', 'UTO', 'NCNS']);
 
-// Pill styling per exception type.
+// Pill styling per absence status.
 const PILL_CLASS = {
   'Late': 'warn',
   'Left Early': 'warn',
@@ -24,13 +34,11 @@ const PILL_CLASS = {
   'UPL': 'info',
   'FMLA': 'info',
   'PFML': 'info',
+  'Jury Duty': 'info',
   'Bereavement': 'violet',
   'Alt Holiday': 'violet',
+  'Traumatic Leave': 'violet',
 };
-
-function isWorkLikeType(type) {
-  return type.startsWith('Work -') || type === 'Meeting' || type === 'Training' || type === 'Admin';
-}
 
 /* ---------------- weekly data source config ---------------- */
 
@@ -264,13 +272,12 @@ function fetchAndParseWeek(weekMeta) {
       const program = STATE.progMap.get(supervisor) || 'Unassigned';
       const schedAdj = EXCLUDE_FROM_SCHED.has(iv.type) ? 0 : iv.duration;
       const nonDisc = NON_DISCRETIONARY_TYPES.has(iv.type) ? iv.duration : 0;
-      const workHours = isWorkLikeType(iv.type) ? iv.duration : 0;
       const year = iv.date.getFullYear();
       const month = iv.date.getMonth() + 1;
 
       enriched.push({
         agent, supervisor, program, eventType: iv.type,
-        schedRaw: iv.duration, schedAdj, workHours, nonDisc,
+        schedRaw: iv.duration, schedAdj, nonDisc,
         date: iv.date, year, month, dkey: dateKey(iv.date),
       });
     }
@@ -312,11 +319,9 @@ function buildDailyGroups() {
     let g = map.get(key);
     if (!g) {
       g = { agent: r.agent, supervisor: r.supervisor, program: r.program, date: r.date, dkey: r.dkey, year: r.year, month: r.month,
-            eventHours: new Map(), workHoursSum: 0, schedRawSum: 0, schedAdjSum: 0, nonDiscSum: 0 };
+            eventHours: new Map(), schedAdjSum: 0, nonDiscSum: 0 };
       map.set(key, g);
     }
-    g.workHoursSum += r.workHours;
-    g.schedRawSum += r.schedRaw;
     g.schedAdjSum += r.schedAdj;
     g.nonDiscSum += r.nonDisc;
     if (EXCEPTION_TYPES.has(r.eventType)) {
@@ -334,10 +339,10 @@ function buildDailyGroups() {
       .filter(e => e.hours > 0); // drop zero-hour placeholder rows
     if (realEvents.length > 0) {
       status = realEvents;
-    } else if (g.workHoursSum > 0 && g.schedRawSum > 0) {
+    } else if (g.schedAdjSum > 0) {
       status = 'present';
     } else {
-      continue; // no work, no exception, no real shift info — skip
+      continue; // no absence status and no scheduled hours — nothing to report that day
     }
     groups.push({
       agent: g.agent, supervisor: g.supervisor, program: g.program,
@@ -506,7 +511,7 @@ function statusCellHtml(status) {
   return status.map(e => {
     const cls = PILL_CLASS[e.type] || 'info';
     return `<span class="pill ${cls}">${esc(e.type)} (${fmtHours(e.hours)} hrs)</span>`;
-  }).join(' ');
+  }).join(', ');
 }
 
 async function renderDailyLog() {
