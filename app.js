@@ -832,6 +832,212 @@ function setupSecretToggle() {
   });
 }
 
+/* ---------------- secret screenshot (Konami code) ----------------
+   ↑ ↑ ↓ ↓ ← → ← → B A anywhere outside a text field captures whichever
+   table is currently on screen — respecting its current filters — as a
+   clean, compact PNG. It's copied straight to the clipboard so it can be
+   pasted directly into an email; if the browser won't allow that, it
+   downloads instead. No visible button or hint anywhere in the UI. */
+
+const KONAMI_SEQUENCE = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+const SCREENSHOT_MAX_ROWS = 300;
+
+function buildFilterTitle(label, filter) {
+  const parts = [];
+  if (filter.year !== undefined && filter.year !== '') parts.push(String(filter.year));
+  if (filter.month !== undefined && filter.month !== '') parts.push(MONTH_NAMES[filter.month - 1]);
+  if (filter.supervisor) parts.push(filter.supervisor);
+  if (filter.program) parts.push(filter.program);
+  if (filter.search) parts.push('"' + filter.search + '"');
+  return label + (parts.length ? ' — ' + parts.join(' · ') : ' — All records');
+}
+
+/** Pulls together whichever table is currently visible, using the data already loaded (no new fetch). */
+function getVisibleTableData() {
+  const activeBtn = document.querySelector('.tab-btn.active');
+  const view = activeBtn ? activeBtn.dataset.view : 'overview';
+
+  if (view === 'overview') {
+    const filter = STATE.overview;
+    const rows = aggregateOverview(filter);
+    const columns = ['Agent Name', 'Supervisor', 'Program'];
+    if (STATE.showHours) columns.push('Sched Hours', 'Absence Hours');
+    columns.push('Attendance %');
+    const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(a => {
+      const r = [a.agent, a.supervisor, a.program];
+      if (STATE.showHours) r.push(fmtHours(a.sched), fmtHours(a.absence));
+      r.push(fmtPct(a.pct));
+      return r;
+    });
+    return { title: buildFilterTitle('Overview', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'overview' };
+  }
+
+  if (view === 'watchlist') {
+    const filter = STATE.watchlist;
+    const rows = aggregateWatchlist(filter);
+    const columns = ['#', 'Agent Name', 'Supervisor', 'Program'];
+    if (STATE.showHours) columns.push('Sched Hours', 'Absence Hours');
+    columns.push('Attendance %');
+    const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map((a, i) => {
+      const r = [String(i + 1), a.agent, a.supervisor, a.program];
+      if (STATE.showHours) r.push(fmtHours(a.sched), fmtHours(a.absence));
+      r.push(fmtPct(a.pct));
+      return r;
+    });
+    return { title: buildFilterTitle('Watchlist', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'watchlist' };
+  }
+
+  // Daily Log
+  const filter = STATE.dailylog;
+  const rows = filterDailyLog(filter);
+  const columns = ['Date', 'Agent Name', 'Supervisor', 'Program', 'Status', 'Attendance %'];
+  const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(g => [
+    fmtDate(g.date), g.agent, g.supervisor, g.program,
+    g.status === 'present' ? 'Present' : g.status.map(e => `${e.type} (${fmtHours(e.hours)} hrs)`).join(', '),
+    fmtPct(g.pct),
+  ]);
+  return { title: buildFilterTitle('Daily Log', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'daily-log' };
+}
+
+/** Draws a plain, print/email-friendly table (no dark theme, no colored pills) onto a canvas. */
+function renderCompactTableToCanvas(data) {
+  const PADDING = 16;
+  const ROW_H = 26;
+  const HEADER_H = 30;
+  const TITLE_H = 26;
+  const NOTE_H = data.totalRows > data.rows.length ? 18 : 0;
+  const CELL_PAD = 10;
+  const FONT = '12px Arial, sans-serif';
+  const HEADER_FONT = 'bold 12px Arial, sans-serif';
+  const TITLE_FONT = 'bold 14px Arial, sans-serif';
+  const NOTE_FONT = '11px Arial, sans-serif';
+
+  const scratch = document.createElement('canvas').getContext('2d');
+  const colWidths = data.columns.map((col, i) => {
+    scratch.font = HEADER_FONT;
+    let max = scratch.measureText(col).width;
+    scratch.font = FONT;
+    for (const row of data.rows) {
+      const w = scratch.measureText(String(row[i] ?? '')).width;
+      if (w > max) max = w;
+    }
+    return Math.ceil(max) + CELL_PAD * 2;
+  });
+
+  const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+  const width = tableWidth + PADDING * 2;
+  const height = TITLE_H + NOTE_H + HEADER_H + data.rows.length * ROW_H + PADDING * 2;
+
+  const scale = 2; // render at 2x for a crisp paste
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.max(1, Math.ceil(width * scale));
+  canvas.height = Math.max(1, Math.ceil(height * scale));
+  const ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+  ctx.textBaseline = 'middle';
+
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.fillStyle = '#1e2a47';
+  ctx.font = TITLE_FONT;
+  ctx.fillText(data.title, PADDING, PADDING + TITLE_H / 2);
+
+  let y = PADDING + TITLE_H;
+
+  if (NOTE_H) {
+    ctx.fillStyle = '#9aa0ae';
+    ctx.font = NOTE_FONT;
+    ctx.fillText(`Showing first ${data.rows.length} of ${data.totalRows} rows`, PADDING, y + NOTE_H / 2);
+    y += NOTE_H;
+  }
+
+  const tableTop = y;
+  ctx.fillStyle = '#eef0f4';
+  ctx.fillRect(PADDING, y, tableWidth, HEADER_H);
+  ctx.fillStyle = '#1e2a47';
+  ctx.font = HEADER_FONT;
+  let x = PADDING;
+  data.columns.forEach((col, i) => {
+    ctx.fillText(col, x + CELL_PAD, y + HEADER_H / 2);
+    x += colWidths[i];
+  });
+  y += HEADER_H;
+
+  ctx.font = FONT;
+  data.rows.forEach((row, rIdx) => {
+    if (rIdx % 2 === 1) {
+      ctx.fillStyle = '#f7f8fa';
+      ctx.fillRect(PADDING, y, tableWidth, ROW_H);
+    }
+    ctx.fillStyle = '#1d2233';
+    let cx = PADDING;
+    row.forEach((cell, i) => {
+      ctx.fillText(String(cell ?? ''), cx + CELL_PAD, y + ROW_H / 2);
+      cx += colWidths[i];
+    });
+    y += ROW_H;
+  });
+
+  ctx.strokeStyle = '#d8dae0';
+  ctx.lineWidth = 1;
+  const tableHeight = HEADER_H + data.rows.length * ROW_H;
+  ctx.strokeRect(PADDING + 0.5, tableTop + 0.5, tableWidth - 1, tableHeight - 1);
+  let ly = tableTop + HEADER_H;
+  for (let i = 0; i < data.rows.length; i++) {
+    ctx.beginPath();
+    ctx.moveTo(PADDING, ly + 0.5);
+    ctx.lineTo(PADDING + tableWidth, ly + 0.5);
+    ctx.stroke();
+    ly += ROW_H;
+  }
+
+  return canvas;
+}
+
+async function captureVisibleTableScreenshot() {
+  const data = getVisibleTableData();
+  if (!data || data.rows.length === 0) {
+    showToast('Nothing to capture');
+    return;
+  }
+  const canvas = renderCompactTableToCanvas(data);
+  canvas.toBlob(async (blob) => {
+    if (!blob) { showToast('Screenshot failed'); return; }
+    try {
+      if (!navigator.clipboard || !window.ClipboardItem) throw new Error('Clipboard image API unavailable');
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+      showToast('Screenshot copied — paste it into your email');
+    } catch (err) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${data.filename}-${dateKey(new Date())}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      showToast('Screenshot downloaded');
+    }
+  }, 'image/png');
+}
+
+function setupKonamiScreenshot() {
+  let buffer = [];
+  document.addEventListener('keydown', (e) => {
+    const t = e.target;
+    const isTyping = t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA');
+    if (isTyping) return;
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    buffer.push(key);
+    if (buffer.length > KONAMI_SEQUENCE.length) buffer.shift();
+    if (buffer.length === KONAMI_SEQUENCE.length && buffer.every((k, i) => k === KONAMI_SEQUENCE[i])) {
+      buffer = [];
+      captureVisibleTableScreenshot();
+    }
+  });
+}
+
 /* ---------------- tabs ---------------- */
 
 function setupTabs() {
@@ -880,6 +1086,7 @@ async function boot() {
 
     setupTabs();
     setupSecretToggle();
+    setupKonamiScreenshot();
     setupOverviewFilters();
     setupDailyLogFilters();
     setupWatchlistFilters();
