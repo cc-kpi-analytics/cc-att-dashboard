@@ -425,6 +425,7 @@ td.num { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-
 .att-good { background: var(--good-bg); color: var(--good); }
 .att-warn { background: var(--warn-bg); color: var(--warn); }
 .att-bad { background: var(--bad-bg); color: var(--bad); }
+.att-neutral { background: var(--line-soft); color: var(--text-faint); }
 
 .empty-state {
   flex: 1 1 auto;

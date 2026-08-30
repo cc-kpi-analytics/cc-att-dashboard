@@ -87,13 +87,13 @@ function fmtHours(n) {
 }
 
 function fmtPct(n) {
-  if (n === null || n === undefined || isNaN(n)) return 'N/A';
+  if (n === null || n === undefined || isNaN(n)) return '—';
   return (n * 100).toFixed(1) + '%';
 }
 
 // Attendance % = 100% − (Non-discretionary shrinkage ÷ Sched hours). Higher is better.
 function pctBadgeClass(n) {
-  if (n === null || n === undefined || isNaN(n)) return 'att-good';
+  if (n === null || n === undefined || isNaN(n)) return 'att-neutral';
   if (n >= 0.95) return 'att-good';
   if (n >= 0.85) return 'att-warn';
   return 'att-bad';
