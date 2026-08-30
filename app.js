@@ -907,7 +907,7 @@ function getVisibleTableData() {
 
 /** Draws a plain, print/email-friendly table (no dark theme, no colored pills) onto a canvas. */
 function renderCompactTableToCanvas(data) {
-  const DESCALE = 0.8; // ~20% smaller overall than the original layout
+  const DESCALE = 0.64; // 0.8 × 0.8 — two successive 20% reductions from the original layout
   const PADDING = 16 * DESCALE;
   const ROW_H = 26 * DESCALE;
   const HEADER_H = 30 * DESCALE;
