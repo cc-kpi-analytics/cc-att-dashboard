@@ -67,20 +67,17 @@ body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 20px 14px 0;
+  gap: 11px;
+  padding: 16px 20px 16px 0;
   margin-right: 12px;
   border-right: 1px solid rgba(255,255,255,0.12);
   white-space: nowrap;
 }
 
 .brand-mark {
-  width: 9px;
-  height: 9px;
-  border-radius: 2px;
-  background: var(--accent);
-  box-shadow: 0 0 0 3px rgba(20,184,166,0.18);
+  display: flex;
   flex: none;
+  filter: drop-shadow(0 0 6px rgba(20,184,166,0.35));
 }
 
 .brand-text {
@@ -121,12 +118,19 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: color 0.15s ease;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
-.tab-btn:hover { color: rgba(255,255,255,0.85); }
+.tab-icon { flex: none; opacity: 0.85; }
 
-.tab-btn.active { color: #fff; }
+.tab-btn:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.04); }
+
+.tab-btn.active {
+  color: #fff;
+  background: rgba(255,255,255,0.055);
+}
+
+.tab-btn.active .tab-icon { opacity: 1; }
 
 .tab-btn.active::after {
   content: '';
@@ -142,17 +146,34 @@ body {
 .header-status {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.6);
   white-space: nowrap;
   padding-left: 16px;
 }
 
-.header-status .dot {
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 999px;
+  padding: 4px 11px;
+}
+
+.status-pill .dot {
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--good);
+  box-shadow: 0 0 0 3px rgba(47,158,99,0.22);
+}
+
+.status-divider {
+  width: 1px;
+  height: 12px;
+  background: rgba(255,255,255,0.14);
 }
 
 /* ---------- Main content ---------- */

@@ -20,18 +20,46 @@
 
   <header class="app-header">
     <div class="brand">
-      <span class="brand-mark"></span>
+      <span class="brand-mark">
+        <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true">
+          <rect x="0.5" y="0.5" width="15" height="15" rx="4" fill="var(--accent)"/>
+          <path d="M4.3 8.4l2.4 2.4 4.6-5.1" stroke="var(--ink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </span>
       <div>
         <div class="brand-text">ATTENDANCE CONSOLE</div>
         <div class="brand-sub">WORKFORCE OPS</div>
       </div>
     </div>
     <nav class="tabs">
-      <button class="tab-btn active" data-view="overview">Overview</button>
-      <button class="tab-btn" data-view="dailylog">Daily Log</button>
-      <button class="tab-btn" data-view="watchlist">Watchlist</button>
+      <button class="tab-btn active" data-view="overview">
+        <svg class="tab-icon" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <rect x="1.5" y="1.5" width="5" height="5" rx="1"/><rect x="9.5" y="1.5" width="5" height="5" rx="1"/>
+          <rect x="1.5" y="9.5" width="5" height="5" rx="1"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/>
+        </svg>
+        Overview
+      </button>
+      <button class="tab-btn" data-view="dailylog">
+        <svg class="tab-icon" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <rect x="1.5" y="3" width="13" height="11" rx="1.5"/><path d="M1.5 6.5h13"/><path d="M4.5 1.5v3M11.5 1.5v3"/>
+        </svg>
+        Daily Log
+      </button>
+      <button class="tab-btn" data-view="watchlist">
+        <svg class="tab-icon" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/>
+        </svg>
+        Watchlist
+      </button>
     </nav>
-    <div class="header-status"><span class="dot"></span><span id="recordCount">—</span></div>
+    <div class="header-status">
+      <span class="status-pill">
+        <span class="dot"></span>
+        <span id="weeksCount">—</span>
+      </span>
+      <span class="status-divider"></span>
+      <span id="agentsCount">—</span>
+    </div>
   </header>
 
   <!-- ===================== SECTION 1: OVERVIEW ===================== -->

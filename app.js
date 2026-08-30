@@ -1081,9 +1081,10 @@ async function boot() {
     STATE.watchlist.year = defaultYear; STATE.watchlist.month = defaultMonth;
     STATE.dailylog.year = defaultYear; STATE.dailylog.month = defaultMonth;
 
-    document.getElementById('recordCount').textContent =
-      STATE.availableWeeks.length.toLocaleString() + (STATE.availableWeeks.length === 1 ? ' week' : ' weeks') +
-      ' available · ' + STATE.agentNames.length.toLocaleString() + ' agents';
+    document.getElementById('weeksCount').textContent =
+      STATE.availableWeeks.length.toLocaleString() + (STATE.availableWeeks.length === 1 ? ' week available' : ' weeks available');
+    document.getElementById('agentsCount').textContent =
+      STATE.agentNames.length.toLocaleString() + ' agents';
 
     setupTabs();
     setupSecretToggle();
