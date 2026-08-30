@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --ink: #1e2a47;
-  --ink-soft: #2a3b61;
+  --ink: #171529;
+  --ink-soft: #211f3d;
   --paper: #f2f3f6;
   --card: #ffffff;
   --line: #e2e4ea;
@@ -10,8 +10,8 @@
   --text: #1d2233;
   --text-dim: #6b7280;
   --text-faint: #9aa0ae;
-  --accent: #14b8a6;
-  --accent-ink: #0f6b60;
+  --accent: #38bdf8;
+  --accent-ink: #0c4a6e;
   --good: #2f9e63;
   --good-bg: #e7f6ee;
   --warn: #dd9a1f;
@@ -61,7 +61,7 @@ body {
   display: flex;
   align-items: stretch;
   padding: 0 20px;
-  border-bottom: 3px solid var(--accent);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .brand {
@@ -77,7 +77,7 @@ body {
 .brand-mark {
   display: flex;
   flex: none;
-  filter: drop-shadow(0 0 6px rgba(20,184,166,0.35));
+  filter: drop-shadow(0 0 6px rgba(56,189,248,0.35));
 }
 
 .brand-text {
@@ -97,51 +97,50 @@ body {
 
 .tabs {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: 2px;
   flex: 1 1 auto;
   overflow-x: auto;
+  margin: 12px 0;
+  padding: 3px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 10px;
 }
 
 .tab-btn {
   appearance: none;
   border: none;
   background: transparent;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,0.6);
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
-  font-size: 13.5px;
+  font-size: 13px;
   letter-spacing: 0.01em;
-  padding: 0 18px;
+  padding: 8px 16px;
+  border-radius: 7px;
   cursor: pointer;
   position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
-.tab-icon { flex: none; opacity: 0.85; }
+.tab-icon { flex: none; opacity: 0.75; }
 
-.tab-btn:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.04); }
+.tab-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
 
 .tab-btn.active {
-  color: #fff;
-  background: rgba(255,255,255,0.055);
+  color: var(--ink);
+  background: var(--accent);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
+
+.tab-btn.active:hover { background: var(--accent); }
 
 .tab-btn.active .tab-icon { opacity: 1; }
-
-.tab-btn.active::after {
-  content: '';
-  position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 0;
-  height: 3px;
-  background: var(--accent);
-  border-radius: 2px 2px 0 0;
-}
 
 .header-status {
   display: flex;
@@ -254,7 +253,7 @@ body {
 .field select:focus, .field input[type="text"]:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(20,184,166,0.15);
+  box-shadow: 0 0 0 3px rgba(56,189,248,0.15);
 }
 
 .field input[type="text"] { min-width: 220px; cursor: text; background-image: none; padding-right: 10px; }
