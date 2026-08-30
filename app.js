@@ -779,7 +779,7 @@ function updateMeta(prefix) {
 }
 
 /* ---------------- secret hours toggle ----------------
-   Type "hours" anywhere on the page (outside a text field) to show/hide
+   Type "gwapo" anywhere on the page (outside a text field) to show/hide
    the Sched Hours and Absence Hours columns in Overview and Watchlist.
    No visible button/menu on purpose — type it again to hide. */
 
@@ -825,7 +825,7 @@ function setupSecretToggle() {
     const isTyping = t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA');
     if (isTyping || e.key.length !== 1) return;
     buffer = (buffer + e.key).slice(-10).toLowerCase();
-    if (buffer.endsWith('hours')) {
+    if (buffer.endsWith('gwapo')) {
       toggleHoursColumns();
       buffer = '';
     }
