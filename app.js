@@ -907,16 +907,15 @@ function getVisibleTableData() {
 
 /** Draws a plain, print/email-friendly table (no dark theme, no colored pills) onto a canvas. */
 function renderCompactTableToCanvas(data) {
-  const PADDING = 16;
-  const ROW_H = 26;
-  const HEADER_H = 30;
-  const TITLE_H = 26;
-  const NOTE_H = data.totalRows > data.rows.length ? 18 : 0;
-  const CELL_PAD = 10;
-  const FONT = '12px Arial, sans-serif';
-  const HEADER_FONT = 'bold 12px Arial, sans-serif';
-  const TITLE_FONT = 'bold 14px Arial, sans-serif';
-  const NOTE_FONT = '11px Arial, sans-serif';
+  const DESCALE = 0.8; // ~20% smaller overall than the original layout
+  const PADDING = 16 * DESCALE;
+  const ROW_H = 26 * DESCALE;
+  const HEADER_H = 30 * DESCALE;
+  const NOTE_H = data.totalRows > data.rows.length ? 18 * DESCALE : 0;
+  const CELL_PAD = 10 * DESCALE;
+  const FONT = `${(12 * DESCALE).toFixed(1)}px Arial, sans-serif`;
+  const HEADER_FONT = `bold ${(12 * DESCALE).toFixed(1)}px Arial, sans-serif`;
+  const NOTE_FONT = `${(11 * DESCALE).toFixed(1)}px Arial, sans-serif`;
 
   const scratch = document.createElement('canvas').getContext('2d');
   const colWidths = data.columns.map((col, i) => {
@@ -932,7 +931,7 @@ function renderCompactTableToCanvas(data) {
 
   const tableWidth = colWidths.reduce((a, b) => a + b, 0);
   const width = tableWidth + PADDING * 2;
-  const height = TITLE_H + NOTE_H + HEADER_H + data.rows.length * ROW_H + PADDING * 2;
+  const height = NOTE_H + HEADER_H + data.rows.length * ROW_H + PADDING * 2;
 
   const scale = 2; // render at 2x for a crisp paste
   const canvas = document.createElement('canvas');
@@ -945,11 +944,7 @@ function renderCompactTableToCanvas(data) {
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, width, height);
 
-  ctx.fillStyle = '#1e2a47';
-  ctx.font = TITLE_FONT;
-  ctx.fillText(data.title, PADDING, PADDING + TITLE_H / 2);
-
-  let y = PADDING + TITLE_H;
+  let y = PADDING;
 
   if (NOTE_H) {
     ctx.fillStyle = '#9aa0ae';
