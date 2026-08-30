@@ -778,10 +778,13 @@ function updateMeta(prefix) {
   el.textContent = parts.length ? parts.join(' · ') : 'All records';
 }
 
-/* ---------------- secret hours toggle ----------------
-   Type "gwapo" anywhere on the page (outside a text field) to show/hide
+/* ---------------- secret typed-word triggers ----------------
+   Type "hours" anywhere on the page (outside a text field) to show/hide
    the Sched Hours and Absence Hours columns in Overview and Watchlist.
-   No visible button/menu on purpose — type it again to hide. */
+   Type "gwapo" to capture a screenshot of whichever table is currently on
+   screen (same action as the Konami code below — just an easier-to-type
+   alternative). No visible button/menu for either, on purpose — type
+   "hours" again to hide the columns. */
 
 function updateHoursHeaders() {
   const rows = [document.getElementById('ov-head-row'), document.getElementById('wl-head-row')];
@@ -825,8 +828,11 @@ function setupSecretToggle() {
     const isTyping = t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA');
     if (isTyping || e.key.length !== 1) return;
     buffer = (buffer + e.key).slice(-10).toLowerCase();
-    if (buffer.endsWith('gwapo')) {
+    if (buffer.endsWith('hours')) {
       toggleHoursColumns();
+      buffer = '';
+    } else if (buffer.endsWith('gwapo')) {
+      captureVisibleTableScreenshot();
       buffer = '';
     }
   });
