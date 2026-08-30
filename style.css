@@ -455,6 +455,16 @@ td.num { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-
   background: var(--paper);
 }
 
+.footer-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.footer-summary:empty { display: none; }
+
 .rank-num {
   display: inline-flex;
   align-items: center;

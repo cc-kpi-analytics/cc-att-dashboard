@@ -359,6 +359,17 @@ function buildDailyGroups() {
 
 /* ---------------- aggregation ---------------- */
 
+/** Sums Sched/Absence hours across records matching filterFn and returns the combined Attendance %. */
+function computeGroupAttendance(filterFn) {
+  let sched = 0, absence = 0;
+  for (const r of STATE.records) {
+    if (!filterFn(r)) continue;
+    sched += r.schedAdj;
+    absence += r.nonDisc;
+  }
+  return sched > 0 ? 1 - (absence / sched) : null;
+}
+
 function aggregateOverview(filter) {
   const byAgent = new Map();
   for (const r of STATE.records) {
@@ -439,6 +450,7 @@ async function renderOverview() {
 
   if (needed.length === 0) {
     setTableMessage('view-overview', 'No data available for this period', 'No weekly files were found for this year/month.');
+    updateOverviewSummary(filter);
     return;
   }
 
@@ -447,11 +459,13 @@ async function renderOverview() {
   } catch (err) {
     if (myGen !== STATE.renderGen.overview) return;
     setTableMessage('view-overview', 'Could not load data for this period', err.message || 'Try again in a moment.');
+    updateOverviewSummary(filter);
     return;
   }
   if (myGen !== STATE.renderGen.overview) return; // a newer filter change superseded this render
 
   const rows = aggregateOverview(filter);
+  updateOverviewSummary(filter);
   if (rows.length === 0) {
     setTableMessage('view-overview', 'No records match these filters', 'Try a different year, month, or supervisor.');
     return;
@@ -467,6 +481,19 @@ async function renderOverview() {
       <td class="num"><span class="att-badge ${pctBadgeClass(a.pct)}">${fmtPct(a.pct)}</span></td>
     </tr>
   `).join('');
+}
+
+function updateOverviewSummary(filter) {
+  const el = document.getElementById('ov-summary');
+  if (!el) return;
+  if (filter.supervisor === '') { el.innerHTML = ''; return; }
+  const pct = computeGroupAttendance(r =>
+    (filter.year === '' || r.year === filter.year) &&
+    (filter.month === '' || r.month === filter.month) &&
+    r.supervisor === filter.supervisor
+  );
+  if (pct === null) { el.innerHTML = ''; return; }
+  el.innerHTML = `${esc(filter.supervisor)} team attendance: <span class="att-badge ${pctBadgeClass(pct)}">${fmtPct(pct)}</span>`;
 }
 
 async function renderWatchlist() {
@@ -524,6 +551,7 @@ async function renderDailyLog() {
 
   if (needed.length === 0) {
     setTableMessage('view-dailylog', 'No data available for this period', 'No weekly files were found for this year/month.');
+    updateDailyLogSummary(filter);
     return;
   }
 
@@ -532,11 +560,13 @@ async function renderDailyLog() {
   } catch (err) {
     if (myGen !== STATE.renderGen.dailylog) return;
     setTableMessage('view-dailylog', 'Could not load data for this period', err.message || 'Try again in a moment.');
+    updateDailyLogSummary(filter);
     return;
   }
   if (myGen !== STATE.renderGen.dailylog) return;
 
   const rows = filterDailyLog(filter);
+  updateDailyLogSummary(filter);
   if (rows.length === 0) {
     setTableMessage('view-dailylog', 'No daily records match these filters', 'Try a different year, month, or search term.');
     return;
@@ -563,6 +593,21 @@ async function renderDailyLog() {
     document.getElementById('dl-note').textContent =
       "Attendance % is calculated per date (that day's absence hours ÷ that day's adjusted sched hours)";
   }
+}
+
+function updateDailyLogSummary(filter) {
+  const el = document.getElementById('dl-summary');
+  if (!el) return;
+  const q = filter.search.trim();
+  const exactAgent = q ? STATE.agentNames.find(n => n.toLowerCase() === q.toLowerCase()) : null;
+  if (!exactAgent) { el.innerHTML = ''; return; }
+  const pct = computeGroupAttendance(r =>
+    (filter.year === '' || r.year === filter.year) &&
+    (filter.month === '' || r.month === filter.month) &&
+    r.agent === exactAgent
+  );
+  if (pct === null) { el.innerHTML = ''; return; }
+  el.innerHTML = `${esc(exactAgent)} attendance: <span class="att-badge ${pctBadgeClass(pct)}">${fmtPct(pct)}</span>`;
 }
 
 /* ---------------- filter UI wiring ---------------- */
