@@ -410,7 +410,7 @@ function aggregateWatchlist(filter) {
     .map(a => ({ ...a, pct: a.sched > 0 ? 1 - (a.absence / a.sched) : null }))
     .filter(a => a.pct !== null);
   out.sort((a, b) => a.pct - b.pct); // lowest attendance % (worst) first
-  return out.slice(0, 10);
+  return out.slice(0, 15);
 }
 
 function filterDailyLog(filter) {
