@@ -103,6 +103,26 @@ function pctBadgeClass(n) {
   return 'att-bad';
 }
 
+/**
+ * Colors rows by rank against each other rather than fixed thresholds —
+ * used for small aggregate panels (like Absenteeism by Day of Week) where
+ * every value is a pooled average across many agents and naturally
+ * clusters into a tight band, so the usual 85%/95% cutoffs barely
+ * differentiate anything. Mutates each row with a `badgeClass`.
+ */
+function assignRelativeBadges(rows) {
+  const withPct = rows.filter(r => r.pct !== null && r.pct !== undefined);
+  const sorted = [...withPct].sort((a, b) => a.pct - b.pct); // worst first
+  const n = sorted.length;
+  sorted.forEach((r, i) => {
+    const frac = n > 1 ? i / (n - 1) : 1; // 0 = worst, 1 = best
+    if (frac < 1 / 3) r.badgeClass = 'att-bad';
+    else if (frac < 2 / 3) r.badgeClass = 'att-warn';
+    else r.badgeClass = 'att-good';
+  });
+  rows.forEach(r => { if (r.pct === null || r.pct === undefined) r.badgeClass = 'att-neutral'; });
+}
+
 function fmtDate(d) {
   if (!d) return '';
   return d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
@@ -545,6 +565,7 @@ function aggregateAbsenteeismByWeekday(filter) {
       pct: d.sched > 0 ? 1 - (d.absence / d.sched) : null,
     });
   }
+  assignRelativeBadges(out);
   // out is already in Sunday→Saturday order from the loop above.
   return out;
 }
@@ -745,7 +766,7 @@ async function renderProgramsView() {
         <td class="name-cell">${esc(d.name)}</td>
         <td class="num">${d.occurrences.toLocaleString()}</td>
         <td class="num">${fmtHours(d.avgAbsence)}</td>
-        <td class="num"><span class="att-badge ${pctBadgeClass(d.pct)}">${fmtPct(d.pct)}</span></td>
+        <td class="num"><span class="att-badge ${d.badgeClass}">${fmtPct(d.pct)}</span></td>
       </tr>
     `).join('');
   }
