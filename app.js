@@ -26,6 +26,11 @@ const EXCEPTION_TYPES = new Set([
 // "Unapproved shrink" — the numerator of Attendance %.
 const NON_DISCRETIONARY_TYPES = new Set(['Late', 'Left Early', 'UTO', 'NCNS']);
 
+// Programs that still show up historically in the roster/data but shouldn't
+// be selectable in Bottom 15 / Programs filter dropdowns going forward
+// (e.g. a discontinued program with no new data expected).
+const RETIRED_PROGRAM_FILTERS = new Set(['Warm Line']);
+
 // Pill styling per absence status.
 const PILL_CLASS = {
   'Late': 'warn',
@@ -223,7 +228,9 @@ function buildRosterFromWorkbook(wb) {
   STATE.progMap = progMap;
   STATE.agentNames = Array.from(new Set(supRows.map(r => r['Name']).filter(Boolean).map(n => String(n).trim()))).sort();
   STATE.supervisors = Array.from(new Set(supRows.map(r => { const s = r['Supervisor']; return s ? String(s).trim() : 'Unassigned'; }))).sort();
-  STATE.programs = Array.from(new Set(progRows.map(r => { const p = r['Program']; return p !== null && p !== undefined ? String(p).trim() : 'Unassigned'; }))).sort();
+  STATE.programs = Array.from(new Set(progRows.map(r => { const p = r['Program']; return p !== null && p !== undefined ? String(p).trim() : 'Unassigned'; })))
+    .filter(p => !RETIRED_PROGRAM_FILTERS.has(p))
+    .sort();
 }
 
 /**
@@ -1242,7 +1249,7 @@ function getVisibleTableData() {
     const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(p => [
       p.program, String(p.agentCount), fmtHours(p.sched), fmtHours(p.absence), fmtPct(p.pct),
     ]);
-    return { title: buildFilterTitle('Program Summary', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'program-summary' };
+    return { title: buildFilterTitle('Attendance Summary', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'attendance-summary' };
   }
 
   // Daily Log
