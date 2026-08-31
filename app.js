@@ -76,7 +76,7 @@ let STATE = {
   overview: { year: '', month: '', supervisor: '' },
   dailylog: { year: '', month: '', date: '', search: '' },
   watchlist: { year: '', month: '', program: '' },
-  programsView: { year: '', month: '' },
+  programsView: { year: '', month: '', program: '' },
   showHours: false,
 
   renderGen: { overview: 0, watchlist: 0, dailylog: 0, programsView: 0 },
@@ -542,6 +542,7 @@ function aggregateAbsenceBreakdown(filter) {
   for (const r of STATE.records) {
     if (filter.year !== '' && r.year !== filter.year) continue;
     if (filter.month !== '' && r.month !== filter.month) continue;
+    if (filter.program && r.program !== filter.program) continue;
     if (!NON_DISCRETIONARY_TYPES.has(r.eventType) || r.schedRaw <= 0) continue;
     byType.set(r.eventType, (byType.get(r.eventType) || 0) + r.schedRaw);
     total += r.schedRaw;
@@ -566,6 +567,7 @@ function aggregateAbsenteeismByWeekday(filter) {
   for (const r of STATE.records) {
     if (filter.year !== '' && r.year !== filter.year) continue;
     if (filter.month !== '' && r.month !== filter.month) continue;
+    if (filter.program && r.program !== filter.program) continue;
     const dow = r.date.getDay();
     let d = byDow.get(dow);
     if (!d) { d = { dow, sched: 0, absence: 0, dates: new Set() }; byDow.set(dow, d); }
@@ -727,9 +729,19 @@ function setProgramsMessage(bigText, smallText) {
   });
 }
 
+/** Reflects the Program filter in the two panel titles it actually scopes (not the program-comparison table itself). */
+function updateProgramsPanelTitles(filter) {
+  const suffix = filter.program ? ` — ${filter.program} only` : '';
+  const bEl = document.getElementById('pg-breakdown-title');
+  const dEl = document.getElementById('pg-days-title');
+  if (bEl) bEl.textContent = 'Absence Breakdown by Type' + suffix;
+  if (dEl) dEl.textContent = 'Absenteeism by Day of Week' + suffix;
+}
+
 async function renderProgramsView() {
   const myGen = ++STATE.renderGen.programsView;
   const filter = STATE.programsView;
+  updateProgramsPanelTitles(filter);
   const needed = weeksOverlapping(filter.year, filter.month);
 
   if (needed.length === 0) {
@@ -986,9 +998,20 @@ function setupProgramsFilters() {
     updateMeta('pg');
   });
 
+  const progSel = document.getElementById('pg-program');
+  progSel.appendChild(opt('', 'All programs'));
+  STATE.programs.forEach(p => progSel.appendChild(opt(p, p)));
+  progSel.addEventListener('change', () => {
+    STATE.programsView.program = progSel.value;
+    renderProgramsView();
+    updateMeta('pg');
+  });
+
   document.getElementById('pg-clear').addEventListener('click', () => {
     document.getElementById('pg-year').value = '';
     document.getElementById('pg-year').dispatchEvent(new Event('change'));
+    progSel.value = '';
+    STATE.programsView.program = '';
     renderProgramsView();
     updateMeta('pg');
   });
@@ -1092,7 +1115,7 @@ function updateMeta(prefix) {
     if (s.month !== '') parts.push(MONTH_NAMES[s.month-1]);
   }
   if (prefix === 'ov' && s.supervisor) parts.push(s.supervisor);
-  if (prefix === 'wl' && s.program) parts.push(s.program);
+  if ((prefix === 'wl' || prefix === 'pg') && s.program) parts.push(s.program);
   if (prefix === 'dl' && s.search) parts.push('"' + s.search + '"');
   el.textContent = parts.length ? parts.join(' · ') : 'All records';
 }

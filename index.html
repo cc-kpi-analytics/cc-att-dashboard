@@ -263,6 +263,10 @@
         <label for="pg-month">Month</label>
         <select id="pg-month"></select>
       </div>
+      <div class="field">
+        <label for="pg-program">Program</label>
+        <select id="pg-program"></select>
+      </div>
       <button class="clear-btn" id="pg-clear">Reset filters</button>
       <div class="filter-meta" id="pg-meta"></div>
     </div>
@@ -287,7 +291,7 @@
       </div>
 
       <div class="table-card admin-card">
-        <div class="card-title">Absence Breakdown by Type</div>
+        <div class="card-title" id="pg-breakdown-title">Absence Breakdown by Type</div>
         <div class="table-scroll">
           <table>
             <thead>
@@ -303,7 +307,7 @@
       </div>
 
       <div class="table-card admin-card">
-        <div class="card-title">Absenteeism by Day of Week</div>
+        <div class="card-title" id="pg-days-title">Absenteeism by Day of Week</div>
         <div class="table-scroll">
           <table>
             <thead>
