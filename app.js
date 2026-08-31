@@ -513,30 +513,45 @@ function aggregateAbsenceBreakdown(filter) {
 }
 
 /** Admin-only: the dates with the most absence hours, across all programs. */
-function aggregateWorstDays(filter, limit) {
-  const byDay = new Map();
+const DOW_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+/**
+ * Admin-only: pools every Sunday together, every Monday together, etc.
+ * (across every week in the selected period) and shows each weekday's
+ * average absenteeism — sorted with the worst (lowest Attendance %) first.
+ */
+function aggregateAbsenteeismByWeekday(filter) {
+  const byDow = new Map(); // 0=Sunday .. 6=Saturday
   for (const r of STATE.records) {
     if (filter.year !== '' && r.year !== filter.year) continue;
     if (filter.month !== '' && r.month !== filter.month) continue;
-    let d = byDay.get(r.dkey);
-    if (!d) {
-      d = { dkey: r.dkey, date: r.date, sched: 0, absence: 0, agentsAffected: new Set() };
-      byDay.set(r.dkey, d);
-    }
+    const dow = r.date.getDay();
+    let d = byDow.get(dow);
+    if (!d) { d = { dow, sched: 0, absence: 0, dates: new Set() }; byDow.set(dow, d); }
     d.sched += r.schedAdj;
     d.absence += r.nonDisc;
-    if (NON_DISCRETIONARY_TYPES.has(r.eventType) && r.schedRaw > 0) d.agentsAffected.add(r.agent);
+    d.dates.add(r.dkey);
   }
-  const out = Array.from(byDay.values())
-    .filter(d => d.absence > 0)
-    .map(d => ({
-      date: d.date, dkey: d.dkey,
-      absence: d.absence,
-      agentsAffected: d.agentsAffected.size,
+
+  const out = [];
+  for (let dow = 0; dow < 7; dow++) {
+    const d = byDow.get(dow);
+    if (!d || d.dates.size === 0) continue;
+    const occurrences = d.dates.size;
+    out.push({
+      name: DOW_NAMES[dow],
+      occurrences,
+      avgAbsence: d.absence / occurrences,
       pct: d.sched > 0 ? 1 - (d.absence / d.sched) : null,
-    }));
-  out.sort((a, b) => b.absence - a.absence);
-  return out.slice(0, limit);
+    });
+  }
+  out.sort((a, b) => {
+    if (a.pct === null && b.pct === null) return 0;
+    if (a.pct === null) return 1;  // no sched hours to judge — push to bottom
+    if (b.pct === null) return -1;
+    return a.pct - b.pct; // lowest Attendance % (highest absenteeism) first
+  });
+  return out;
 }
 
 function filterDailyLog(filter) {
@@ -696,7 +711,7 @@ async function renderProgramsView() {
 
   const programRows = aggregateProgramSummary(filter);
   const { rows: breakdownRows } = aggregateAbsenceBreakdown(filter);
-  const dayRows = aggregateWorstDays(filter, 10);
+  const dayRows = aggregateAbsenteeismByWeekday(filter);
 
   if (programRows.length === 0) {
     setProgramsMessage('No records match these filters', 'Try a different year or month.');
@@ -732,9 +747,9 @@ async function renderProgramsView() {
   } else {
     daysBody.innerHTML = dayRows.map(d => `
       <tr>
-        <td class="mono">${fmtDate(d.date)}</td>
-        <td class="num">${fmtHours(d.absence)}</td>
-        <td class="num">${d.agentsAffected.toLocaleString()}</td>
+        <td class="name-cell">${esc(d.name)}</td>
+        <td class="num">${d.occurrences.toLocaleString()}</td>
+        <td class="num">${fmtHours(d.avgAbsence)}</td>
         <td class="num"><span class="att-badge ${pctBadgeClass(d.pct)}">${fmtPct(d.pct)}</span></td>
       </tr>
     `).join('');
