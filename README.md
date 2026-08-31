@@ -4,12 +4,52 @@ A single-page, fixed-frame attendance dashboard that reads weekly schedule
 exports directly in the browser — no backend, no build step.
 
 ## Files
-- `index.html` — page structure, 3 tabbed sections
+- `index.html` — page structure, login screen, 3 tabbed sections
 - `style.css` — design system / styling
 - `mhtml-parser.js` — turns a saved Five9 schedule report (.mhtml) into plain interval records
+- `auth.js` — login gate, sourced from the `access` sheet in `attendance_raw.xlsx`
 - `app.js` — discovers weekly files, fetches/parses them on demand, aggregates, renders
-- `attendance_raw.xlsx` — **only used for the `supervisor` and `program` sheets** now (see below)
+- `attendance_raw.xlsx` — the `supervisor` and `program` sheets, plus the `access` sheet (see "Signing in" below)
 - `data/WB_YYYY_MM_DD.mhtml` — one file per week of raw schedule data (you add a new one every week)
+
+## Signing in
+
+The dashboard now sits behind a simple login screen, sourced entirely from
+the `access` sheet in `attendance_raw.xlsx`:
+
+| Username | Password | Program |
+|---|---|---|
+| rcl-leadership | Crisis*2026 | RCL |
+| admin-attendance | WFM@crisis2026 | Admin |
+
+- One row per account. A `Program` value scopes that account to just that
+  program — Overview/Daily Log/Bottom 15 only show agents in it, including
+  the filter dropdowns and Employee Search suggestions.
+- A `Program` value of exactly `Admin` (any capitalization) grants full,
+  unrestricted access to everything — that's what `admin-attendance` does
+  by default.
+- Usernames are matched without regard to case; passwords are matched
+  exactly as typed.
+- Once someone signs in, their browser remembers it for that session (it
+  clears when they close the tab/browser) — they won't have to log in
+  again on every page refresh. A "Sign out" link sits in the header next
+  to the weeks/agents counter.
+- To add, remove, or change an account, just edit the rows in the `access`
+  sheet and push the updated `attendance_raw.xlsx` — no code changes
+  needed.
+
+**Please read this before treating it as real security.** This is a UI
+convenience, not a lock. `attendance_raw.xlsx` — including every password
+in that sheet, in plain text — sits in the same public, unauthenticated
+`data/` folder as everything else in this app. Anyone who fetches that
+file directly (or opens the browser's network tab while using the
+dashboard) can read every username and password, restricted or not. This
+gate stops someone from casually clicking into another program's data
+inside the dashboard; it does not make the file itself inaccessible to a
+determined or technical person. Don't reuse these passwords anywhere that
+actually matters, and don't treat this as sufficient if the data ever
+needs to be genuinely locked down — that would require a real backend in
+front of the files, which is a meaningfully bigger project than this.
 
 ## The weekly data workflow
 
@@ -68,57 +108,83 @@ CCS/Chat`, `Break`, `Lunch`, `PTO`, `Late`, `UTO`...), and a `Duration`. The
 app derives the same figures it used to trust from Excel, now computed
 directly from those intervals:
 
-- **Sched hours** — sum of `Duration` for every interval that day, except
-  intervals typed `Lunch`, `PTO`, `UPL`, `FMLA`, `PFML`, `Bereavement`, or
-  `Alt Holiday` (same exclusion rule as before — these aren't real scheduled
-  working time).
-- **Absence hours** (non-discretionary shrinkage) — sum of `Duration` for
-  intervals typed `Late`, `Left Early`, `UTO`, or `NCNS`.
-- **Attendance %** — 100% − (Absence hours ÷ Sched hours), same formula as
-  before, just fed by the numbers above.
-- **"Work hours"** (used only to decide whether a day counts as *Present* in
-  the Daily Log) — sum of `Duration` for intervals typed `Work - …`,
-  `Meeting`, `Training`, or `Admin`. If an agent has no exceptions that day
-  and this is greater than zero, the day shows **Present**.
-- **Daily Log Status** — every exception-type interval that day (`PTO`,
-  `UPL`, `FMLA`, `PFML`, `Late`, `Left Early`, `UTO`, `Bereavement`, `Alt
-  Holiday`, `NCNS`) is **summed by type** (a day can have the same exception
-  type split across two separate intervals — e.g. FMLA taken in a morning
-  block and an afternoon block — these get merged into one total rather than
-  shown as two separate entries) and displayed as `Type (X hrs)`, joined by
-  `; ` if there's more than one type that day. Zero-hour placeholder rows are
-  dropped since they carry no information.
+- **Sched hours** — sum of `Duration` for every interval that day, **except**
+  intervals typed `Lunch`, `PTO`, `UPL`, `FMLA`, `PFML`, `Bereavement`, `Alt
+  Holiday`, `Jury Duty`, `Traumatic Leave`, or plain `Admin` (as opposed to
+  `Work - Admin`, which is real work and counts normally). These are treated
+  as unscheduled/non-working time.
+- **Absence hours** ("unapproved shrink") — sum of `Duration` for intervals
+  typed `Late`, `Left Early`, `UTO`, or `NCNS`.
+- **Attendance %** — 100% − (Absence hours ÷ Sched hours).
+- **Present** — if an agent has no absence-status interval that day and
+  Sched hours (as defined above) is greater than zero, the day shows
+  **Present**.
+- **Daily Log Status** — every absence-status interval that day (`Late`,
+  `UTO`, `NCNS`, `Left Early`, `FMLA`, `PFML`, `UPL`, `Traumatic Leave`, `Alt
+  Holiday`, `PTO`, `Bereavement`, `Jury Duty`, plain `Admin`) is **summed by
+  type** (a day can have the same status split across two separate intervals
+  — e.g. FMLA taken in a morning block and an afternoon block — these get
+  merged into one total rather than shown as two separate entries) and
+  displayed as `Type (X hrs)`, separated by a comma if there's more than one
+  status that day. Zero-hour placeholder rows are dropped since they carry
+  no information. `Admin` is included here (not just excluded from Sched
+  hours) so an Admin-only day still shows something in the log instead of
+  silently disappearing.
 
 If Five9 ever adds a new event type the app doesn't recognize, it falls
-through safely: it counts toward Sched hours (like Break/Meeting do) but
-isn't treated as an absence or as "work hours" — nothing breaks, it just
-won't be specially categorized until you decide it should be.
+through safely: it counts toward Sched hours (like Break/Meeting/Work-*
+types do) but isn't treated as an absence status — nothing breaks, it just
+won't be specially categorized until you tell me it needs to be one or the
+other.
 
 ## Section 1 — Overview
 Filters: Year, Month, Supervisor. Shows Agent Name, Supervisor, Program, and
 Attendance % (Sched/Absence Hours are hidden by default — see below).
 
 ## Section 2 — Daily Log
-Filters: Year, Month, Employee Search (type-ahead). Shows Date, Agent Name,
-Supervisor, Program, Status, and that date's Attendance %.
+Filters: Year, Month, a specific Date (optional — picking one narrows to
+just that day and syncs Year/Month to match it; changing Year or Month
+afterward clears the picked date), and Employee Search (type-ahead). Shows
+Date, Agent Name, Supervisor, Program, Status, and that date's Attendance %.
 
-## Section 3 — Watchlist
-Filters: Year, Month, Program. Shows the 10 agents with the **lowest**
+## Section 3 — Bottom 15
+Filters: Year, Month, Program. Shows the 15 agents with the **lowest**
 Attendance % (worst attendance) for the selected period, ranked.
 
 ## Sched/Absence Hours (hidden by request)
-Sched Hours and Absence Hours are hidden from Overview and Watchlist by
+Sched Hours and Absence Hours are hidden from Overview and Bottom 15 by
 default. There's no visible button for this — on any page, just type the
 word `hours` (no need to click or hold anything) and both columns toggle
 on/off; type it again to hide them. It only fires outside of a text field,
 so it won't trigger while typing in Employee Search. Nothing in the UI
 hints that this exists.
 
+## Screenshot-to-clipboard (type "gwapo", or the Konami code)
+Two ways to trigger the same thing — whichever's easier to remember:
+- Type the word **`gwapo`** anywhere on the page (outside a text field), or
+- Press **↑ ↑ ↓ ↓ ← → ← → B A** (the Konami code)
+
+Either one renders whichever table is currently on screen — respecting
+whatever filters are applied — as a clean, compact PNG (plain white
+background, black text, no dark theme or colored pills, no title/filter
+text, sized to fit just the table itself and scaled down to about 58% of
+its original size — three successive reductions of 20%, 20%, then 10%) and
+copies it straight to your clipboard, so you can paste it directly into an
+email or chat. If
+your browser won't allow writing images to the clipboard (some browsers
+restrict this), it downloads the PNG instead and tells you so via the same
+small toast used for the `hours` trick.
+
+It's capped at 300 rows to keep the image a reasonable size for something
+you'd paste into an email — if the table has more than that, a small note
+on the image says how many rows were left out.
+
 ## The Excel file's remaining role
 `attendance_raw.xlsx` is still required, but now **only** for its
-`supervisor` sheet (Agent → Supervisor) and `program` sheet (Supervisor →
-Program). Its `raw` sheet is no longer read at all. Update this file
-whenever your roster or program assignments change — it doesn't need to be
+`supervisor` sheet (Agent → Supervisor), `program` sheet (Supervisor →
+Program), and `access` sheet (login accounts — see "Signing in" above).
+Its `raw` sheet is no longer read at all. Update this file whenever your
+roster, program assignments, or accounts change — it doesn't need to be
 touched weekly the way the schedule data does.
 
 ### Data quirks handled
@@ -138,6 +204,7 @@ touched weekly the way the schedule data does.
    index.html
    style.css
    mhtml-parser.js
+   auth.js
    app.js
    attendance_raw.xlsx
    data/

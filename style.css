@@ -175,6 +175,134 @@ body {
   background: rgba(255,255,255,0.14);
 }
 
+.sign-out-btn {
+  appearance: none;
+  border: none;
+  background: none;
+  color: rgba(255,255,255,0.5);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 4px;
+}
+
+.sign-out-btn:hover { color: #fff; }
+
+/* ---------- Login screen ---------- */
+.login-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-screen.hidden { display: none; }
+
+.login-card {
+  width: 100%;
+  max-width: 340px;
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 28px 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding-bottom: 4px;
+}
+
+.login-brand .brand-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.login-brand .brand-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-faint);
+  letter-spacing: 0.06em;
+  margin-top: 1px;
+}
+
+.login-hint {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.login-field label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.login-field input {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  padding: 9px 11px;
+  border-radius: 7px;
+  transition: border-color 0.15s ease;
+}
+
+.login-field input:hover { border-color: #c7cad4; }
+
+.login-field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(56,189,248,0.15);
+}
+
+.login-error {
+  font-size: 12px;
+  color: var(--bad);
+  background: var(--bad-bg);
+  border-radius: 7px;
+  padding: 8px 10px;
+}
+
+.login-submit {
+  appearance: none;
+  border: none;
+  background: var(--ink);
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.login-submit:hover { background: var(--ink-soft); }
+
 /* ---------- Main content ---------- */
 .view {
   flex: 1 1 auto;

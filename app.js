@@ -61,6 +61,9 @@ let STATE = {
   supervisors: [],
   programs: [],
 
+  currentUser: null,        // signed-in username
+  allowedPrograms: null,    // Set of allowed programs for this session, or null = unrestricted (admin)
+
   availableWeeks: [],     // [{ sunday, saturday, filename, key }], sorted ascending
   weekPromises: new Map(),// key -> Promise<enriched records[]>, doubles as a cache
 
@@ -128,9 +131,21 @@ function esc(s) {
   return d.innerHTML;
 }
 
+/** Shows "signed in as X · Sign out" in the header. */
+function updateSignedInStatus() {
+  if (!STATE.currentUser) return;
+  const wrap = document.getElementById('authStatus');
+  const divider = document.getElementById('authDivider');
+  if (!wrap || !divider) return;
+  wrap.innerHTML = `${esc(STATE.currentUser)} <button type="button" id="signOutBtn" class="sign-out-btn">Sign out</button>`;
+  wrap.style.display = '';
+  divider.style.display = '';
+  document.getElementById('signOutBtn').addEventListener('click', signOutUser);
+}
+
 /* ---------------- roster (supervisor / program mapping) ---------------- */
 
-async function loadRoster() {
+async function fetchRosterWorkbook() {
   setLoading('READING attendance_raw.xlsx …');
   const resp = await fetch('./attendance_raw.xlsx');
   if (!resp.ok) throw new Error('Could not fetch attendance_raw.xlsx (HTTP ' + resp.status + '). Make sure the file sits in the same folder as index.html.');
@@ -141,6 +156,10 @@ async function loadRoster() {
   for (const s of ['supervisor', 'program']) {
     if (!wb.SheetNames.includes(s)) throw new Error('Workbook is missing the required "' + s + '" sheet.');
   }
+  return wb;
+}
+
+function buildRosterFromWorkbook(wb) {
   const supRows = XLSX.utils.sheet_to_json(wb.Sheets['supervisor'], { defval: null });
   const progRows = XLSX.utils.sheet_to_json(wb.Sheets['program'], { defval: null });
 
@@ -163,6 +182,24 @@ async function loadRoster() {
   STATE.agentNames = Array.from(new Set(supRows.map(r => r['Name']).filter(Boolean).map(n => String(n).trim()))).sort();
   STATE.supervisors = Array.from(new Set(supRows.map(r => { const s = r['Supervisor']; return s ? String(s).trim() : 'Unassigned'; }))).sort();
   STATE.programs = Array.from(new Set(progRows.map(r => { const p = r['Program']; return p !== null && p !== undefined ? String(p).trim() : 'Unassigned'; }))).sort();
+}
+
+/**
+ * Scopes the roster (and, from then on, every fetched week's records) down
+ * to the signed-in user's allowed program(s). Pass null for unrestricted
+ * (admin) access.
+ */
+function applyProgramRestriction(allowedPrograms) {
+  STATE.allowedPrograms = allowedPrograms || null;
+  if (!STATE.allowedPrograms) return;
+
+  const allowed = STATE.allowedPrograms;
+  STATE.programs = STATE.programs.filter(p => allowed.has(p));
+  STATE.supervisors = STATE.supervisors.filter(s => allowed.has(STATE.progMap.get(s) || 'Unassigned'));
+  STATE.agentNames = STATE.agentNames.filter(a => {
+    const sup = STATE.supMap.get(a) || 'Unassigned';
+    return allowed.has(STATE.progMap.get(sup) || 'Unassigned');
+  });
 }
 
 /* ---------------- weekly file discovery ---------------- */
@@ -289,6 +326,7 @@ function fetchAndParseWeek(weekMeta) {
       const agent = iv.agent;
       const supervisor = STATE.supMap.get(agent) || 'Unassigned';
       const program = STATE.progMap.get(supervisor) || 'Unassigned';
+      if (STATE.allowedPrograms && !STATE.allowedPrograms.has(program)) continue; // out of scope for this signed-in user
       const schedAdj = EXCLUDE_FROM_SCHED.has(iv.type) ? 0 : iv.duration;
       const nonDisc = NON_DISCRETIONARY_TYPES.has(iv.type) ? iv.duration : 0;
       const year = iv.date.getFullYear();
@@ -1119,7 +1157,16 @@ function setupTabs() {
 
 async function boot() {
   try {
-    await loadRoster();
+    const wb = await fetchRosterWorkbook();
+    const accessMap = parseAccessSheet(wb);
+
+    setLoading(null); // hide the loading overlay so the login screen (if needed) is visible
+    const { username, allowedPrograms } = await runLoginGate(accessMap);
+    STATE.currentUser = username;
+
+    setLoading('PARSING roster …');
+    buildRosterFromWorkbook(wb);
+    applyProgramRestriction(allowedPrograms);
 
     setLoading('DISCOVERING weekly files …');
     STATE.availableWeeks = await discoverAvailableWeeks((checked, total) => {
@@ -1147,6 +1194,7 @@ async function boot() {
       STATE.availableWeeks.length.toLocaleString() + (STATE.availableWeeks.length === 1 ? ' week available' : ' weeks available');
     document.getElementById('agentsCount').textContent =
       STATE.agentNames.length.toLocaleString() + ' agents';
+    updateSignedInStatus();
 
     setupTabs();
     setupSecretToggle();

@@ -13,6 +13,34 @@
   <div class="msg" id="loadingMsg">READING attendance_raw.xlsx …</div>
 </div>
 
+<div class="login-screen hidden" id="loginScreen">
+  <form class="login-card" id="loginForm" autocomplete="off">
+    <div class="login-brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true">
+          <rect x="0.5" y="0.5" width="15" height="15" rx="4" fill="var(--accent)"/>
+          <path d="M4.3 8.4l2.4 2.4 4.6-5.1" stroke="var(--ink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </span>
+      <div>
+        <div class="brand-text">ATTENDANCE CONSOLE</div>
+        <div class="brand-sub">WORKFORCE OPS</div>
+      </div>
+    </div>
+    <p class="login-hint">Sign in with your program credentials</p>
+    <div class="login-field">
+      <label for="loginUsername">Username</label>
+      <input type="text" id="loginUsername" autocomplete="username" />
+    </div>
+    <div class="login-field">
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" autocomplete="current-password" />
+    </div>
+    <div class="login-error" id="loginError" style="display:none;"></div>
+    <button type="submit" class="login-submit">Sign In</button>
+  </form>
+</div>
+
 <div class="err-banner" id="errBanner"></div>
 <div class="toast" id="secretToast"></div>
 
@@ -59,6 +87,8 @@
       </span>
       <span class="status-divider"></span>
       <span id="agentsCount">—</span>
+      <span class="status-divider" id="authDivider" style="display:none;"></span>
+      <span id="authStatus" style="display:none;"></span>
     </div>
   </header>
 
@@ -214,6 +244,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="mhtml-parser.js"></script>
+<script src="auth.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
