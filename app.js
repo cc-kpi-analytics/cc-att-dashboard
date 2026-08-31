@@ -160,7 +160,7 @@ function escAttr(s) {
 /** Renders a Supervisor cell, with a hover tooltip explaining "Unassigned" when it applies. */
 function fmtSupervisorCell(agent, supervisor) {
   if (supervisor !== 'Unassigned') return esc(supervisor);
-  const tip = `${agent} isn't listed in the roster's "supervisor" sheet yet — add them there once their supervisor is known.`;
+  const tip = `${agent} is most likely no longer active (attrition, termination, or resignation) — that's typically why no supervisor is on record for them.`;
   return `<span class="unassigned-tag" data-tooltip="${escAttr(tip)}">Unassigned</span>`;
 }
 
@@ -168,8 +168,8 @@ function fmtSupervisorCell(agent, supervisor) {
 function fmtProgramCell(supervisor, program) {
   if (program !== 'Unassigned') return esc(program);
   const tip = supervisor === 'Unassigned'
-    ? `No supervisor is assigned, so a program can't be determined either.`
-    : `${supervisor} isn't listed in the roster's "program" sheet yet — add them there once their program is known.`;
+    ? `This agent is most likely no longer active (attrition, termination, or resignation) — that's typically why no supervisor or program is on record for them.`
+    : `${supervisor} is most likely no longer an active supervisor (attrition, termination, or resignation) — that's typically why no program is on record for them.`;
   return `<span class="unassigned-tag" data-tooltip="${escAttr(tip)}">Unassigned</span>`;
 }
 
@@ -757,7 +757,7 @@ async function renderProgramsView() {
 
   document.getElementById('pg-tbody').innerHTML = programRows.map(p => `
     <tr>
-      <td class="name-cell">${p.program === "Unassigned" ? `<span class="unassigned-tag" data-tooltip="${escAttr('These agents\u2019 supervisors aren\u2019t listed in the program sheet yet (or the agents themselves have no supervisor assigned).')}">Unassigned</span>` : esc(p.program)}</td>
+      <td class="name-cell">${p.program === "Unassigned" ? `<span class="unassigned-tag" data-tooltip="${escAttr('These agents (or their supervisors) are most likely no longer active \u2014 attrition, termination, or resignation \u2014 that\u2019s typically why no program is on record for them.')}">Unassigned</span>` : esc(p.program)}</td>
       <td class="num">${p.agentCount.toLocaleString()}</td>
       <td class="num">${fmtHours(p.sched)}</td>
       <td class="num">${fmtHours(p.absence)}</td>
