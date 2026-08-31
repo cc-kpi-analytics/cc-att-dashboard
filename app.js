@@ -545,12 +545,7 @@ function aggregateAbsenteeismByWeekday(filter) {
       pct: d.sched > 0 ? 1 - (d.absence / d.sched) : null,
     });
   }
-  out.sort((a, b) => {
-    if (a.pct === null && b.pct === null) return 0;
-    if (a.pct === null) return 1;  // no sched hours to judge — push to bottom
-    if (b.pct === null) return -1;
-    return a.pct - b.pct; // lowest Attendance % (highest absenteeism) first
-  });
+  // out is already in Sunday→Saturday order from the loop above.
   return out;
 }
 
