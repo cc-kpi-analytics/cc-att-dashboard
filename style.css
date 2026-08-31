@@ -463,6 +463,31 @@ body {
   overflow: hidden;
 }
 
+/* ---------- Admin (Programs) view: a scrollable stack of capped-height cards ---------- */
+.admin-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-card {
+  flex: 0 0 auto;
+  max-height: 320px;
+}
+
+.card-title {
+  flex: 0 0 auto;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink);
+  padding: 13px 16px 10px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
 .table-scroll {
   flex: 1 1 auto;
   overflow-y: auto;

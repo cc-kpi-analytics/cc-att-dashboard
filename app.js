@@ -76,9 +76,10 @@ let STATE = {
   overview: { year: '', month: '', supervisor: '' },
   dailylog: { year: '', month: '', date: '', search: '' },
   watchlist: { year: '', month: '', program: '' },
+  programsView: { year: '', month: '' },
   showHours: false,
 
-  renderGen: { overview: 0, watchlist: 0, dailylog: 0 },
+  renderGen: { overview: 0, watchlist: 0, dailylog: 0, programsView: 0 },
 };
 
 /* ---------------- helpers ---------------- */
@@ -467,6 +468,77 @@ function aggregateWatchlist(filter) {
   return out.slice(0, 15);
 }
 
+/** Admin-only: one row per program, aggregated across every agent in it. */
+function aggregateProgramSummary(filter) {
+  const byProgram = new Map();
+  for (const r of STATE.records) {
+    if (filter.year !== '' && r.year !== filter.year) continue;
+    if (filter.month !== '' && r.month !== filter.month) continue;
+    let p = byProgram.get(r.program);
+    if (!p) {
+      p = { program: r.program, sched: 0, absence: 0, agents: new Set() };
+      byProgram.set(r.program, p);
+    }
+    p.sched += r.schedAdj;
+    p.absence += r.nonDisc;
+    p.agents.add(r.agent);
+  }
+  const out = Array.from(byProgram.values()).map(p => ({
+    program: p.program,
+    agentCount: p.agents.size,
+    sched: p.sched,
+    absence: p.absence,
+    pct: p.sched > 0 ? 1 - (p.absence / p.sched) : null,
+  }));
+  out.sort((a, b) => a.program.localeCompare(b.program));
+  return out;
+}
+
+/** Admin-only: how the "unapproved shrink" hours break down by exception type, across all programs. */
+function aggregateAbsenceBreakdown(filter) {
+  const byType = new Map();
+  let total = 0;
+  for (const r of STATE.records) {
+    if (filter.year !== '' && r.year !== filter.year) continue;
+    if (filter.month !== '' && r.month !== filter.month) continue;
+    if (!NON_DISCRETIONARY_TYPES.has(r.eventType) || r.schedRaw <= 0) continue;
+    byType.set(r.eventType, (byType.get(r.eventType) || 0) + r.schedRaw);
+    total += r.schedRaw;
+  }
+  const rows = Array.from(byType.entries()).map(([type, hours]) => ({
+    type, hours, share: total > 0 ? hours / total : 0,
+  }));
+  rows.sort((a, b) => b.hours - a.hours);
+  return { rows, total };
+}
+
+/** Admin-only: the dates with the most absence hours, across all programs. */
+function aggregateWorstDays(filter, limit) {
+  const byDay = new Map();
+  for (const r of STATE.records) {
+    if (filter.year !== '' && r.year !== filter.year) continue;
+    if (filter.month !== '' && r.month !== filter.month) continue;
+    let d = byDay.get(r.dkey);
+    if (!d) {
+      d = { dkey: r.dkey, date: r.date, sched: 0, absence: 0, agentsAffected: new Set() };
+      byDay.set(r.dkey, d);
+    }
+    d.sched += r.schedAdj;
+    d.absence += r.nonDisc;
+    if (NON_DISCRETIONARY_TYPES.has(r.eventType) && r.schedRaw > 0) d.agentsAffected.add(r.agent);
+  }
+  const out = Array.from(byDay.values())
+    .filter(d => d.absence > 0)
+    .map(d => ({
+      date: d.date, dkey: d.dkey,
+      absence: d.absence,
+      agentsAffected: d.agentsAffected.size,
+      pct: d.sched > 0 ? 1 - (d.absence / d.sched) : null,
+    }));
+  out.sort((a, b) => b.absence - a.absence);
+  return out.slice(0, limit);
+}
+
 function filterDailyLog(filter) {
   const q = filter.search.trim().toLowerCase();
   return STATE.dailyGroups.filter(g => {
@@ -590,6 +662,83 @@ async function renderWatchlist() {
       <td class="num"><span class="att-badge ${pctBadgeClass(a.pct)}">${fmtPct(a.pct)}</span></td>
     </tr>
   `).join('');
+}
+
+/** Puts the same message into all three Programs-view tables at once (loading/empty/error states). */
+function setProgramsMessage(bigText, smallText) {
+  const specs = [['pg-tbody', 5], ['pg-breakdown-tbody', 3], ['pg-days-tbody', 4]];
+  const html = `<tr><td colspan="__COLSPAN__"><div class="empty-state"><div class="big">${esc(bigText)}</div>` +
+    (smallText ? `<div class="small">${esc(smallText)}</div>` : '') + `</div></td></tr>`;
+  specs.forEach(([id, colspan]) => {
+    const tbody = document.getElementById(id);
+    if (tbody) tbody.innerHTML = html.replace('__COLSPAN__', colspan);
+  });
+}
+
+async function renderProgramsView() {
+  const myGen = ++STATE.renderGen.programsView;
+  const filter = STATE.programsView;
+  const needed = weeksOverlapping(filter.year, filter.month);
+
+  if (needed.length === 0) {
+    setProgramsMessage('No data available for this period', 'No weekly files were found for this year/month.');
+    return;
+  }
+
+  try {
+    await ensureWeeksLoadedForView('view-programs', needed);
+  } catch (err) {
+    if (myGen !== STATE.renderGen.programsView) return;
+    setProgramsMessage('Could not load data for this period', err.message || 'Try again in a moment.');
+    return;
+  }
+  if (myGen !== STATE.renderGen.programsView) return;
+
+  const programRows = aggregateProgramSummary(filter);
+  const { rows: breakdownRows } = aggregateAbsenceBreakdown(filter);
+  const dayRows = aggregateWorstDays(filter, 10);
+
+  if (programRows.length === 0) {
+    setProgramsMessage('No records match these filters', 'Try a different year or month.');
+    return;
+  }
+
+  document.getElementById('pg-tbody').innerHTML = programRows.map(p => `
+    <tr>
+      <td class="name-cell">${esc(p.program)}</td>
+      <td class="num">${p.agentCount.toLocaleString()}</td>
+      <td class="num">${fmtHours(p.sched)}</td>
+      <td class="num">${fmtHours(p.absence)}</td>
+      <td class="num"><span class="att-badge ${pctBadgeClass(p.pct)}">${fmtPct(p.pct)}</span></td>
+    </tr>
+  `).join('');
+
+  const breakdownBody = document.getElementById('pg-breakdown-tbody');
+  if (breakdownRows.length === 0) {
+    breakdownBody.innerHTML = `<tr><td colspan="3"><div class="empty-state"><div class="small">No Late/UTO/NCNS/Left Early hours in this period.</div></div></td></tr>`;
+  } else {
+    breakdownBody.innerHTML = breakdownRows.map(b => `
+      <tr>
+        <td><span class="pill ${PILL_CLASS[b.type] || 'info'}">${esc(b.type)}</span></td>
+        <td class="num">${fmtHours(b.hours)}</td>
+        <td class="num">${(b.share * 100).toFixed(1)}%</td>
+      </tr>
+    `).join('');
+  }
+
+  const daysBody = document.getElementById('pg-days-tbody');
+  if (dayRows.length === 0) {
+    daysBody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><div class="small">No absences recorded in this period.</div></div></td></tr>`;
+  } else {
+    daysBody.innerHTML = dayRows.map(d => `
+      <tr>
+        <td class="mono">${fmtDate(d.date)}</td>
+        <td class="num">${fmtHours(d.absence)}</td>
+        <td class="num">${d.agentsAffected.toLocaleString()}</td>
+        <td class="num"><span class="att-badge ${pctBadgeClass(d.pct)}">${fmtPct(d.pct)}</span></td>
+      </tr>
+    `).join('');
+  }
 }
 
 function statusCellHtml(status) {
@@ -777,6 +926,24 @@ function setupWatchlistFilters() {
   updateMeta('wl');
 }
 
+function setupProgramsFilters() {
+  populateYearMonth('pg', STATE.programsView, () => {
+    STATE.programsView.year = document.getElementById('pg-year').value === '' ? '' : Number(document.getElementById('pg-year').value);
+    STATE.programsView.month = document.getElementById('pg-month').value === '' ? '' : Number(document.getElementById('pg-month').value);
+    renderProgramsView();
+    updateMeta('pg');
+  });
+
+  document.getElementById('pg-clear').addEventListener('click', () => {
+    document.getElementById('pg-year').value = '';
+    document.getElementById('pg-year').dispatchEvent(new Event('change'));
+    renderProgramsView();
+    updateMeta('pg');
+  });
+
+  updateMeta('pg');
+}
+
 function setupDailyLogFilters() {
   populateYearMonth('dl', STATE.dailylog, () => {
     STATE.dailylog.year = document.getElementById('dl-year').value === '' ? '' : Number(document.getElementById('dl-year').value);
@@ -865,7 +1032,7 @@ function updateMeta(prefix) {
   const el = document.getElementById(prefix + '-meta');
   if (!el) return;
   const parts = [];
-  const s = STATE[prefix === 'ov' ? 'overview' : prefix === 'wl' ? 'watchlist' : 'dailylog'];
+  const s = STATE[prefix === 'ov' ? 'overview' : prefix === 'wl' ? 'watchlist' : prefix === 'pg' ? 'programsView' : 'dailylog'];
   if (prefix === 'dl' && s.date) {
     parts.push(parseISODateLocal(s.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }));
   } else {
@@ -991,6 +1158,16 @@ function getVisibleTableData() {
       return r;
     });
     return { title: buildFilterTitle('Watchlist', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'watchlist' };
+  }
+
+  if (view === 'programs') {
+    const filter = STATE.programsView;
+    const rows = aggregateProgramSummary(filter);
+    const columns = ['Program', 'Agents', 'Sched Hours', 'Absence Hours', 'Attendance %'];
+    const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(p => [
+      p.program, String(p.agentCount), fmtHours(p.sched), fmtHours(p.absence), fmtPct(p.pct),
+    ]);
+    return { title: buildFilterTitle('Program Summary', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'program-summary' };
   }
 
   // Daily Log
@@ -1189,6 +1366,7 @@ async function boot() {
     STATE.overview.year = defaultYear; STATE.overview.month = defaultMonth;
     STATE.watchlist.year = defaultYear; STATE.watchlist.month = defaultMonth;
     STATE.dailylog.year = defaultYear; STATE.dailylog.month = defaultMonth;
+    STATE.programsView.year = defaultYear; STATE.programsView.month = defaultMonth;
 
     document.getElementById('weeksCount').textContent =
       STATE.availableWeeks.length.toLocaleString() + (STATE.availableWeeks.length === 1 ? ' week available' : ' weeks available');
@@ -1203,11 +1381,18 @@ async function boot() {
     setupDailyLogFilters();
     setupWatchlistFilters();
 
+    const isAdmin = STATE.allowedPrograms === null;
+    if (isAdmin) {
+      document.getElementById('tab-programs').style.display = '';
+      setupProgramsFilters();
+    }
+
     setLoading(null);
 
     renderOverview();
     renderDailyLog();
     renderWatchlist();
+    if (isAdmin) renderProgramsView();
   } catch (err) {
     console.error(err);
     setLoading(null);

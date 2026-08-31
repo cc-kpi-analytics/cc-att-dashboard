@@ -79,6 +79,12 @@
         </svg>
         Bottom 15
       </button>
+      <button class="tab-btn" data-view="programs" id="tab-programs" style="display:none;">
+        <svg class="tab-icon" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <path d="M2 13.5V8M6 13.5V4M10 13.5V6.5M14 13.5V2.5"/>
+        </svg>
+        Programs
+      </button>
     </nav>
     <div class="header-status">
       <span class="status-pill">
@@ -236,6 +242,81 @@
       <div class="table-footer">
         <span>Ranked by Attendance % — lowest (worst) first</span>
         <span id="wl-count">-rsapico-</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SECTION 4: PROGRAMS (admin only) ===================== -->
+  <section class="view" id="view-programs">
+    <div class="view-head">
+      <div class="view-title-wrap">
+        <span class="view-title">Program Summary</span>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="field">
+        <label for="pg-year">Year</label>
+        <select id="pg-year"></select>
+      </div>
+      <div class="field">
+        <label for="pg-month">Month</label>
+        <select id="pg-month"></select>
+      </div>
+      <button class="clear-btn" id="pg-clear">Reset filters</button>
+      <div class="filter-meta" id="pg-meta"></div>
+    </div>
+
+    <div class="admin-scroll" id="pg-scroll">
+      <div class="table-card admin-card">
+        <div class="card-title">Attendance by Program</div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Program</th>
+                <th class="num">Agents</th>
+                <th class="num">Sched Hours</th>
+                <th class="num">Absence Hours</th>
+                <th class="num">Attendance %</th>
+              </tr>
+            </thead>
+            <tbody id="pg-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-card admin-card">
+        <div class="card-title">Absence Breakdown by Type</div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th class="num">Hours</th>
+                <th class="num">Share of Absence</th>
+              </tr>
+            </thead>
+            <tbody id="pg-breakdown-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-card admin-card">
+        <div class="card-title">Highest-Absenteeism Days</div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th class="num">Absence Hours</th>
+                <th class="num">Agents Affected</th>
+                <th class="num">Attendance %</th>
+              </tr>
+            </thead>
+            <tbody id="pg-days-tbody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
