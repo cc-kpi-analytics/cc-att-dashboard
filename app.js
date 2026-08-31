@@ -152,6 +152,27 @@ function esc(s) {
   return d.innerHTML;
 }
 
+/** Like esc(), but also escapes quotes — required for safely embedding text inside an HTML attribute value. */
+function escAttr(s) {
+  return esc(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+/** Renders a Supervisor cell, with a hover tooltip explaining "Unassigned" when it applies. */
+function fmtSupervisorCell(agent, supervisor) {
+  if (supervisor !== 'Unassigned') return esc(supervisor);
+  const tip = `${agent} isn't listed in the roster's "supervisor" sheet yet — add them there once their supervisor is known.`;
+  return `<span class="unassigned-tag" data-tooltip="${escAttr(tip)}">Unassigned</span>`;
+}
+
+/** Renders a Program cell, with a hover tooltip explaining "Unassigned" when it applies. */
+function fmtProgramCell(supervisor, program) {
+  if (program !== 'Unassigned') return esc(program);
+  const tip = supervisor === 'Unassigned'
+    ? `No supervisor is assigned, so a program can't be determined either.`
+    : `${supervisor} isn't listed in the roster's "program" sheet yet — add them there once their program is known.`;
+  return `<span class="unassigned-tag" data-tooltip="${escAttr(tip)}">Unassigned</span>`;
+}
+
 /** Shows "signed in as X · Sign out" in the header. */
 function updateSignedInStatus() {
   if (!STATE.currentUser) return;
@@ -636,8 +657,8 @@ async function renderOverview() {
   tbody.innerHTML = rows.map(a => `
     <tr>
       <td class="name-cell">${esc(a.agent)}</td>
-      <td>${esc(a.supervisor)}</td>
-      <td>${esc(a.program)}</td>
+      <td>${fmtSupervisorCell(a.agent, a.supervisor)}</td>
+      <td>${fmtProgramCell(a.supervisor, a.program)}</td>
       ${STATE.showHours ? `<td class="num">${fmtHours(a.sched)}</td><td class="num">${fmtHours(a.absence)}</td>` : ''}
       <td class="num"><span class="att-badge ${pctBadgeClass(a.pct)}">${fmtPct(a.pct)}</span></td>
     </tr>
@@ -687,8 +708,8 @@ async function renderWatchlist() {
     <tr>
       <td class="rank-cell"><span class="rank-num">${i+1}</span></td>
       <td class="name-cell">${esc(a.agent)}</td>
-      <td>${esc(a.supervisor)}</td>
-      <td>${esc(a.program)}</td>
+      <td>${fmtSupervisorCell(a.agent, a.supervisor)}</td>
+      <td>${fmtProgramCell(a.supervisor, a.program)}</td>
       ${STATE.showHours ? `<td class="num">${fmtHours(a.sched)}</td><td class="num">${fmtHours(a.absence)}</td>` : ''}
       <td class="num"><span class="att-badge ${pctBadgeClass(a.pct)}">${fmtPct(a.pct)}</span></td>
     </tr>
@@ -736,7 +757,7 @@ async function renderProgramsView() {
 
   document.getElementById('pg-tbody').innerHTML = programRows.map(p => `
     <tr>
-      <td class="name-cell">${esc(p.program)}</td>
+      <td class="name-cell">${p.program === "Unassigned" ? `<span class="unassigned-tag" data-tooltip="${escAttr('These agents\u2019 supervisors aren\u2019t listed in the program sheet yet (or the agents themselves have no supervisor assigned).')}">Unassigned</span>` : esc(p.program)}</td>
       <td class="num">${p.agentCount.toLocaleString()}</td>
       <td class="num">${fmtHours(p.sched)}</td>
       <td class="num">${fmtHours(p.absence)}</td>
@@ -817,8 +838,8 @@ async function renderDailyLog() {
     <tr>
       <td class="mono">${fmtDate(g.date)}</td>
       <td class="name-cell">${esc(g.agent)}</td>
-      <td>${esc(g.supervisor)}</td>
-      <td>${esc(g.program)}</td>
+      <td>${fmtSupervisorCell(g.agent, g.supervisor)}</td>
+      <td>${fmtProgramCell(g.supervisor, g.program)}</td>
       <td class="status-cell">${statusCellHtml(g.status)}</td>
       <td class="num"><span class="att-badge ${pctBadgeClass(g.pct)}">${fmtPct(g.pct)}</span></td>
     </tr>
