@@ -230,7 +230,7 @@ body {
   color: var(--text-faint);
 }
 
-.field select, .field input[type="text"] {
+.field select, .field input[type="text"], .field input[type="date"] {
   appearance: none;
   border: 1px solid var(--line);
   background: var(--paper);
@@ -238,25 +238,30 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 500;
-  padding: 7px 30px 7px 10px;
+  padding: 7px 10px;
   border-radius: 7px;
   min-width: 130px;
+  transition: border-color 0.15s ease;
+}
+
+.field select {
+  padding-right: 30px;
   cursor: pointer;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7280'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 11px center;
-  transition: border-color 0.15s ease;
 }
 
-.field select:hover, .field input[type="text"]:hover { border-color: #c7cad4; }
+.field select:hover, .field input[type="text"]:hover, .field input[type="date"]:hover { border-color: #c7cad4; }
 
-.field select:focus, .field input[type="text"]:focus {
+.field select:focus, .field input[type="text"]:focus, .field input[type="date"]:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(56,189,248,0.15);
 }
 
-.field input[type="text"] { min-width: 220px; cursor: text; background-image: none; padding-right: 10px; }
+.field input[type="text"] { min-width: 220px; cursor: text; }
+.field input[type="date"] { min-width: 150px; cursor: pointer; }
 
 .search-wrap { position: relative; }
 
@@ -564,5 +569,5 @@ td.num { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-
   .app { height: auto; min-height: 100vh; }
   .view { padding: 14px; }
   .filter-bar { gap: 10px; }
-  .field select, .field input[type="text"] { min-width: 100px; }
+  .field select, .field input[type="text"], .field input[type="date"] { min-width: 100px; }
 }

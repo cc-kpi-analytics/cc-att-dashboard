@@ -71,7 +71,7 @@ let STATE = {
   monthsByYear: new Map(),
 
   overview: { year: '', month: '', supervisor: '' },
-  dailylog: { year: '', month: '', search: '' },
+  dailylog: { year: '', month: '', date: '', search: '' },
   watchlist: { year: '', month: '', program: '' },
   showHours: false,
 
@@ -257,6 +257,22 @@ function weeksOverlapping(year, month) {
   return STATE.availableWeeks.filter(w => w.saturday >= rangeStart && w.sunday <= rangeEnd);
 }
 
+/** Parses an <input type="date"> value ("YYYY-MM-DD") as a local date, avoiding the UTC-shift pitfall of `new Date(str)`. */
+function parseISODateLocal(str) {
+  const [y, m, d] = str.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
+/** Which week(s) does the Daily Log need for its current filter — a single exact date, or the usual year/month range. */
+function weeksForDailyLog(filter) {
+  if (filter.date) {
+    const d = parseISODateLocal(filter.date);
+    const match = STATE.availableWeeks.find(w => d >= w.sunday && d <= w.saturday);
+    return match ? [match] : [];
+  }
+  return weeksOverlapping(filter.year, filter.month);
+}
+
 /* ---------------- weekly file fetch + parse + cache ---------------- */
 
 function fetchAndParseWeek(weekMeta) {
@@ -416,8 +432,12 @@ function aggregateWatchlist(filter) {
 function filterDailyLog(filter) {
   const q = filter.search.trim().toLowerCase();
   return STATE.dailyGroups.filter(g => {
-    if (filter.year !== '' && g.year !== filter.year) return false;
-    if (filter.month !== '' && g.month !== filter.month) return false;
+    if (filter.date) {
+      if (g.dkey !== filter.date) return false;
+    } else {
+      if (filter.year !== '' && g.year !== filter.year) return false;
+      if (filter.month !== '' && g.month !== filter.month) return false;
+    }
     if (q && !g.agent.toLowerCase().includes(q)) return false;
     return true;
   });
@@ -547,10 +567,10 @@ function statusCellHtml(status) {
 async function renderDailyLog() {
   const myGen = ++STATE.renderGen.dailylog;
   const filter = STATE.dailylog;
-  const needed = weeksOverlapping(filter.year, filter.month);
+  const needed = weeksForDailyLog(filter);
 
   if (needed.length === 0) {
-    setTableMessage('view-dailylog', 'No data available for this period', 'No weekly files were found for this year/month.');
+    setTableMessage('view-dailylog', 'No data available for this period', filter.date ? 'No weekly file covers this date.' : 'No weekly files were found for this year/month.');
     updateDailyLogSummary(filter);
     return;
   }
@@ -619,6 +639,33 @@ function opt(value, label) {
   return o;
 }
 
+/** Rebuilds a section's Month <option> list to match its Year select's current value. */
+function refreshMonthOptions(prefix) {
+  const yearSel = document.getElementById(prefix + '-year');
+  const monthSel = document.getElementById(prefix + '-month');
+  const yVal = yearSel.value;
+  monthSel.innerHTML = '';
+  monthSel.appendChild(opt('', 'All months'));
+  let monthNums;
+  if (yVal === '') {
+    const all = new Set();
+    STATE.monthsByYear.forEach(set => set.forEach(m => all.add(m)));
+    monthNums = Array.from(all);
+  } else {
+    monthNums = Array.from(STATE.monthsByYear.get(Number(yVal)) || []);
+  }
+  monthNums.sort((a,b)=>a-b).forEach(m => monthSel.appendChild(opt(m, MONTH_NAMES[m-1])));
+}
+
+/** Programmatically sets a section's Year/Month selects (and rebuilds Month options) without dispatching change events. */
+function setYearMonthSelects(prefix, year, month) {
+  const yearSel = document.getElementById(prefix + '-year');
+  const monthSel = document.getElementById(prefix + '-month');
+  yearSel.value = year === '' ? '' : String(year);
+  refreshMonthOptions(prefix);
+  monthSel.value = month === '' ? '' : String(month);
+}
+
 function populateYearMonth(prefix, currentFilter, onChange) {
   const yearSel = document.getElementById(prefix + '-year');
   const monthSel = document.getElementById(prefix + '-month');
@@ -627,24 +674,10 @@ function populateYearMonth(prefix, currentFilter, onChange) {
   STATE.years.forEach(y => yearSel.appendChild(opt(y, y)));
   yearSel.value = currentFilter.year === '' ? '' : String(currentFilter.year);
 
-  function refreshMonths() {
-    const yVal = yearSel.value;
-    monthSel.innerHTML = '';
-    monthSel.appendChild(opt('', 'All months'));
-    let monthNums;
-    if (yVal === '') {
-      const all = new Set();
-      STATE.monthsByYear.forEach(set => set.forEach(m => all.add(m)));
-      monthNums = Array.from(all);
-    } else {
-      monthNums = Array.from(STATE.monthsByYear.get(Number(yVal)) || []);
-    }
-    monthNums.sort((a,b)=>a-b).forEach(m => monthSel.appendChild(opt(m, MONTH_NAMES[m-1])));
-  }
-  refreshMonths();
+  refreshMonthOptions(prefix);
   monthSel.value = currentFilter.month === '' ? '' : String(currentFilter.month);
 
-  yearSel.addEventListener('change', () => { refreshMonths(); onChange(); });
+  yearSel.addEventListener('change', () => { refreshMonthOptions(prefix); onChange(); });
   monthSel.addEventListener('change', onChange);
 }
 
@@ -710,6 +743,29 @@ function setupDailyLogFilters() {
   populateYearMonth('dl', STATE.dailylog, () => {
     STATE.dailylog.year = document.getElementById('dl-year').value === '' ? '' : Number(document.getElementById('dl-year').value);
     STATE.dailylog.month = document.getElementById('dl-month').value === '' ? '' : Number(document.getElementById('dl-month').value);
+    if (STATE.dailylog.date) {
+      STATE.dailylog.date = '';
+      document.getElementById('dl-date').value = '';
+    }
+    renderDailyLog();
+    updateMeta('dl');
+  });
+
+  const dateInput = document.getElementById('dl-date');
+  if (STATE.availableWeeks.length > 0) {
+    const earliest = STATE.availableWeeks[0].sunday;
+    const latest = STATE.availableWeeks[STATE.availableWeeks.length - 1].saturday;
+    dateInput.min = dateKey(earliest);
+    dateInput.max = dateKey(latest);
+  }
+  dateInput.addEventListener('change', () => {
+    STATE.dailylog.date = dateInput.value; // already "YYYY-MM-DD", matches dkey format directly
+    if (dateInput.value) {
+      const d = parseISODateLocal(dateInput.value);
+      STATE.dailylog.year = d.getFullYear();
+      STATE.dailylog.month = d.getMonth() + 1;
+      setYearMonthSelects('dl', STATE.dailylog.year, STATE.dailylog.month);
+    }
     renderDailyLog();
     updateMeta('dl');
   });
@@ -755,6 +811,8 @@ function setupDailyLogFilters() {
   document.getElementById('dl-clear').addEventListener('click', () => {
     document.getElementById('dl-year').value = '';
     document.getElementById('dl-year').dispatchEvent(new Event('change'));
+    dateInput.value = '';
+    STATE.dailylog.date = '';
     searchInput.value = '';
     STATE.dailylog.search = '';
     closeSuggest();
@@ -770,8 +828,12 @@ function updateMeta(prefix) {
   if (!el) return;
   const parts = [];
   const s = STATE[prefix === 'ov' ? 'overview' : prefix === 'wl' ? 'watchlist' : 'dailylog'];
-  if (s.year !== '') parts.push(s.year);
-  if (s.month !== '') parts.push(MONTH_NAMES[s.month-1]);
+  if (prefix === 'dl' && s.date) {
+    parts.push(parseISODateLocal(s.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }));
+  } else {
+    if (s.year !== '') parts.push(s.year);
+    if (s.month !== '') parts.push(MONTH_NAMES[s.month-1]);
+  }
   if (prefix === 'ov' && s.supervisor) parts.push(s.supervisor);
   if (prefix === 'wl' && s.program) parts.push(s.program);
   if (prefix === 'dl' && s.search) parts.push('"' + s.search + '"');
