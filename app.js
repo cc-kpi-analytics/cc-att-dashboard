@@ -708,6 +708,9 @@ async function renderOverview() {
   }
 
   const tbody = document.getElementById('ov-tbody');
+  const totals = rows.reduce((acc, a) => ({ sched: acc.sched + a.sched, absence: acc.absence + a.absence }), { sched: 0, absence: 0 });
+  const totalsPct = totals.sched > 0 ? 1 - (totals.absence / totals.sched) : null;
+
   tbody.innerHTML = rows.map(a => `
     <tr>
       <td class="name-cell">${esc(a.agent)}</td>
@@ -716,7 +719,15 @@ async function renderOverview() {
       ${STATE.showHours ? `<td class="num">${fmtHours(a.sched)}</td><td class="num">${fmtHours(a.absence)}</td>` : ''}
       <td class="num"><span class="att-badge ${pctBadgeClass(a.pct)}">${fmtPct(a.pct)}</span></td>
     </tr>
-  `).join('');
+  `).join('') + `
+    <tr class="totals-row">
+      <td class="name-cell">Total</td>
+      <td></td>
+      <td></td>
+      ${STATE.showHours ? `<td class="num">${fmtHours(totals.sched)}</td><td class="num">${fmtHours(totals.absence)}</td>` : ''}
+      <td class="num"><span class="att-badge ${pctBadgeClass(totalsPct)}">${fmtPct(totalsPct)}</span></td>
+    </tr>
+  `;
 }
 
 function updateOverviewSummary(filter) {
@@ -1282,6 +1293,14 @@ function getVisibleTableData() {
       r.push(fmtPct(a.pct));
       return r;
     });
+    if (rows.length > 0 && rows.length <= SCREENSHOT_MAX_ROWS) {
+      const t = rows.reduce((acc, a) => ({ sched: acc.sched + a.sched, absence: acc.absence + a.absence }), { sched: 0, absence: 0 });
+      const totalsPct = t.sched > 0 ? 1 - (t.absence / t.sched) : null;
+      const totalRow = ['Total', '', ''];
+      if (STATE.showHours) totalRow.push(fmtHours(t.sched), fmtHours(t.absence));
+      totalRow.push(fmtPct(totalsPct));
+      dataRows.push(totalRow);
+    }
     return { title: buildFilterTitle('Overview', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'overview' };
   }
 
