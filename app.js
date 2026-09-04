@@ -26,6 +26,15 @@ const EXCEPTION_TYPES = new Set([
 // "Unapproved shrink" — the numerator of Attendance %.
 const NON_DISCRETIONARY_TYPES = new Set(['Late', 'Left Early', 'UTO', 'NCNS']);
 
+// Used only by the Attendance Summary tab's own hours model (Sched hours =
+// everything except Lunch, split into non-discretionary vs discretionary
+// exception time). Everywhere else in the app keeps the original
+// EXCLUDE_FROM_SCHED-based definition of Sched hours.
+const DISCRETIONARY_TYPES = new Set([
+  'Admin', 'Alt Holiday', 'Bereavement', 'FMLA', 'Jury Duty', 'Meeting',
+  'PFML', 'PTO', 'Training', 'Traumatic Leave', 'UPL',
+]);
+
 // Programs that still show up historically in the roster/data but shouldn't
 // be selectable in Bottom 15 / Programs filter dropdowns going forward
 // (e.g. a discontinued program with no new data expected).
@@ -126,6 +135,29 @@ function assignRelativeBadges(rows) {
     else r.badgeClass = 'att-good';
   });
   rows.forEach(r => { if (r.pct === null || r.pct === undefined) r.badgeClass = 'att-neutral'; });
+}
+
+// Absenteeism % is the inverse sense of Attendance % — higher is worse — so
+// its fixed-threshold coloring is the mirror image of pctBadgeClass.
+function absenteeismBadgeClass(pct) {
+  if (pct === null || pct === undefined || isNaN(pct)) return 'att-neutral';
+  if (pct <= 0.05) return 'att-good';
+  if (pct <= 0.15) return 'att-warn';
+  return 'att-bad';
+}
+
+/** Like assignRelativeBadges, but for an absenteeism-direction metric (lowest = best) on an arbitrary field. */
+function assignRelativeAbsenteeismBadges(rows, key) {
+  const withPct = rows.filter(r => r[key] !== null && r[key] !== undefined);
+  const sorted = [...withPct].sort((a, b) => a[key] - b[key]); // best (lowest) first
+  const n = sorted.length;
+  sorted.forEach((r, i) => {
+    const frac = n > 1 ? i / (n - 1) : 0; // 0 = best, 1 = worst
+    if (frac < 1 / 3) r.badgeClass = 'att-good';
+    else if (frac < 2 / 3) r.badgeClass = 'att-warn';
+    else r.badgeClass = 'att-bad';
+  });
+  rows.forEach(r => { if (r[key] === null || r[key] === undefined) r.badgeClass = 'att-neutral'; });
 }
 
 function fmtDate(d) {
@@ -517,6 +549,13 @@ function aggregateWatchlist(filter) {
 }
 
 /** Admin-only: one row per program, aggregated across every agent in it. */
+/**
+ * Admin-only, Attendance Summary tab only: a different hours model than
+ * the rest of the app. Here, Sched hours = every interval except Lunch
+ * (not the usual EXCLUDE_FROM_SCHED list), split into non-discretionary
+ * (Late/UTO/NCNS/Left Early) and discretionary (everything else that's an
+ * exception type) absence hours.
+ */
 function aggregateProgramSummary(filter) {
   const byProgram = new Map();
   for (const r of STATE.records) {
@@ -524,25 +563,27 @@ function aggregateProgramSummary(filter) {
     if (filter.month !== '' && r.month !== filter.month) continue;
     let p = byProgram.get(r.program);
     if (!p) {
-      p = { program: r.program, sched: 0, absence: 0, agents: new Set() };
+      p = { program: r.program, sched: 0, nonDisc: 0, disc: 0 };
       byProgram.set(r.program, p);
     }
-    p.sched += r.schedAdj;
-    p.absence += r.nonDisc;
-    p.agents.add(r.agent);
+    if (r.eventType !== 'Lunch') p.sched += r.schedRaw;
+    if (NON_DISCRETIONARY_TYPES.has(r.eventType)) p.nonDisc += r.schedRaw;
+    else if (DISCRETIONARY_TYPES.has(r.eventType)) p.disc += r.schedRaw;
   }
   const out = Array.from(byProgram.values()).map(p => ({
     program: p.program,
-    agentCount: p.agents.size,
-    sched: p.sched,
-    absence: p.absence,
-    pct: p.sched > 0 ? 1 - (p.absence / p.sched) : null,
+    nonDisc: p.nonDisc,
+    disc: p.disc,
+    nonDiscPct: p.sched > 0 ? p.nonDisc / p.sched : null,
+    discPct: p.sched > 0 ? p.disc / p.sched : null,
+    totalPct: p.sched > 0 ? (p.nonDisc + p.disc) / p.sched : null,
   }));
   out.sort((a, b) => a.program.localeCompare(b.program));
   return out;
 }
 
 /** Admin-only: how the "unapproved shrink" hours break down by exception type, across all programs. */
+/** Admin-only: how absence hours split by exception type — both non-discretionary and discretionary. */
 function aggregateAbsenceBreakdown(filter) {
   const byType = new Map();
   let total = 0;
@@ -550,7 +591,8 @@ function aggregateAbsenceBreakdown(filter) {
     if (filter.year !== '' && r.year !== filter.year) continue;
     if (filter.month !== '' && r.month !== filter.month) continue;
     if (filter.program && r.program !== filter.program) continue;
-    if (!NON_DISCRETIONARY_TYPES.has(r.eventType) || r.schedRaw <= 0) continue;
+    const isRelevant = NON_DISCRETIONARY_TYPES.has(r.eventType) || DISCRETIONARY_TYPES.has(r.eventType);
+    if (!isRelevant || r.schedRaw <= 0) continue;
     byType.set(r.eventType, (byType.get(r.eventType) || 0) + r.schedRaw);
     total += r.schedRaw;
   }
@@ -569,6 +611,7 @@ const DOW_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frid
  * (across every week in the selected period) and shows each weekday's
  * average absenteeism — sorted with the worst (lowest Attendance %) first.
  */
+/** Same hours model as aggregateProgramSummary, grouped by weekday (pooled across every occurrence in the period) instead of by program. */
 function aggregateAbsenteeismByWeekday(filter) {
   const byDow = new Map(); // 0=Sunday .. 6=Saturday
   for (const r of STATE.records) {
@@ -577,9 +620,10 @@ function aggregateAbsenteeismByWeekday(filter) {
     if (filter.program && r.program !== filter.program) continue;
     const dow = r.date.getDay();
     let d = byDow.get(dow);
-    if (!d) { d = { dow, sched: 0, absence: 0, dates: new Set() }; byDow.set(dow, d); }
-    d.sched += r.schedAdj;
-    d.absence += r.nonDisc;
+    if (!d) { d = { dow, sched: 0, nonDisc: 0, disc: 0, dates: new Set() }; byDow.set(dow, d); }
+    if (r.eventType !== 'Lunch') d.sched += r.schedRaw;
+    if (NON_DISCRETIONARY_TYPES.has(r.eventType)) d.nonDisc += r.schedRaw;
+    else if (DISCRETIONARY_TYPES.has(r.eventType)) d.disc += r.schedRaw;
     d.dates.add(r.dkey);
   }
 
@@ -587,15 +631,16 @@ function aggregateAbsenteeismByWeekday(filter) {
   for (let dow = 0; dow < 7; dow++) {
     const d = byDow.get(dow);
     if (!d || d.dates.size === 0) continue;
-    const occurrences = d.dates.size;
     out.push({
       name: DOW_NAMES[dow],
-      occurrences,
-      avgAbsence: d.absence / occurrences,
-      pct: d.sched > 0 ? 1 - (d.absence / d.sched) : null,
+      nonDisc: d.nonDisc,
+      disc: d.disc,
+      nonDiscPct: d.sched > 0 ? d.nonDisc / d.sched : null,
+      discPct: d.sched > 0 ? d.disc / d.sched : null,
+      totalPct: d.sched > 0 ? (d.nonDisc + d.disc) / d.sched : null,
     });
   }
-  assignRelativeBadges(out);
+  assignRelativeAbsenteeismBadges(out, 'totalPct');
   // out is already in Sunday→Saturday order from the loop above.
   return out;
 }
@@ -727,7 +772,7 @@ async function renderWatchlist() {
 
 /** Puts the same message into all three Programs-view tables at once (loading/empty/error states). */
 function setProgramsMessage(bigText, smallText) {
-  const specs = [['pg-tbody', 5], ['pg-breakdown-tbody', 3], ['pg-days-tbody', 4]];
+  const specs = [['pg-tbody', 4], ['pg-breakdown-tbody', 3], ['pg-days-tbody', 4]];
   const html = `<tr><td colspan="__COLSPAN__"><div class="empty-state"><div class="big">${esc(bigText)}</div>` +
     (smallText ? `<div class="small">${esc(smallText)}</div>` : '') + `</div></td></tr>`;
   specs.forEach(([id, colspan]) => {
@@ -777,16 +822,15 @@ async function renderProgramsView() {
   document.getElementById('pg-tbody').innerHTML = programRows.map(p => `
     <tr>
       <td class="name-cell">${p.program === "Unassigned" ? `<span class="unassigned-tag" data-tooltip="${escAttr('These agents (or their supervisors) are most likely no longer active \u2014 attrition, termination, or resignation \u2014 that\u2019s typically why no program is on record for them.')}">Unassigned</span>` : esc(p.program)}</td>
-      <td class="num">${p.agentCount.toLocaleString()}</td>
-      <td class="num">${fmtHours(p.sched)}</td>
-      <td class="num">${fmtHours(p.absence)}</td>
-      <td class="num"><span class="att-badge ${pctBadgeClass(p.pct)}">${fmtPct(p.pct)}</span></td>
+      <td class="num mono">${fmtHours(p.nonDisc)} hrs / ${fmtPct(p.nonDiscPct)}</td>
+      <td class="num mono">${fmtHours(p.disc)} hrs / ${fmtPct(p.discPct)}</td>
+      <td class="num"><span class="att-badge ${absenteeismBadgeClass(p.totalPct)}">${fmtPct(p.totalPct)}</span></td>
     </tr>
   `).join('');
 
   const breakdownBody = document.getElementById('pg-breakdown-tbody');
   if (breakdownRows.length === 0) {
-    breakdownBody.innerHTML = `<tr><td colspan="3"><div class="empty-state"><div class="small">No Late/UTO/NCNS/Left Early hours in this period.</div></div></td></tr>`;
+    breakdownBody.innerHTML = `<tr><td colspan="3"><div class="empty-state"><div class="small">No exception hours in this period.</div></div></td></tr>`;
   } else {
     breakdownBody.innerHTML = breakdownRows.map(b => `
       <tr>
@@ -804,9 +848,9 @@ async function renderProgramsView() {
     daysBody.innerHTML = dayRows.map(d => `
       <tr>
         <td class="name-cell">${esc(d.name)}</td>
-        <td class="num">${d.occurrences.toLocaleString()}</td>
-        <td class="num">${fmtHours(d.avgAbsence)}</td>
-        <td class="num"><span class="att-badge ${d.badgeClass}">${fmtPct(d.pct)}</span></td>
+        <td class="num mono">${fmtHours(d.nonDisc)} hrs / ${fmtPct(d.nonDiscPct)}</td>
+        <td class="num mono">${fmtHours(d.disc)} hrs / ${fmtPct(d.discPct)}</td>
+        <td class="num"><span class="att-badge ${d.badgeClass}">${fmtPct(d.totalPct)}</span></td>
       </tr>
     `).join('');
   }
@@ -1245,9 +1289,12 @@ function getVisibleTableData() {
   if (view === 'programs') {
     const filter = STATE.programsView;
     const rows = aggregateProgramSummary(filter);
-    const columns = ['Program', 'Agents', 'Sched Hours', 'Absence Hours', 'Attendance %'];
+    const columns = ['Program', 'Non-Discretionary Hrs/Absenteeism %', 'Discretionary Hrs/Absenteeism %', 'Total Absenteeism %'];
     const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(p => [
-      p.program, String(p.agentCount), fmtHours(p.sched), fmtHours(p.absence), fmtPct(p.pct),
+      p.program,
+      `${fmtHours(p.nonDisc)} hrs / ${fmtPct(p.nonDiscPct)}`,
+      `${fmtHours(p.disc)} hrs / ${fmtPct(p.discPct)}`,
+      fmtPct(p.totalPct),
     ]);
     return { title: buildFilterTitle('Attendance Summary', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'attendance-summary' };
   }
