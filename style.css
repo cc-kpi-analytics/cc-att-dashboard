@@ -563,6 +563,14 @@ td.num { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-
 
 .name-cell { font-weight: 600; color: var(--ink); }
 
+.totals-row td {
+  border-top: 2px solid var(--line);
+  background: var(--paper);
+  font-weight: 700;
+}
+
+.totals-row .name-cell { color: var(--ink); }
+
 .unassigned-tag {
   position: relative;
   display: inline-block;

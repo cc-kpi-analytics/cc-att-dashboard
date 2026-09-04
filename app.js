@@ -572,6 +572,7 @@ function aggregateProgramSummary(filter) {
   }
   const out = Array.from(byProgram.values()).map(p => ({
     program: p.program,
+    sched: p.sched,
     nonDisc: p.nonDisc,
     disc: p.disc,
     nonDiscPct: p.sched > 0 ? p.nonDisc / p.sched : null,
@@ -582,7 +583,6 @@ function aggregateProgramSummary(filter) {
   return out;
 }
 
-/** Admin-only: how the "unapproved shrink" hours break down by exception type, across all programs. */
 /** Admin-only: how absence hours split by exception type — both non-discretionary and discretionary. */
 function aggregateAbsenceBreakdown(filter) {
   const byType = new Map();
@@ -819,6 +819,13 @@ async function renderProgramsView() {
     return;
   }
 
+  const programTotals = programRows.reduce((acc, p) => ({
+    sched: acc.sched + p.sched, nonDisc: acc.nonDisc + p.nonDisc, disc: acc.disc + p.disc,
+  }), { sched: 0, nonDisc: 0, disc: 0 });
+  programTotals.nonDiscPct = programTotals.sched > 0 ? programTotals.nonDisc / programTotals.sched : null;
+  programTotals.discPct = programTotals.sched > 0 ? programTotals.disc / programTotals.sched : null;
+  programTotals.totalPct = programTotals.sched > 0 ? (programTotals.nonDisc + programTotals.disc) / programTotals.sched : null;
+
   document.getElementById('pg-tbody').innerHTML = programRows.map(p => `
     <tr>
       <td class="name-cell">${p.program === "Unassigned" ? `<span class="unassigned-tag" data-tooltip="${escAttr('These agents (or their supervisors) are most likely no longer active \u2014 attrition, termination, or resignation \u2014 that\u2019s typically why no program is on record for them.')}">Unassigned</span>` : esc(p.program)}</td>
@@ -826,7 +833,14 @@ async function renderProgramsView() {
       <td class="num mono">${fmtHours(p.disc)} hrs / ${fmtPct(p.discPct)}</td>
       <td class="num"><span class="att-badge ${absenteeismBadgeClass(p.totalPct)}">${fmtPct(p.totalPct)}</span></td>
     </tr>
-  `).join('');
+  `).join('') + `
+    <tr class="totals-row">
+      <td class="name-cell">Total</td>
+      <td class="num mono">${fmtHours(programTotals.nonDisc)} hrs / ${fmtPct(programTotals.nonDiscPct)}</td>
+      <td class="num mono">${fmtHours(programTotals.disc)} hrs / ${fmtPct(programTotals.discPct)}</td>
+      <td class="num"><span class="att-badge ${absenteeismBadgeClass(programTotals.totalPct)}">${fmtPct(programTotals.totalPct)}</span></td>
+    </tr>
+  `;
 
   const breakdownBody = document.getElementById('pg-breakdown-tbody');
   if (breakdownRows.length === 0) {
@@ -1296,6 +1310,13 @@ function getVisibleTableData() {
       `${fmtHours(p.disc)} hrs / ${fmtPct(p.discPct)}`,
       fmtPct(p.totalPct),
     ]);
+    if (rows.length > 0 && rows.length <= SCREENSHOT_MAX_ROWS) {
+      const t = rows.reduce((acc, p) => ({ sched: acc.sched + p.sched, nonDisc: acc.nonDisc + p.nonDisc, disc: acc.disc + p.disc }), { sched: 0, nonDisc: 0, disc: 0 });
+      const nonDiscPct = t.sched > 0 ? t.nonDisc / t.sched : null;
+      const discPct = t.sched > 0 ? t.disc / t.sched : null;
+      const totalPct = t.sched > 0 ? (t.nonDisc + t.disc) / t.sched : null;
+      dataRows.push(['Total', `${fmtHours(t.nonDisc)} hrs / ${fmtPct(nonDiscPct)}`, `${fmtHours(t.disc)} hrs / ${fmtPct(discPct)}`, fmtPct(totalPct)]);
+    }
     return { title: buildFilterTitle('Attendance Summary', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'attendance-summary' };
   }
 
