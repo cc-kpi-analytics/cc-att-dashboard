@@ -70,7 +70,7 @@ const DISCOVERY_CONCURRENCY = 16;
 
 let STATE = {
   supMap: new Map(),
-  progMap: new Map(),
+  agentProgramMap: new Map(),
   agentNames: [],
   supervisors: [],
   programs: [],
@@ -232,35 +232,49 @@ async function fetchRosterWorkbook() {
 
   setLoading('PARSING roster …');
   const wb = XLSX.read(buf, { type: 'array', cellDates: true });
-  for (const s of ['supervisor', 'program']) {
-    if (!wb.SheetNames.includes(s)) throw new Error('Workbook is missing the required "' + s + '" sheet.');
+  if (!wb.SheetNames.includes('supervisor-program')) {
+    throw new Error('Workbook is missing the required "supervisor-program" sheet.');
   }
   return wb;
 }
 
+/**
+ * Roster now comes from one sheet: "supervisor-program" (Name, Supervisor,
+ * Program per agent) — no more separate supervisor/program sheets or the
+ * two-hop lookup that went with them. A blank or "#N/A" Program (Excel
+ * formula-error placeholders show up here for some rows) is treated as
+ * "Unassigned", same as a genuinely missing value.
+ */
 function buildRosterFromWorkbook(wb) {
-  const supRows = XLSX.utils.sheet_to_json(wb.Sheets['supervisor'], { defval: null });
-  const progRows = XLSX.utils.sheet_to_json(wb.Sheets['program'], { defval: null });
+  const rosterRows = XLSX.utils.sheet_to_json(wb.Sheets['supervisor-program'], { defval: null });
 
-  const supMap = new Map();
-  supRows.forEach(r => {
-    const name = r['Name'];
-    const sup = r['Supervisor'];
-    if (name) supMap.set(String(name).trim(), sup ? String(sup).trim() : 'Unassigned');
-  });
+  const supMap = new Map();          // Agent -> Supervisor
+  const agentProgramMap = new Map(); // Agent -> Program
+  const agentNames = [];
 
-  const progMap = new Map();
-  progRows.forEach(r => {
+  rosterRows.forEach(r => {
+    const nameRaw = r['Name'];
+    if (!nameRaw) return;
+    const agent = String(nameRaw).trim();
+    agentNames.push(agent);
+
     const sup = r['Supervisor'];
-    const prog = r['Program'];
-    if (sup) progMap.set(String(sup).trim(), prog !== null && prog !== undefined ? String(prog).trim() : 'Unassigned');
+    supMap.set(agent, sup ? String(sup).trim() : 'Unassigned');
+
+    const progRaw = r['Program'];
+    let program = 'Unassigned';
+    if (progRaw !== null && progRaw !== undefined) {
+      const progStr = String(progRaw).trim();
+      if (progStr && progStr.toUpperCase() !== '#N/A') program = progStr;
+    }
+    agentProgramMap.set(agent, program);
   });
 
   STATE.supMap = supMap;
-  STATE.progMap = progMap;
-  STATE.agentNames = Array.from(new Set(supRows.map(r => r['Name']).filter(Boolean).map(n => String(n).trim()))).sort();
-  STATE.supervisors = Array.from(new Set(supRows.map(r => { const s = r['Supervisor']; return s ? String(s).trim() : 'Unassigned'; }))).sort();
-  STATE.programs = Array.from(new Set(progRows.map(r => { const p = r['Program']; return p !== null && p !== undefined ? String(p).trim() : 'Unassigned'; })))
+  STATE.agentProgramMap = agentProgramMap;
+  STATE.agentNames = Array.from(new Set(agentNames)).sort();
+  STATE.supervisors = Array.from(new Set(supMap.values())).sort();
+  STATE.programs = Array.from(new Set(agentProgramMap.values()))
     .filter(p => !RETIRED_PROGRAM_FILTERS.has(p))
     .sort();
 }
@@ -268,7 +282,11 @@ function buildRosterFromWorkbook(wb) {
 /**
  * Scopes the roster (and, from then on, every fetched week's records) down
  * to the signed-in user's allowed program(s). Pass null for unrestricted
- * (admin) access.
+ * (admin) access. Filtering happens agent-by-agent (each agent has their
+ * own directly-assigned program) rather than by supervisor, since a
+ * supervisor can legitimately oversee agents in more than one program —
+ * a supervisor stays visible in the filter dropdown as long as at least
+ * one of their (now-filtered) agents remains in scope.
  */
 function applyProgramRestriction(allowedPrograms) {
   STATE.allowedPrograms = allowedPrograms || null;
@@ -276,11 +294,10 @@ function applyProgramRestriction(allowedPrograms) {
 
   const allowed = STATE.allowedPrograms;
   STATE.programs = STATE.programs.filter(p => allowed.has(p));
-  STATE.supervisors = STATE.supervisors.filter(s => allowed.has(STATE.progMap.get(s) || 'Unassigned'));
-  STATE.agentNames = STATE.agentNames.filter(a => {
-    const sup = STATE.supMap.get(a) || 'Unassigned';
-    return allowed.has(STATE.progMap.get(sup) || 'Unassigned');
-  });
+  STATE.agentNames = STATE.agentNames.filter(a => allowed.has(STATE.agentProgramMap.get(a) || 'Unassigned'));
+
+  const inScopeSupervisors = new Set(STATE.agentNames.map(a => STATE.supMap.get(a) || 'Unassigned'));
+  STATE.supervisors = STATE.supervisors.filter(s => inScopeSupervisors.has(s));
 }
 
 /* ---------------- weekly file discovery ---------------- */
@@ -406,7 +423,7 @@ function fetchAndParseWeek(weekMeta) {
     for (const iv of intervals) {
       const agent = iv.agent;
       const supervisor = STATE.supMap.get(agent) || 'Unassigned';
-      const program = STATE.progMap.get(supervisor) || 'Unassigned';
+      const program = STATE.agentProgramMap.get(agent) || 'Unassigned';
       if (STATE.allowedPrograms && !STATE.allowedPrograms.has(program)) continue; // out of scope for this signed-in user
       const schedAdj = EXCLUDE_FROM_SCHED.has(iv.type) ? 0 : iv.duration;
       const nonDisc = NON_DISCRETIONARY_TYPES.has(iv.type) ? iv.duration : 0;
