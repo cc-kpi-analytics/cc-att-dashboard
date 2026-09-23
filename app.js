@@ -40,6 +40,20 @@ const DISCRETIONARY_TYPES = new Set([
 // (e.g. a discontinued program with no new data expected).
 const RETIRED_PROGRAM_FILTERS = new Set(['Warm Line']);
 
+// A weekly .mhtml file often gets uploaded partway through its own week —
+// e.g. it's Wednesday, but the file already has scheduled shifts for
+// Thursday through Saturday. Those haven't happened yet, so they aren't
+// real attendance data (just a future schedule); exclude today and any
+// later date from every part of the dashboard until that day has passed.
+const EXCLUDE_TODAY_AND_FUTURE = true;
+
+/** True if `d` is strictly before the start of `referenceNow`'s day (defaults to the real current time). */
+function isPastDate(d, referenceNow) {
+  const today = referenceNow ? new Date(referenceNow) : new Date();
+  today.setHours(0, 0, 0, 0);
+  return d < today;
+}
+
 // Pill styling per absence status.
 const PILL_CLASS = {
   'Late': 'warn',
@@ -421,6 +435,7 @@ function fetchAndParseWeek(weekMeta) {
 
     const enriched = [];
     for (const iv of intervals) {
+      if (EXCLUDE_TODAY_AND_FUTURE && !isPastDate(iv.date)) continue; // not real attendance yet — it's today or still in the future
       const agent = iv.agent;
       const supervisor = STATE.supMap.get(agent) || 'Unassigned';
       const program = STATE.agentProgramMap.get(agent) || 'Unassigned';
