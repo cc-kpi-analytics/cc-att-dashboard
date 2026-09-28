@@ -105,7 +105,6 @@ let STATE = {
   dailylog: { year: '', month: '', date: '', search: '' },
   watchlist: { year: '', month: '', program: '' },
   programsView: { year: '', month: '', program: '' },
-  alertsView: { year: '', month: '' },
   showHours: false,
 
   renderGen: { overview: 0, watchlist: 0, dailylog: 0, programsView: 0, alerts: 0 },
@@ -644,15 +643,26 @@ const DOW_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frid
 // day includes a UTO or NCNS exception.
 const ALERT_TYPES = new Set(['UTO', 'NCNS']);
 const ALERT_STREAK_THRESHOLD = 3;
+const ALERT_LOOKBACK_DAYS = 30; // only show streaks whose most recent day falls in this rolling window
+
+/** { start, end } for the rolling lookback window, end exclusive (today at midnight). */
+function alertsDateRange(referenceNow) {
+  const end = referenceNow ? new Date(referenceNow) : new Date();
+  end.setHours(0, 0, 0, 0);
+  const start = new Date(end);
+  start.setDate(start.getDate() - ALERT_LOOKBACK_DAYS);
+  return { start, end };
+}
 
 /**
  * One entry per contiguous streak of 3+ consecutive scheduled days with a
  * UTO/NCNS exception, across the agent's entire scheduled history (not
- * just the selected period — a streak needs full context to detect
- * correctly). The Year/Month filter only controls which streaks are
- * shown, keyed off the streak's most recent day.
+ * just the lookback window — a streak needs full context to detect
+ * correctly). Only streaks whose most recent day falls within the last
+ * ALERT_LOOKBACK_DAYS days are returned.
  */
-function aggregateConsecutiveAbsences(filter) {
+function aggregateConsecutiveAbsences() {
+  const { start, end } = alertsDateRange();
   const byAgent = new Map();
   STATE.dailyGroups.forEach(g => {
     if (!byAgent.has(g.agent)) byAgent.set(g.agent, []);
@@ -667,8 +677,7 @@ function aggregateConsecutiveAbsences(filter) {
     const flushStreak = () => {
       if (streak.length >= ALERT_STREAK_THRESHOLD) {
         const last = streak[streak.length - 1];
-        if ((filter.year === '' || last.year === filter.year) &&
-            (filter.month === '' || last.month === filter.month)) {
+        if (last.date >= start && last.date < end) {
           alerts.push({
             agent,
             supervisor: streak[0].supervisor,
@@ -696,6 +705,7 @@ function aggregateConsecutiveAbsences(filter) {
   alerts.sort((a, b) => b.lastDate - a.lastDate || a.agent.localeCompare(b.agent));
   return alerts;
 }
+
 
 /**
  * Admin-only: pools every Sunday together, every Monday together, etc.
@@ -907,7 +917,6 @@ function updateProgramsPanelTitles(filter) {
  */
 async function renderAlertsView() {
   const myGen = ++STATE.renderGen.alerts;
-  const filter = STATE.alertsView;
 
   if (STATE.availableWeeks.length === 0) {
     setTableMessage('view-alerts', 'No data available', 'No weekly files were found.');
@@ -923,9 +932,11 @@ async function renderAlertsView() {
   }
   if (myGen !== STATE.renderGen.alerts) return;
 
-  const rows = aggregateConsecutiveAbsences(filter);
+  updateAlertsRangeLabel();
+
+  const rows = aggregateConsecutiveAbsences();
   if (rows.length === 0) {
-    setTableMessage('view-alerts', 'No consecutive-absence streaks found', 'Try a different year/month — or there may simply be none in this data.');
+    setTableMessage('view-alerts', 'No consecutive-absence streaks in the last ' + ALERT_LOOKBACK_DAYS + ' days', 'Nothing to flag right now.');
     return;
   }
 
@@ -939,6 +950,17 @@ async function renderAlertsView() {
       <td class="status-cell">${a.entries.map(e => `<span class="pill ${PILL_CLASS[e.type] || 'bad'}">${esc(e.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' }))}: ${esc(e.type)}</span>`).join(' ')}</td>
     </tr>
   `).join('');
+}
+
+/** Shows the actual rolling date range (e.g. "Aug 30 – Sep 28, 2026") in the filter-meta slot. */
+function updateAlertsRangeLabel() {
+  const el = document.getElementById('al-meta');
+  if (!el) return;
+  const { start, end } = alertsDateRange();
+  const lastVisibleDay = new Date(end);
+  lastVisibleDay.setDate(lastVisibleDay.getDate() - 1);
+  const fmt = (d) => d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+  el.textContent = `Last ${ALERT_LOOKBACK_DAYS} days: ${fmt(start)} – ${fmt(lastVisibleDay)}`;
 }
 
 async function renderProgramsView() {
@@ -1206,24 +1228,6 @@ function setupWatchlistFilters() {
   updateMeta('wl');
 }
 
-function setupAlertsFilters() {
-  populateYearMonth('al', STATE.alertsView, () => {
-    STATE.alertsView.year = document.getElementById('al-year').value === '' ? '' : Number(document.getElementById('al-year').value);
-    STATE.alertsView.month = document.getElementById('al-month').value === '' ? '' : Number(document.getElementById('al-month').value);
-    renderAlertsView();
-    updateMeta('al');
-  });
-
-  document.getElementById('al-clear').addEventListener('click', () => {
-    document.getElementById('al-year').value = '';
-    document.getElementById('al-year').dispatchEvent(new Event('change'));
-    renderAlertsView();
-    updateMeta('al');
-  });
-
-  updateMeta('al');
-}
-
 function setupProgramsFilters() {
   populateYearMonth('pg', STATE.programsView, () => {
     STATE.programsView.year = document.getElementById('pg-year').value === '' ? '' : Number(document.getElementById('pg-year').value);
@@ -1341,7 +1345,7 @@ function updateMeta(prefix) {
   const el = document.getElementById(prefix + '-meta');
   if (!el) return;
   const parts = [];
-  const s = STATE[prefix === 'ov' ? 'overview' : prefix === 'wl' ? 'watchlist' : prefix === 'pg' ? 'programsView' : prefix === 'al' ? 'alertsView' : 'dailylog'];
+  const s = STATE[prefix === 'ov' ? 'overview' : prefix === 'wl' ? 'watchlist' : prefix === 'pg' ? 'programsView' : 'dailylog'];
   if (prefix === 'dl' && s.date) {
     parts.push(parseISODateLocal(s.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }));
   } else {
@@ -1478,14 +1482,13 @@ function getVisibleTableData() {
   }
 
   if (view === 'alerts') {
-    const filter = STATE.alertsView;
-    const rows = aggregateConsecutiveAbsences(filter);
+    const rows = aggregateConsecutiveAbsences();
     const columns = ['Agent Name', 'Supervisor', 'Program', 'Consecutive Days', 'Dates'];
     const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(a => [
       a.agent, a.supervisor, a.program, String(a.length),
       a.entries.map(e => `${e.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}: ${e.type}`).join(', '),
     ]);
-    return { title: buildFilterTitle('Attendance Alerts', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'attendance-alerts' };
+    return { title: 'Attendance Alerts (last ' + ALERT_LOOKBACK_DAYS + ' days)', columns, rows: dataRows, totalRows: rows.length, filename: 'attendance-alerts' };
   }
 
   if (view === 'programs') {
@@ -1706,7 +1709,6 @@ async function boot() {
     STATE.watchlist.year = defaultYear; STATE.watchlist.month = defaultMonth;
     STATE.dailylog.year = defaultYear; STATE.dailylog.month = defaultMonth;
     STATE.programsView.year = defaultYear; STATE.programsView.month = defaultMonth;
-    STATE.alertsView.year = defaultYear; STATE.alertsView.month = defaultMonth;
 
     document.getElementById('weeksCount').textContent =
       STATE.availableWeeks.length.toLocaleString() + (STATE.availableWeeks.length === 1 ? ' week available' : ' weeks available');
@@ -1720,11 +1722,11 @@ async function boot() {
     setupOverviewFilters();
     setupDailyLogFilters();
     setupWatchlistFilters();
-    setupAlertsFilters();
 
     const isAdmin = STATE.allowedPrograms === null;
     if (isAdmin) {
       document.getElementById('tab-programs').style.display = '';
+      document.getElementById('tab-alerts').style.display = '';
       setupProgramsFilters();
     }
 
