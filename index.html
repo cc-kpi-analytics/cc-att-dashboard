@@ -79,6 +79,12 @@
         </svg>
         Bottom 15
       </button>
+      <button class="tab-btn" data-view="alerts">
+        <svg class="tab-icon" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <path d="M8 1.5l7 12.5H1z"/><path d="M8 6.5v3.5" stroke-linecap="round"/><circle cx="8" cy="11.7" r="0.3" fill="currentColor" stroke="none"/>
+        </svg>
+        Attendance Alerts
+      </button>
       <button class="tab-btn" data-view="programs" id="tab-programs" style="display:none;">
         <svg class="tab-icon" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
           <path d="M2 13.5V8M6 13.5V4M10 13.5V6.5M14 13.5V2.5"/>
@@ -242,6 +248,49 @@
       <div class="table-footer">
         <span>Ranked by Attendance % — lowest (worst) first</span>
         <span id="wl-count">-rsapico-</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SECTION 3.5: ATTENDANCE ALERTS ===================== -->
+  <section class="view" id="view-alerts">
+    <div class="view-head">
+      <div class="view-title-wrap">
+        <span class="view-title">Attendance Alerts</span>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="field">
+        <label for="al-year">Year</label>
+        <select id="al-year"></select>
+      </div>
+      <div class="field">
+        <label for="al-month">Month</label>
+        <select id="al-month"></select>
+      </div>
+      <button class="clear-btn" id="al-clear">Reset filters</button>
+      <div class="filter-meta" id="al-meta"></div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Agent Name</th>
+              <th>Supervisor</th>
+              <th>Program</th>
+              <th class="num">Consecutive Days</th>
+              <th>Dates</th>
+            </tr>
+          </thead>
+          <tbody id="al-tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <span>3+ consecutive scheduled days of UTO or NCNS — a day off in between doesn't break the streak</span>
+        <span id="al-count">-rsapico-</span>
       </div>
     </div>
   </section>

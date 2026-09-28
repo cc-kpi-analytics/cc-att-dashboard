@@ -105,9 +105,10 @@ let STATE = {
   dailylog: { year: '', month: '', date: '', search: '' },
   watchlist: { year: '', month: '', program: '' },
   programsView: { year: '', month: '', program: '' },
+  alertsView: { year: '', month: '' },
   showHours: false,
 
-  renderGen: { overview: 0, watchlist: 0, dailylog: 0, programsView: 0 },
+  renderGen: { overview: 0, watchlist: 0, dailylog: 0, programsView: 0, alerts: 0 },
 };
 
 /* ---------------- helpers ---------------- */
@@ -638,6 +639,64 @@ function aggregateAbsenceBreakdown(filter) {
 /** Admin-only: the dates with the most absence hours, across all programs. */
 const DOW_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+// Attendance Alerts: flag a run of 3+ consecutive *scheduled* days (a day
+// the agent wasn't scheduled at all doesn't break the streak) where each
+// day includes a UTO or NCNS exception.
+const ALERT_TYPES = new Set(['UTO', 'NCNS']);
+const ALERT_STREAK_THRESHOLD = 3;
+
+/**
+ * One entry per contiguous streak of 3+ consecutive scheduled days with a
+ * UTO/NCNS exception, across the agent's entire scheduled history (not
+ * just the selected period — a streak needs full context to detect
+ * correctly). The Year/Month filter only controls which streaks are
+ * shown, keyed off the streak's most recent day.
+ */
+function aggregateConsecutiveAbsences(filter) {
+  const byAgent = new Map();
+  STATE.dailyGroups.forEach(g => {
+    if (!byAgent.has(g.agent)) byAgent.set(g.agent, []);
+    byAgent.get(g.agent).push(g);
+  });
+
+  const alerts = [];
+  byAgent.forEach((days, agent) => {
+    days.sort((a, b) => a.date - b.date);
+    let streak = [];
+
+    const flushStreak = () => {
+      if (streak.length >= ALERT_STREAK_THRESHOLD) {
+        const last = streak[streak.length - 1];
+        if ((filter.year === '' || last.year === filter.year) &&
+            (filter.month === '' || last.month === filter.month)) {
+          alerts.push({
+            agent,
+            supervisor: streak[0].supervisor,
+            program: streak[0].program,
+            length: streak.length,
+            entries: streak.map(d => ({
+              date: d.date,
+              type: (d.status !== 'present' && d.status.find(e => ALERT_TYPES.has(e.type))) ? d.status.find(e => ALERT_TYPES.has(e.type)).type : '',
+            })),
+            lastDate: last.date,
+          });
+        }
+      }
+      streak = [];
+    };
+
+    days.forEach(d => {
+      const hasAlertType = d.status !== 'present' && d.status.some(e => ALERT_TYPES.has(e.type) && e.hours > 0);
+      if (hasAlertType) streak.push(d);
+      else flushStreak();
+    });
+    flushStreak(); // close out a streak that runs to the end of the agent's data
+  });
+
+  alerts.sort((a, b) => b.lastDate - a.lastDate || a.agent.localeCompare(b.agent));
+  return alerts;
+}
+
 /**
  * Admin-only: pools every Sunday together, every Monday together, etc.
  * (across every week in the selected period) and shows each weekday's
@@ -696,13 +755,16 @@ function filterDailyLog(filter) {
 function colCountFor(section) {
   if (section === 'overview') return STATE.showHours ? 6 : 4;
   if (section === 'watchlist') return STATE.showHours ? 7 : 5;
+  if (section === 'alerts') return 5;
   return 6; // daily log
 }
 
 /** Replaces a table's <tbody> with a single spanning message row (loading/empty states). */
 function setTableMessage(viewId, bigText, smallText, smallId) {
-  const section = viewId === 'view-overview' ? 'overview' : viewId === 'view-watchlist' ? 'watchlist' : 'dailylog';
-  const tbodyId = viewId === 'view-overview' ? 'ov-tbody' : viewId === 'view-watchlist' ? 'wl-tbody' : 'dl-tbody';
+  const sectionMap = { 'view-overview': 'overview', 'view-watchlist': 'watchlist', 'view-alerts': 'alerts' };
+  const tbodyMap = { 'view-overview': 'ov-tbody', 'view-watchlist': 'wl-tbody', 'view-alerts': 'al-tbody' };
+  const section = sectionMap[viewId] || 'dailylog';
+  const tbodyId = tbodyMap[viewId] || 'dl-tbody';
   const tbody = document.getElementById(tbodyId);
   if (!tbody) return;
   const colspan = colCountFor(section);
@@ -831,6 +893,52 @@ function updateProgramsPanelTitles(filter) {
   const dEl = document.getElementById('pg-days-title');
   if (bEl) bEl.textContent = 'Absence Breakdown by Type' + suffix;
   if (dEl) dEl.textContent = 'Absenteeism by Day of Week' + suffix;
+}
+
+/**
+ * Attendance Alerts needs an agent's *entire* scheduled history to detect
+ * streaks correctly (a streak can start in one week and complete in the
+ * next), so — unlike every other section — it always ensures every
+ * discovered week is loaded, regardless of the Year/Month filter. Those
+ * filters only control which resulting streaks are displayed. This is
+ * also why this tab renders lazily (only when clicked) rather than during
+ * boot, so opening the dashboard doesn't force-fetch the whole dataset for
+ * people who never look at this tab.
+ */
+async function renderAlertsView() {
+  const myGen = ++STATE.renderGen.alerts;
+  const filter = STATE.alertsView;
+
+  if (STATE.availableWeeks.length === 0) {
+    setTableMessage('view-alerts', 'No data available', 'No weekly files were found.');
+    return;
+  }
+
+  try {
+    await ensureWeeksLoadedForView('view-alerts', STATE.availableWeeks);
+  } catch (err) {
+    if (myGen !== STATE.renderGen.alerts) return;
+    setTableMessage('view-alerts', 'Could not load data', err.message || 'Try again in a moment.');
+    return;
+  }
+  if (myGen !== STATE.renderGen.alerts) return;
+
+  const rows = aggregateConsecutiveAbsences(filter);
+  if (rows.length === 0) {
+    setTableMessage('view-alerts', 'No consecutive-absence streaks found', 'Try a different year/month — or there may simply be none in this data.');
+    return;
+  }
+
+  const tbody = document.getElementById('al-tbody');
+  tbody.innerHTML = rows.map(a => `
+    <tr>
+      <td class="name-cell">${esc(a.agent)}</td>
+      <td>${fmtSupervisorCell(a.agent, a.supervisor)}</td>
+      <td>${fmtProgramCell(a.supervisor, a.program)}</td>
+      <td class="num"><span class="rank-num">${a.length}</span></td>
+      <td class="status-cell">${a.entries.map(e => `<span class="pill ${PILL_CLASS[e.type] || 'bad'}">${esc(e.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' }))}: ${esc(e.type)}</span>`).join(' ')}</td>
+    </tr>
+  `).join('');
 }
 
 async function renderProgramsView() {
@@ -1098,6 +1206,24 @@ function setupWatchlistFilters() {
   updateMeta('wl');
 }
 
+function setupAlertsFilters() {
+  populateYearMonth('al', STATE.alertsView, () => {
+    STATE.alertsView.year = document.getElementById('al-year').value === '' ? '' : Number(document.getElementById('al-year').value);
+    STATE.alertsView.month = document.getElementById('al-month').value === '' ? '' : Number(document.getElementById('al-month').value);
+    renderAlertsView();
+    updateMeta('al');
+  });
+
+  document.getElementById('al-clear').addEventListener('click', () => {
+    document.getElementById('al-year').value = '';
+    document.getElementById('al-year').dispatchEvent(new Event('change'));
+    renderAlertsView();
+    updateMeta('al');
+  });
+
+  updateMeta('al');
+}
+
 function setupProgramsFilters() {
   populateYearMonth('pg', STATE.programsView, () => {
     STATE.programsView.year = document.getElementById('pg-year').value === '' ? '' : Number(document.getElementById('pg-year').value);
@@ -1215,7 +1341,7 @@ function updateMeta(prefix) {
   const el = document.getElementById(prefix + '-meta');
   if (!el) return;
   const parts = [];
-  const s = STATE[prefix === 'ov' ? 'overview' : prefix === 'wl' ? 'watchlist' : prefix === 'pg' ? 'programsView' : 'dailylog'];
+  const s = STATE[prefix === 'ov' ? 'overview' : prefix === 'wl' ? 'watchlist' : prefix === 'pg' ? 'programsView' : prefix === 'al' ? 'alertsView' : 'dailylog'];
   if (prefix === 'dl' && s.date) {
     parts.push(parseISODateLocal(s.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }));
   } else {
@@ -1349,6 +1475,17 @@ function getVisibleTableData() {
       return r;
     });
     return { title: buildFilterTitle('Watchlist', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'watchlist' };
+  }
+
+  if (view === 'alerts') {
+    const filter = STATE.alertsView;
+    const rows = aggregateConsecutiveAbsences(filter);
+    const columns = ['Agent Name', 'Supervisor', 'Program', 'Consecutive Days', 'Dates'];
+    const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(a => [
+      a.agent, a.supervisor, a.program, String(a.length),
+      a.entries.map(e => `${e.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}: ${e.type}`).join(', '),
+    ]);
+    return { title: buildFilterTitle('Attendance Alerts', filter), columns, rows: dataRows, totalRows: rows.length, filename: 'attendance-alerts' };
   }
 
   if (view === 'programs') {
@@ -1527,6 +1664,7 @@ function setupTabs() {
       btn.classList.add('active');
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.getElementById('view-' + btn.dataset.view).classList.add('active');
+      if (btn.dataset.view === 'alerts') renderAlertsView();
     });
   });
 }
@@ -1568,6 +1706,7 @@ async function boot() {
     STATE.watchlist.year = defaultYear; STATE.watchlist.month = defaultMonth;
     STATE.dailylog.year = defaultYear; STATE.dailylog.month = defaultMonth;
     STATE.programsView.year = defaultYear; STATE.programsView.month = defaultMonth;
+    STATE.alertsView.year = defaultYear; STATE.alertsView.month = defaultMonth;
 
     document.getElementById('weeksCount').textContent =
       STATE.availableWeeks.length.toLocaleString() + (STATE.availableWeeks.length === 1 ? ' week available' : ' weeks available');
@@ -1581,6 +1720,7 @@ async function boot() {
     setupOverviewFilters();
     setupDailyLogFilters();
     setupWatchlistFilters();
+    setupAlertsFilters();
 
     const isAdmin = STATE.allowedPrograms === null;
     if (isAdmin) {
