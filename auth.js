@@ -218,7 +218,7 @@ function runLoginGate(credMap) {
       signinErrorEl.style.display = 'none';
       signinInfoEl.style.display = 'none';
 
-      const email = signinEmailInput.value.trim();
+      const email = signinEmailInput.value.trim().toLowerCase();
       const password = signinPasswordInput.value;
       if (!email || !password) {
         signinErrorEl.textContent = 'Enter your email and password.';
@@ -243,7 +243,7 @@ function runLoginGate(credMap) {
     document.getElementById('signinForgotBtn').addEventListener('click', () => {
       forgotErrorEl.style.display = 'none';
       forgotInfoEl.style.display = 'none';
-      forgotEmailInput.value = signinEmailInput.value.includes('@') ? signinEmailInput.value.trim() : '';
+      forgotEmailInput.value = signinEmailInput.value.includes('@') ? signinEmailInput.value.trim().toLowerCase() : '';
       showOnly(forgotCard);
       forgotEmailInput.focus();
     });
@@ -262,7 +262,7 @@ function runLoginGate(credMap) {
       forgotErrorEl.style.display = 'none';
       forgotInfoEl.style.display = 'none';
 
-      const email = forgotEmailInput.value.trim();
+      const email = forgotEmailInput.value.trim().toLowerCase();
       if (!email) {
         forgotErrorEl.textContent = 'Enter your account email.';
         forgotErrorEl.style.display = '';
@@ -408,7 +408,7 @@ function runLoginGate(credMap) {
       e.preventDefault();
       signupErrorEl.style.display = 'none';
 
-      const email = signupEmailInput.value.trim();
+      const email = signupEmailInput.value.trim().toLowerCase();
       const password = signupPasswordInput.value;
       const confirm = signupConfirmInput.value;
 
