@@ -349,14 +349,40 @@ function runLoginGate(credMap) {
       resetSubmitBtn.disabled = true;
       resetSubmitBtn.textContent = 'Saving…';
       try {
-        const user = await identity.gotrue.recover(pendingRecoveryToken, true);
-        const updater = (typeof user.update === 'function') ? user : identity.gotrue.currentUser();
-        await updater.update({ password });
+        // identity.gotrue.recover() calls a legacy "/verify" endpoint that
+        // this Netlify site's hosted Identity backend 404s on (confirmed —
+        // Identity itself is healthy; that one specific route isn't there).
+        // The recovery token from the email link is itself a short-lived
+        // credential good for exactly one thing: setting a new password.
+        // We use it directly as a Bearer token against the one endpoint we
+        // already know works (the same /user update gotrue-js itself uses
+        // elsewhere), instead of going through the broken exchange step.
+        const res = await fetch('/.netlify/identity/user', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + pendingRecoveryToken },
+          body: JSON.stringify({ password }),
+        });
+        if (!res.ok) {
+          let detail = '';
+          try { const body = await res.json(); detail = body.msg || body.error_description || body.error || ''; } catch (e2) { /* ignore */ }
+          const err = new Error(detail || ('Request failed with status ' + res.status));
+          err.status = res.status;
+          throw err;
+        }
+        const updatedUser = await res.json();
         pendingRecoveryToken = null;
-        tryEnter(user);
+
+        // Also log in normally (same as the signup flow does right after
+        // creating an account) so this is a real, persisted Identity
+        // session — not just a one-off password change.
+        let sessionUser = updatedUser;
+        try {
+          sessionUser = await loginWithRetry(identity, updatedUser.email, password, 2);
+        } catch (loginErr) { /* password is genuinely set either way — proceed with what we have */ }
+        tryEnter(sessionUser);
       } catch (err) {
         const msg = (err && err.message) || '';
-        if (/expired|invalid|not.*found/i.test(msg)) {
+        if (err.status === 401 || err.status === 403 || /expired|invalid|not.*found|jwt/i.test(msg)) {
           resetErrorEl.textContent = 'This password reset link has already been used or has expired — this can happen if your email security automatically opens links before you click them. Request a fresh one below.';
           resetRequestNewBtn.classList.remove('hidden');
         } else {
