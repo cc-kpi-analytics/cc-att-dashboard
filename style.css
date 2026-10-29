@@ -303,6 +303,22 @@ body {
 
 .login-submit:hover { background: var(--ink-soft); }
 
+.login-secondary {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.login-secondary:hover { border-color: #c7cad4; background: var(--paper); }
+
 /* ---------- Main content ---------- */
 .view {
   flex: 1 1 auto;

@@ -1677,10 +1677,10 @@ function setupTabs() {
 async function boot() {
   try {
     const wb = await fetchRosterWorkbook();
-    const accessMap = parseAccessSheet(wb);
+    const credMap = parseCredentialsSheet(wb);
 
     setLoading(null); // hide the loading overlay so the login screen (if needed) is visible
-    const { username, allowedPrograms } = await runLoginGate(accessMap);
+    const { username, allowedPrograms } = await runLoginGate(credMap);
     STATE.currentUser = username;
 
     setLoading('PARSING roster …');
