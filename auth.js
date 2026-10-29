@@ -80,13 +80,21 @@ function parseCredentialsSheet(wb) {
 }
 
 function signOutUser() {
+  // We sign in through identity.gotrue directly, so the widget's own state
+  // may not know about the session and its logout() can silently do nothing.
+  // Log out of the underlying GoTrue session ourselves, then reload no matter what.
+  const done = () => { window.location.reload(); };
   try {
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.logout();
-      return; // the 'logout' handler below reloads the page
+    const identity = window.netlifyIdentity;
+    const user = identity && identity.gotrue && identity.gotrue.currentUser();
+    if (user && typeof user.logout === 'function') {
+      Promise.resolve(user.logout()).then(done, done);
+      setTimeout(done, 1500); // safety net if the request hangs
+      return;
     }
   } catch (e) { /* fall through */ }
-  window.location.reload();
+  try { if (window.netlifyIdentity) window.netlifyIdentity.logout(); } catch (e) { /* ignore */ }
+  setTimeout(done, 300);
 }
 
 function friendlyAuthError(err) {
