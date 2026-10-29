@@ -202,6 +202,7 @@ body {
 }
 
 .login-screen.hidden { display: none; }
+.login-card.hidden { display: none; }
 
 .login-card {
   width: 100%;
