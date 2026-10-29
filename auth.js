@@ -89,9 +89,34 @@ function signOutUser() {
 function friendlyAuthError(err) {
   const msg = (err && err.message) ? err.message : '';
   if (/already.*registered|user.*exists|already.*exist/i.test(msg)) return 'An account with that email already exists. Try Sign In instead.';
+  if (/not.*confirm|confirm.*email/i.test(msg)) return 'This account needs to be confirmed before signing in. If you just created it, wait a moment and try again — if it keeps happening, ask your admin to check the "autoconfirm" setting in the Netlify dashboard (see README).';
   if (/invalid.*login|invalid.*grant|invalid.*password|wrong.*password/i.test(msg)) return 'Incorrect email or password.';
   if (/password.*short|password.*least/i.test(msg)) return 'Password is too short — use at least 6 characters.';
   return msg || 'Something went wrong. Please try again.';
+}
+
+/** Small delay helper for the signup->login retry below. */
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/**
+ * Logs in right after a signup. With Netlify's "autoconfirm" setting on,
+ * the account is usable immediately — but occasionally the very first
+ * login attempt right after signup fails transiently (the account hasn't
+ * finished propagating on Netlify's side yet) even though the account is
+ * genuinely fine, as shown by a plain Sign In working a moment later. A
+ * couple of short retries absorb that without the person ever seeing it.
+ */
+async function loginWithRetry(identity, email, password, attempts) {
+  let lastErr;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await identity.gotrue.login(email, password, true);
+    } catch (err) {
+      lastErr = err;
+      if (i < attempts - 1) await wait(600 * (i + 1));
+    }
+  }
+  throw lastErr;
 }
 
 /**
@@ -268,8 +293,20 @@ function runLoginGate(credMap) {
       signupSubmitBtn.textContent = 'Creating account…';
       try {
         await identity.gotrue.signup(email, password);
-        const user = await identity.gotrue.login(email, password, true);
-        tryEnter(user);
+        try {
+          const user = await loginWithRetry(identity, email, password, 3);
+          tryEnter(user);
+        } catch (loginErr) {
+          // The account was created successfully (signup() didn't throw) —
+          // only the immediate auto-login didn't go through. Don't show a
+          // scary error for an account that's actually fine; just hand
+          // them to Sign In with the email already filled in.
+          showOnly(signinCard);
+          signinEmailInput.value = email;
+          signinInfoEl.textContent = 'Account created. Sign in below to continue.';
+          signinInfoEl.style.display = '';
+          signinPasswordInput.focus();
+        }
       } catch (err) {
         signupErrorEl.textContent = friendlyAuthError(err);
         signupErrorEl.style.display = '';
