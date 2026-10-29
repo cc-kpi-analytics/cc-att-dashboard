@@ -13,16 +13,19 @@
    signup confirmation email, since this app sends email only for
    password resets).
 
-   Sign In and Create Account are our OWN forms here (not the widget's
-   built-in modal) for two reasons: a "Confirm Password" field on
-   signup, and — more importantly — so a brand-new signup can be
-   checked against the credentials sheet BEFORE an account is created
-   at all, which the widget's own signup tab has no way to do. We call
-   straight into netlifyIdentity's underlying GoTrue client
-   (`identity.gotrue`) to do this, which keeps the resulting session
-   stored exactly where the widget itself expects it (so currentUser(),
-   future page loads, and the widget's own automatic handling of a
-   password-recovery email link all keep working normally).
+   Sign In, Create Account, Forgot Password, and "set a new password
+   after clicking the reset email link" are all OUR OWN forms here, not
+   the widget's built-in modal — the modal turned out to render as an
+   invisible, unclickable overlay on top of this page for at least one
+   user, which is a known class of issue with embedding that widget
+   in a custom page. We call straight into netlifyIdentity's underlying
+   GoTrue client (`identity.gotrue`) for every step, which keeps the
+   resulting session stored exactly where the widget itself expects it
+   (so currentUser() and future page loads keep working normally) while
+   never depending on the widget actually drawing anything itself. A
+   "Confirm Password" field on signup, and checking a brand-new signup
+   against the credentials sheet BEFORE an account is created at all,
+   come along for free this way too.
 
    What none of this knows about is which program an email belongs to.
    That mapping still lives in the "credentials" sheet of
@@ -98,6 +101,18 @@ function friendlyAuthError(err) {
 /** Small delay helper for the signup->login retry below. */
 function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+/** Parses a URL hash fragment like "#recovery_token=abc&type=recovery" into a Map. */
+function parseHashParams(hash) {
+  const out = new Map();
+  (hash || '').replace(/^#/, '').split('&').forEach(pair => {
+    if (!pair) return;
+    const idx = pair.indexOf('=');
+    if (idx === -1) return;
+    out.set(decodeURIComponent(pair.slice(0, idx)), decodeURIComponent(pair.slice(idx + 1)));
+  });
+  return out;
+}
+
 /**
  * Logs in right after a signup. With Netlify's "autoconfirm" setting on,
  * the account is usable immediately — but occasionally the very first
@@ -141,16 +156,29 @@ function runLoginGate(credMap) {
     const signinCard = document.getElementById('signinCard');
     const signupCard = document.getElementById('signupCard');
     const forgotCard = document.getElementById('forgotCard');
+    const resetCard = document.getElementById('resetCard');
     const noAccessCard = document.getElementById('noAccessCard');
     const loginErrorEl = document.getElementById('loginError');
     const noAccessEmailEl = document.getElementById('noAccessEmail');
 
-    const allCards = [choiceCard, signinCard, signupCard, forgotCard, noAccessCard];
+    const allCards = [choiceCard, signinCard, signupCard, forgotCard, resetCard, noAccessCard];
     function showOnly(card) {
       screen.classList.remove('hidden');
       allCards.forEach(c => c.classList.toggle('hidden', c !== card));
     }
     function hideLoginScreen() { screen.classList.add('hidden'); }
+
+    // A password-reset email link lands back here as
+    // "#recovery_token=...&type=recovery". Pull it out and scrub the URL
+    // immediately — before identity.init() runs — so the widget's own
+    // (broken, in our case) recovery modal never gets a chance to react
+    // to it, and so reloading or sharing the URL can't replay the token.
+    const hashParams = parseHashParams(window.location.hash);
+    const recoveryToken = hashParams.get('recovery_token') || null;
+    if (recoveryToken) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+    let pendingRecoveryUser = null;
 
     function tryEnter(user) {
       const email = (user.email || '').trim().toLowerCase();
@@ -166,16 +194,11 @@ function runLoginGate(credMap) {
     }
 
     identity.on('init', (user) => {
+      if (recoveryToken) return; // the reset-password flow below owns the screen until that form is submitted
       if (user) tryEnter(user);
       else showOnly(choiceCard);
     });
 
-    // Fires when the widget's OWN internal flows complete a login behind
-    // our backs — namely, after someone sets a new password from a
-    // password-recovery email link (that UI is still the widget's own
-    // built-in modal; see README). Signing in or signing up through our
-    // own forms below call tryEnter() directly instead of relying on this.
-    identity.on('login', (user) => { tryEnter(user); identity.close(); });
     identity.on('logout', () => { window.location.reload(); });
     identity.on('error', (err) => {
       loginErrorEl.textContent = friendlyAuthError(err);
@@ -276,6 +299,71 @@ function runLoginGate(credMap) {
 
     document.getElementById('forgotBackBtn').addEventListener('click', () => showOnly(signinCard));
 
+    /* ---------- set a new password (after clicking a reset-email link) ---------- */
+    const resetForm = document.getElementById('resetForm');
+    const resetPasswordInput = document.getElementById('resetPassword');
+    const resetConfirmInput = document.getElementById('resetConfirmPassword');
+    const resetErrorEl = document.getElementById('resetError');
+    const resetSubmitBtn = document.getElementById('resetSubmitBtn');
+    const resetRequestNewBtn = document.getElementById('resetRequestNewBtn');
+
+    function initiateRecoveryFlow(token) {
+      showOnly(resetCard);
+      resetErrorEl.style.display = 'none';
+      resetRequestNewBtn.classList.add('hidden');
+      const fields = [resetPasswordInput, resetConfirmInput, resetSubmitBtn];
+      fields.forEach(el => el.disabled = true);
+      resetSubmitBtn.textContent = 'Verifying link…';
+
+      identity.gotrue.recover(token, true).then((user) => {
+        pendingRecoveryUser = user;
+        fields.forEach(el => el.disabled = false);
+        resetSubmitBtn.textContent = 'Set New Password';
+      }).catch(() => {
+        resetSubmitBtn.textContent = 'Set New Password';
+        resetErrorEl.textContent = 'This password reset link is invalid or has expired.';
+        resetErrorEl.style.display = '';
+        resetRequestNewBtn.classList.remove('hidden');
+      });
+    }
+
+    resetForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      resetErrorEl.style.display = 'none';
+      if (!pendingRecoveryUser) return; // the link hasn't verified yet (or failed) — form stays disabled until then
+
+      const password = resetPasswordInput.value;
+      const confirm = resetConfirmInput.value;
+      if (password !== confirm) {
+        resetErrorEl.textContent = 'Passwords don’t match.';
+        resetErrorEl.style.display = '';
+        resetConfirmInput.value = '';
+        resetConfirmInput.focus();
+        return;
+      }
+      if (password.length < 6) {
+        resetErrorEl.textContent = 'Password must be at least 6 characters.';
+        resetErrorEl.style.display = '';
+        return;
+      }
+
+      resetSubmitBtn.disabled = true;
+      resetSubmitBtn.textContent = 'Saving…';
+      try {
+        const updater = (typeof pendingRecoveryUser.update === 'function') ? pendingRecoveryUser : identity.gotrue.currentUser();
+        await updater.update({ password });
+        tryEnter(pendingRecoveryUser);
+      } catch (err) {
+        resetErrorEl.textContent = friendlyAuthError(err);
+        resetErrorEl.style.display = '';
+      } finally {
+        resetSubmitBtn.disabled = false;
+        resetSubmitBtn.textContent = 'Set New Password';
+      }
+    });
+
+    document.getElementById('resetRequestNewBtn').addEventListener('click', () => showOnly(forgotCard));
+
     /* ---------- create account (custom form, gated by credentials sheet) ---------- */
     const signupForm = document.getElementById('signupForm');
     const signupEmailInput = document.getElementById('signupEmail');
@@ -347,7 +435,8 @@ function runLoginGate(credMap) {
     document.getElementById('noAccessSignOutBtn').addEventListener('click', signOutUser);
     document.getElementById('noAccessRefreshBtn').addEventListener('click', () => window.location.reload());
 
-    identity.init(); // fires 'init' above with the current user (or null); also auto-handles a #recovery_token= link
+    if (recoveryToken) initiateRecoveryFlow(recoveryToken);
+    identity.init(); // fires 'init' above with the current user (or null) — a no-op while a recovery flow is in progress
   });
 }
 

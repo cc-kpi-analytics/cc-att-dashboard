@@ -90,6 +90,35 @@
     <button type="button" class="login-secondary" id="forgotBackBtn">Back to Sign In</button>
   </div>
 
+  <div class="login-card hidden" id="resetCard">
+    <div class="login-brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true">
+          <rect x="0.5" y="0.5" width="15" height="15" rx="4" fill="var(--accent)"/>
+          <path d="M4.3 8.4l2.4 2.4 4.6-5.1" stroke="var(--ink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </span>
+      <div>
+        <div class="brand-text">ATTENDANCE CONSOLE</div>
+        <div class="brand-sub">WORKFORCE OPS</div>
+      </div>
+    </div>
+    <p class="login-hint">Set a new password for your account.</p>
+    <form id="resetForm" autocomplete="off">
+      <div class="login-field">
+        <label for="resetPassword">New Password</label>
+        <input type="password" id="resetPassword" autocomplete="new-password" minlength="6" required />
+      </div>
+      <div class="login-field">
+        <label for="resetConfirmPassword">Confirm New Password</label>
+        <input type="password" id="resetConfirmPassword" autocomplete="new-password" minlength="6" required />
+      </div>
+      <div class="login-error" id="resetError" style="display:none;"></div>
+      <button type="submit" class="login-submit" id="resetSubmitBtn">Set New Password</button>
+    </form>
+    <button type="button" class="login-secondary hidden" id="resetRequestNewBtn">Request a new link</button>
+  </div>
+
   <div class="login-card hidden" id="signupCard">
     <div class="login-brand">
       <span class="brand-mark">
