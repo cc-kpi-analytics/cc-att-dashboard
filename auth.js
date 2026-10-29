@@ -140,11 +140,12 @@ function runLoginGate(credMap) {
     const choiceCard = document.getElementById('loginCard');
     const signinCard = document.getElementById('signinCard');
     const signupCard = document.getElementById('signupCard');
+    const forgotCard = document.getElementById('forgotCard');
     const noAccessCard = document.getElementById('noAccessCard');
     const loginErrorEl = document.getElementById('loginError');
     const noAccessEmailEl = document.getElementById('noAccessEmail');
 
-    const allCards = [choiceCard, signinCard, signupCard, noAccessCard];
+    const allCards = [choiceCard, signinCard, signupCard, forgotCard, noAccessCard];
     function showOnly(card) {
       screen.classList.remove('hidden');
       allCards.forEach(c => c.classList.toggle('hidden', c !== card));
@@ -229,26 +230,51 @@ function runLoginGate(credMap) {
       }
     });
 
-    document.getElementById('signinForgotBtn').addEventListener('click', async () => {
-      signinErrorEl.style.display = 'none';
-      const email = signinEmailInput.value.trim();
-      if (!email) {
-        signinErrorEl.textContent = 'Enter your email above first, then click "Forgot password?" again.';
-        signinErrorEl.style.display = '';
-        signinEmailInput.focus();
-        return;
-      }
-      try {
-        await identity.gotrue.requestPasswordRecovery(email);
-        signinInfoEl.textContent = 'If that email has an account, a password reset link is on its way to it.';
-        signinInfoEl.style.display = '';
-      } catch (err) {
-        signinErrorEl.textContent = friendlyAuthError(err);
-        signinErrorEl.style.display = '';
-      }
+    document.getElementById('signinForgotBtn').addEventListener('click', () => {
+      forgotErrorEl.style.display = 'none';
+      forgotInfoEl.style.display = 'none';
+      forgotEmailInput.value = signinEmailInput.value.includes('@') ? signinEmailInput.value.trim() : '';
+      showOnly(forgotCard);
+      forgotEmailInput.focus();
     });
 
     document.getElementById('signinBackBtn').addEventListener('click', () => showOnly(choiceCard));
+
+    /* ---------- forgot password (its own form — just an email + submit) ---------- */
+    const forgotForm = document.getElementById('forgotForm');
+    const forgotEmailInput = document.getElementById('forgotEmail');
+    const forgotErrorEl = document.getElementById('forgotError');
+    const forgotInfoEl = document.getElementById('forgotInfo');
+    const forgotSubmitBtn = document.getElementById('forgotSubmitBtn');
+
+    forgotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      forgotErrorEl.style.display = 'none';
+      forgotInfoEl.style.display = 'none';
+
+      const email = forgotEmailInput.value.trim();
+      if (!email) {
+        forgotErrorEl.textContent = 'Enter your account email.';
+        forgotErrorEl.style.display = '';
+        return;
+      }
+
+      forgotSubmitBtn.disabled = true;
+      forgotSubmitBtn.textContent = 'Sending…';
+      try {
+        await identity.gotrue.requestPasswordRecovery(email);
+        forgotInfoEl.textContent = 'If that email has an account, a password reset link is on its way to it. Check your inbox and click the link to set a new password.';
+        forgotInfoEl.style.display = '';
+      } catch (err) {
+        forgotErrorEl.textContent = friendlyAuthError(err);
+        forgotErrorEl.style.display = '';
+      } finally {
+        forgotSubmitBtn.disabled = false;
+        forgotSubmitBtn.textContent = 'Send reset link';
+      }
+    });
+
+    document.getElementById('forgotBackBtn').addEventListener('click', () => showOnly(signinCard));
 
     /* ---------- create account (custom form, gated by credentials sheet) ---------- */
     const signupForm = document.getElementById('signupForm');
@@ -329,7 +355,7 @@ function showLoginFatal(message) {
   const screen = document.getElementById('loginScreen');
   const choiceCard = document.getElementById('loginCard');
   screen.classList.remove('hidden');
-  ['loginCard', 'signinCard', 'signupCard', 'noAccessCard'].forEach(id => {
+  ['loginCard', 'signinCard', 'signupCard', 'forgotCard', 'noAccessCard'].forEach(id => {
     document.getElementById(id).classList.toggle('hidden', id !== 'loginCard');
   });
   const errorEl = document.getElementById('loginError');

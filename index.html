@@ -64,6 +64,32 @@
     <button type="button" class="login-secondary" id="signinBackBtn">Back</button>
   </div>
 
+  <div class="login-card hidden" id="forgotCard">
+    <div class="login-brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true">
+          <rect x="0.5" y="0.5" width="15" height="15" rx="4" fill="var(--accent)"/>
+          <path d="M4.3 8.4l2.4 2.4 4.6-5.1" stroke="var(--ink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </span>
+      <div>
+        <div class="brand-text">ATTENDANCE CONSOLE</div>
+        <div class="brand-sub">WORKFORCE OPS</div>
+      </div>
+    </div>
+    <p class="login-hint">Enter your account email and we'll send a password reset link to it.</p>
+    <form id="forgotForm" autocomplete="off">
+      <div class="login-field">
+        <label for="forgotEmail">Email</label>
+        <input type="email" id="forgotEmail" autocomplete="username" required />
+      </div>
+      <div class="login-error" id="forgotError" style="display:none;"></div>
+      <div class="login-info" id="forgotInfo" style="display:none;"></div>
+      <button type="submit" class="login-submit" id="forgotSubmitBtn">Send reset link</button>
+    </form>
+    <button type="button" class="login-secondary" id="forgotBackBtn">Back to Sign In</button>
+  </div>
+
   <div class="login-card hidden" id="signupCard">
     <div class="login-brand">
       <span class="brand-mark">
