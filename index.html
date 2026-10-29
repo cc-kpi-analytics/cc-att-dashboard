@@ -5,6 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Attendance Ops Console</title>
 <link rel="stylesheet" href="style.css" />
+<script>
+  // Grab a password-reset token out of the URL hash and scrub it BEFORE
+  // any other script — especially the Netlify Identity widget below —
+  // loads and gets a chance to react to it on its own. The widget auto-
+  // processes a #recovery_token= hash the moment its own script runs,
+  // using internal logic we don't control and that has proven unreliable
+  // on this site; this makes sure it never even sees one. auth.js reads
+  // the result from window.__pendingRecoveryToken instead of the hash.
+  (function () {
+    var m = /(?:^|[#&])recovery_token=([^&]+)/.exec(window.location.hash);
+    if (m) {
+      window.__pendingRecoveryToken = decodeURIComponent(m[1]);
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  })();
+</script>
 </head>
 <body>
 

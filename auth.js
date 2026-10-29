@@ -101,18 +101,6 @@ function friendlyAuthError(err) {
 /** Small delay helper for the signup->login retry below. */
 function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-/** Parses a URL hash fragment like "#recovery_token=abc&type=recovery" into a Map. */
-function parseHashParams(hash) {
-  const out = new Map();
-  (hash || '').replace(/^#/, '').split('&').forEach(pair => {
-    if (!pair) return;
-    const idx = pair.indexOf('=');
-    if (idx === -1) return;
-    out.set(decodeURIComponent(pair.slice(0, idx)), decodeURIComponent(pair.slice(idx + 1)));
-  });
-  return out;
-}
-
 /**
  * Logs in right after a signup. With Netlify's "autoconfirm" setting on,
  * the account is usable immediately — but occasionally the very first
@@ -169,15 +157,14 @@ function runLoginGate(credMap) {
     function hideLoginScreen() { screen.classList.add('hidden'); }
 
     // A password-reset email link lands back here as
-    // "#recovery_token=...&type=recovery". Pull it out and scrub the URL
-    // immediately — before identity.init() runs — so the widget's own
-    // (broken, in our case) recovery modal never gets a chance to react
-    // to it, and so reloading or sharing the URL can't replay the token.
-    const hashParams = parseHashParams(window.location.hash);
-    const recoveryToken = hashParams.get('recovery_token') || null;
-    if (recoveryToken) {
-      history.replaceState(null, '', window.location.pathname + window.location.search);
-    }
+    // "#recovery_token=...&type=recovery". An inline script at the very
+    // top of index.html — which runs before this file, and before the
+    // Identity widget's own script — already pulled the token out of the
+    // URL and scrubbed the hash, so the widget's own internal handling
+    // (which has proven unreliable on this site) never gets a chance to
+    // see or react to it in the first place.
+    const recoveryToken = window.__pendingRecoveryToken || null;
+    delete window.__pendingRecoveryToken;
     let pendingRecoveryToken = null;
 
     function tryEnter(user) {
