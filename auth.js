@@ -178,7 +178,7 @@ function runLoginGate(credMap) {
     if (recoveryToken) {
       history.replaceState(null, '', window.location.pathname + window.location.search);
     }
-    let pendingRecoveryUser = null;
+    let pendingRecoveryToken = null;
 
     function tryEnter(user) {
       const email = (user.email || '').trim().toLowerCase();
@@ -307,30 +307,29 @@ function runLoginGate(credMap) {
     const resetSubmitBtn = document.getElementById('resetSubmitBtn');
     const resetRequestNewBtn = document.getElementById('resetRequestNewBtn');
 
+    // IMPORTANT: the recovery token is a one-time-use credential. Some
+    // organizations' email security (notably Microsoft 365 Safe Links)
+    // automatically opens email links in a scanning browser *before* the
+    // person ever clicks them, to check they're not malicious — and if
+    // that scan runs this page's JS, anything that auto-exchanges the
+    // token the instant the page loads gets its token burned by the
+    // scanner instead of the real person. So this deliberately does NOT
+    // call identity.gotrue.recover() on page load. It only happens inside
+    // the form's submit handler below, which requires someone to actually
+    // type a password and click submit — something an automated link
+    // scanner essentially never does. This is the standard mitigation for
+    // this class of problem (the same one Supabase/Auth0/etc. recommend).
     function initiateRecoveryFlow(token) {
       showOnly(resetCard);
       resetErrorEl.style.display = 'none';
       resetRequestNewBtn.classList.add('hidden');
-      const fields = [resetPasswordInput, resetConfirmInput, resetSubmitBtn];
-      fields.forEach(el => el.disabled = true);
-      resetSubmitBtn.textContent = 'Verifying link…';
-
-      identity.gotrue.recover(token, true).then((user) => {
-        pendingRecoveryUser = user;
-        fields.forEach(el => el.disabled = false);
-        resetSubmitBtn.textContent = 'Set New Password';
-      }).catch(() => {
-        resetSubmitBtn.textContent = 'Set New Password';
-        resetErrorEl.textContent = 'This password reset link is invalid or has expired.';
-        resetErrorEl.style.display = '';
-        resetRequestNewBtn.classList.remove('hidden');
-      });
+      pendingRecoveryToken = token;
     }
 
     resetForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       resetErrorEl.style.display = 'none';
-      if (!pendingRecoveryUser) return; // the link hasn't verified yet (or failed) — form stays disabled until then
+      if (!pendingRecoveryToken) return;
 
       const password = resetPasswordInput.value;
       const confirm = resetConfirmInput.value;
@@ -350,11 +349,19 @@ function runLoginGate(credMap) {
       resetSubmitBtn.disabled = true;
       resetSubmitBtn.textContent = 'Saving…';
       try {
-        const updater = (typeof pendingRecoveryUser.update === 'function') ? pendingRecoveryUser : identity.gotrue.currentUser();
+        const user = await identity.gotrue.recover(pendingRecoveryToken, true);
+        const updater = (typeof user.update === 'function') ? user : identity.gotrue.currentUser();
         await updater.update({ password });
-        tryEnter(pendingRecoveryUser);
+        pendingRecoveryToken = null;
+        tryEnter(user);
       } catch (err) {
-        resetErrorEl.textContent = friendlyAuthError(err);
+        const msg = (err && err.message) || '';
+        if (/expired|invalid|not.*found/i.test(msg)) {
+          resetErrorEl.textContent = 'This password reset link has already been used or has expired — this can happen if your email security automatically opens links before you click them. Request a fresh one below.';
+          resetRequestNewBtn.classList.remove('hidden');
+        } else {
+          resetErrorEl.textContent = friendlyAuthError(err);
+        }
         resetErrorEl.style.display = '';
       } finally {
         resetSubmitBtn.disabled = false;
