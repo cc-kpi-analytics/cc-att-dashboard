@@ -337,26 +337,39 @@ function runLoginGate(credMap) {
       resetSubmitBtn.textContent = 'Saving…';
       try {
         // identity.gotrue.recover() calls a legacy "/verify" endpoint that
-        // this Netlify site's hosted Identity backend 404s on (confirmed —
-        // Identity itself is healthy; that one specific route isn't there).
-        // The recovery token from the email link is itself a short-lived
-        // credential good for exactly one thing: setting a new password.
-        // We use it directly as a Bearer token against the one endpoint we
-        // already know works (the same /user update gotrue-js itself uses
-        // elsewhere), instead of going through the broken exchange step.
-        const res = await fetch('/.netlify/identity/user', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + pendingRecoveryToken },
-          body: JSON.stringify({ password }),
+        // this Netlify site's hosted Identity backend 404'd on earlier. The
+        // real GoTrue source (netlify/gotrue api/verify.go) confirms /verify
+        // IS the correct, required step — it just has to be called the way
+        // the backend actually expects: POST, JSON body {type, token}. That
+        // call exchanges the one-time recovery token for a real session
+        // (access_token); the recovery token itself is never valid as a
+        // Bearer credential on its own, which is why using it directly
+        // against /user (the previous attempt) kept reporting it as
+        // invalid/expired even on a brand-new link. The actual password
+        // update is a second, separate call using that session's token.
+        const verifyRes = await fetch('/.netlify/identity/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'recovery', token: pendingRecoveryToken }),
         });
-        if (!res.ok) {
-          let detail = '';
-          try { const body = await res.json(); detail = body.msg || body.error_description || body.error || ''; } catch (e2) { /* ignore */ }
-          const err = new Error(detail || ('Request failed with status ' + res.status));
-          err.status = res.status;
+        if (!verifyRes.ok) {
+          const err = new Error('verify failed');
+          err.status = verifyRes.status;
           throw err;
         }
-        const updatedUser = await res.json();
+        const session = await verifyRes.json(); // { access_token, refresh_token, expires_in, user, ... }
+
+        const updateRes = await fetch('/.netlify/identity/user', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+          body: JSON.stringify({ password }),
+        });
+        if (!updateRes.ok) {
+          let detail = '';
+          try { const body = await updateRes.json(); detail = body.msg || body.error_description || body.error || ''; } catch (e2) { /* ignore */ }
+          throw new Error(detail || ('Request failed with status ' + updateRes.status));
+        }
+        const updatedUser = await updateRes.json();
         pendingRecoveryToken = null;
 
         // Also log in normally (same as the signup flow does right after
@@ -368,8 +381,7 @@ function runLoginGate(credMap) {
         } catch (loginErr) { /* password is genuinely set either way — proceed with what we have */ }
         tryEnter(sessionUser);
       } catch (err) {
-        const msg = (err && err.message) || '';
-        if (err.status === 401 || err.status === 403 || /expired|invalid|not.*found|jwt/i.test(msg)) {
+        if (err.status === 404 || err.status === 422) {
           resetErrorEl.textContent = 'This password reset link has already been used or has expired — this can happen if your email security automatically opens links before you click them. Request a fresh one below.';
           resetRequestNewBtn.classList.remove('hidden');
         } else {
