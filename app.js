@@ -283,7 +283,9 @@ function buildRosterFromWorkbook(wb) {
     let program = 'Unassigned';
     if (progRaw !== null && progRaw !== undefined) {
       const progStr = String(progRaw).trim();
-      if (progStr && progStr.toUpperCase() !== '#N/A') program = progStr;
+      // A lookup formula in the sheet returns 0 / #N/A for people with no program
+      // (e.g. managers) — treat those as Unassigned rather than a program named "0".
+      if (progStr && progStr !== '0' && progStr.toUpperCase() !== '#N/A') program = progStr;
     }
     agentProgramMap.set(agent, program);
   });
@@ -607,7 +609,7 @@ function aggregateProgramSummary(filter) {
     if (NON_DISCRETIONARY_TYPES.has(r.eventType)) p.nonDisc += r.schedRaw;
     else if (DISCRETIONARY_TYPES.has(r.eventType)) p.disc += r.schedRaw;
   }
-  const out = Array.from(byProgram.values()).map(p => ({
+  const out = Array.from(byProgram.values()).filter(p => p.sched > 0).map(p => ({ // skip programs with no hours at all
     program: p.program,
     sched: p.sched,
     nonDisc: p.nonDisc,
