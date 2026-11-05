@@ -35,6 +35,10 @@ const DISCRETIONARY_TYPES = new Set([
   'PFML', 'PTO', 'Training', 'Traumatic Leave', 'UPL',
 ]);
 
+// Event types dropped at load time, so their hours never count in any section
+// or calculation (lowercase; matched case-insensitively).
+const IGNORED_EVENT_TYPES = new Set(['new hire training']);
+
 // Programs that still show up historically in the roster/data but shouldn't
 // be selectable in Bottom 15 / Programs filter dropdowns going forward
 // (e.g. a discontinued program with no new data expected).
@@ -436,6 +440,7 @@ function fetchAndParseWeek(weekMeta) {
     const enriched = [];
     for (const iv of intervals) {
       if (EXCLUDE_TODAY_AND_FUTURE && !isPastDate(iv.date)) continue; // not real attendance yet — it's today or still in the future
+      if (IGNORED_EVENT_TYPES.has(String(iv.type).trim().toLowerCase())) continue; // e.g. New Hire Training — ignored everywhere
       const agent = iv.agent;
       const supervisor = STATE.supMap.get(agent) || 'Unassigned';
       const program = STATE.agentProgramMap.get(agent) || 'Unassigned';
@@ -683,7 +688,7 @@ function aggregateConsecutiveAbsences() {
             supervisor: streak[0].supervisor,
             program: streak[0].program,
             length: streak.length,
-            entries: streak.map(d => ({
+            entries: streak.slice().reverse().map(d => ({ // newest first
               date: d.date,
               type: (d.status !== 'present' && d.status.find(e => ALERT_TYPES.has(e.type))) ? d.status.find(e => ALERT_TYPES.has(e.type)).type : '',
             })),
