@@ -1446,7 +1446,7 @@ function buildFilterTitle(label, filter) {
 }
 
 /** Pulls together whichever table is currently visible, using the data already loaded (no new fetch). */
-function getVisibleTableData() {
+function getVisibleTableData(maxRows = SCREENSHOT_MAX_ROWS) {
   const activeBtn = document.querySelector('.tab-btn.active');
   const view = activeBtn ? activeBtn.dataset.view : 'overview';
 
@@ -1456,13 +1456,13 @@ function getVisibleTableData() {
     const columns = ['Agent Name', 'Supervisor', 'Program'];
     if (STATE.showHours) columns.push('Sched Hours', 'Absence Hours');
     columns.push('Attendance %');
-    const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(a => {
+    const dataRows = rows.slice(0, maxRows).map(a => {
       const r = [a.agent, a.supervisor, a.program];
       if (STATE.showHours) r.push(fmtHours(a.sched), fmtHours(a.absence));
       r.push(fmtPct(a.pct));
       return r;
     });
-    if (rows.length > 0 && rows.length <= SCREENSHOT_MAX_ROWS) {
+    if (rows.length > 0 && rows.length <= maxRows) {
       const t = rows.reduce((acc, a) => ({ sched: acc.sched + a.sched, absence: acc.absence + a.absence }), { sched: 0, absence: 0 });
       const totalsPct = t.sched > 0 ? 1 - (t.absence / t.sched) : null;
       const totalRow = ['Total', '', ''];
@@ -1479,7 +1479,7 @@ function getVisibleTableData() {
     const columns = ['#', 'Agent Name', 'Supervisor', 'Program'];
     if (STATE.showHours) columns.push('Sched Hours', 'Absence Hours');
     columns.push('Attendance %');
-    const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map((a, i) => {
+    const dataRows = rows.slice(0, maxRows).map((a, i) => {
       const r = [String(i + 1), a.agent, a.supervisor, a.program];
       if (STATE.showHours) r.push(fmtHours(a.sched), fmtHours(a.absence));
       r.push(fmtPct(a.pct));
@@ -1491,7 +1491,7 @@ function getVisibleTableData() {
   if (view === 'alerts') {
     const rows = aggregateConsecutiveAbsences();
     const columns = ['Agent Name', 'Supervisor', 'Program', 'Consecutive Days', 'Dates'];
-    const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(a => [
+    const dataRows = rows.slice(0, maxRows).map(a => [
       a.agent, a.supervisor, a.program, String(a.length),
       a.entries.map(e => `${e.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}: ${e.type}`).join(', '),
     ]);
@@ -1502,13 +1502,13 @@ function getVisibleTableData() {
     const filter = STATE.programsView;
     const rows = aggregateProgramSummary(filter);
     const columns = ['Program', 'Non-Discretionary Hrs/Absenteeism %', 'Discretionary Hrs/Absenteeism %', 'Total Absenteeism %'];
-    const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(p => [
+    const dataRows = rows.slice(0, maxRows).map(p => [
       p.program,
       `${fmtHours(p.nonDisc)} hrs / ${fmtPct(p.nonDiscPct)}`,
       `${fmtHours(p.disc)} hrs / ${fmtPct(p.discPct)}`,
       fmtPct(p.totalPct),
     ]);
-    if (rows.length > 0 && rows.length <= SCREENSHOT_MAX_ROWS) {
+    if (rows.length > 0 && rows.length <= maxRows) {
       const t = rows.reduce((acc, p) => ({ sched: acc.sched + p.sched, nonDisc: acc.nonDisc + p.nonDisc, disc: acc.disc + p.disc }), { sched: 0, nonDisc: 0, disc: 0 });
       const nonDiscPct = t.sched > 0 ? t.nonDisc / t.sched : null;
       const discPct = t.sched > 0 ? t.disc / t.sched : null;
@@ -1522,7 +1522,7 @@ function getVisibleTableData() {
   const filter = STATE.dailylog;
   const rows = filterDailyLog(filter);
   const columns = ['Date', 'Agent Name', 'Supervisor', 'Program', 'Status', 'Attendance %'];
-  const dataRows = rows.slice(0, SCREENSHOT_MAX_ROWS).map(g => [
+  const dataRows = rows.slice(0, maxRows).map(g => [
     fmtDate(g.date), g.agent, g.supervisor, g.program,
     g.status === 'present' ? 'Present' : g.status.map(e => `${e.type} (${fmtHours(e.hours)} hrs)`).join(', '),
     fmtPct(g.pct),
@@ -1621,7 +1621,8 @@ function renderCompactTableToCanvas(data) {
   return canvas;
 }
 
-async function captureVisibleTableScreenshot() {
+async function captureVisibleTableScreenshot(opts) {
+  const forceDownload = !!(opts && opts.download);
   const data = getVisibleTableData();
   if (!data || data.rows.length === 0) {
     showToast('Nothing to capture');
@@ -1631,7 +1632,7 @@ async function captureVisibleTableScreenshot() {
   canvas.toBlob(async (blob) => {
     if (!blob) { showToast('Screenshot failed'); return; }
     try {
-      if (!navigator.clipboard || !window.ClipboardItem) throw new Error('Clipboard image API unavailable');
+      if (forceDownload || !navigator.clipboard || !window.ClipboardItem) throw new Error('Download requested or clipboard image API unavailable');
       await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
       showToast('Screenshot copied — paste it into your email');
     } catch (err) {
@@ -1643,7 +1644,7 @@ async function captureVisibleTableScreenshot() {
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 4000);
-      showToast('Screenshot downloaded');
+      showToast('Picture downloaded');
     }
   }, 'image/png');
 }
@@ -1661,6 +1662,60 @@ function setupKonamiScreenshot() {
       buffer = [];
       captureVisibleTableScreenshot();
     }
+  });
+}
+
+/* ---------------- Export button (every section) ---------------- */
+
+/** Downloads the currently visible table (all rows, current filters) as an .xlsx file. */
+function exportVisibleTableToExcel() {
+  const data = getVisibleTableData(Infinity);
+  if (!data || data.rows.length === 0) { showToast('Nothing to export'); return; }
+  if (typeof XLSX === 'undefined') { showToast('Excel export unavailable'); return; }
+  const aoa = [[data.title], [], data.columns].concat(data.rows);
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  ws['!cols'] = data.columns.map((c, i) => ({
+    wch: Math.min(60, Math.max(String(c).length, ...data.rows.map(r => String(r[i] ?? '').length)) + 2),
+  }));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, data.filename.slice(0, 31));
+  XLSX.writeFile(wb, `${data.filename}-${dateKey(new Date())}.xlsx`);
+  showToast('Excel file downloaded');
+}
+
+function setupExportButtons() {
+  document.querySelectorAll('.view-head').forEach(head => {
+    const wrap = document.createElement('div');
+    wrap.className = 'export-wrap';
+    wrap.innerHTML = `
+      <button type="button" class="export-btn" aria-haspopup="true" aria-expanded="false">Export ▾</button>
+      <div class="export-menu" hidden>
+        <button type="button" data-act="excel">Excel (.xlsx)</button>
+        <button type="button" data-act="png">Picture (PNG)</button>
+        <button type="button" data-act="copy">Copy picture</button>
+      </div>`;
+    head.appendChild(wrap);
+    const btn = wrap.querySelector('.export-btn');
+    const menu = wrap.querySelector('.export-menu');
+    const close = () => { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = menu.hidden;
+      document.querySelectorAll('.export-menu').forEach(m => { m.hidden = true; });
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    menu.addEventListener('click', (e) => {
+      const act = e.target.dataset && e.target.dataset.act;
+      if (!act) return;
+      close();
+      if (act === 'excel') exportVisibleTableToExcel();
+      else if (act === 'png') captureVisibleTableScreenshot({ download: true });
+      else captureVisibleTableScreenshot();
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.export-menu').forEach(m => { m.hidden = true; });
   });
 }
 
@@ -1726,6 +1781,7 @@ async function boot() {
     setupTabs();
     setupSecretToggle();
     setupKonamiScreenshot();
+    setupExportButtons();
     setupOverviewFilters();
     setupDailyLogFilters();
     setupWatchlistFilters();

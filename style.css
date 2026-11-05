@@ -834,3 +834,23 @@ td.num { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-
    under their headers and are easier to read down the column. */
 .pg-table thead th.num,
 .pg-table td.num { text-align: left; }
+
+/* Export button + dropdown (top-right of every section) */
+.export-wrap { position: relative; margin-left: auto; align-self: flex-end; }
+.export-btn {
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+  padding: 7px 14px; border-radius: 8px;
+  border: 1px solid #d8dae0; background: #fff; color: var(--ink);
+}
+.export-btn:hover { border-color: #b9bdca; }
+.export-menu {
+  position: absolute; right: 0; top: calc(100% + 4px); z-index: 50; min-width: 170px;
+  background: #fff; border: 1px solid #d8dae0; border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(20, 26, 48, .14); padding: 4px;
+}
+.export-menu[hidden] { display: none; }
+.export-menu button {
+  display: block; width: 100%; text-align: left; font: inherit; font-size: 13px;
+  padding: 8px 10px; border: 0; background: none; border-radius: 6px; cursor: pointer; color: var(--text);
+}
+.export-menu button:hover { background: #eef0f4; }
