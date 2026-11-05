@@ -829,3 +829,8 @@ td.num { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-
   .filter-bar { gap: 10px; }
   .field select, .field input[type="text"], .field input[type="date"] { min-width: 100px; }
 }
+
+/* Attendance by Program: left-align the data columns so values sit directly
+   under their headers and are easier to read down the column. */
+.pg-table thead th.num,
+.pg-table td.num { text-align: left; }
