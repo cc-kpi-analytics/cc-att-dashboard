@@ -1,23 +1,23 @@
 From: <Saved by Blink>
 Snapshot-Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/Schedule/PublishSchedule/Reports/PrinterViewByAgent.aspx?ac=46&tzid=4&fd=2026%2f11%2f01&ag=&ose=1
 Subject: Report - Published schedule detail
-Date: Fri, 06 Nov 2026 15:25:19 GMT
+Date: Mon, 09 Nov 2026 15:50:21 GMT
 MIME-Version: 1.0
 Content-Type: multipart/related;
 	type="text/html";
-	boundary="----MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----"
+	boundary="----MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----"
 
 
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/html
-Content-ID: <frame-78A1B380558E64EEA8C0E4E4E52312D0@mhtml.blink>
+Content-ID: <frame-169AF377C5C906484E88FA10608E6AD9@mhtml.blink>
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/Schedule/PublishSchedule/Reports/PrinterViewByAgent.aspx?ac=46&tzid=4&fd=2026%2f11%2f01&ag=&ose=1
 
 <!DOCTYPE html><html xmlns=3D"http://www.w3.org/1999/xhtml"><head><meta htt=
 p-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8"><link rel=
-=3D"stylesheet" type=3D"text/css" href=3D"cid:css-c8524f8b-0b4e-4095-8079-2=
-d1ddca7b546@mhtml.blink" />
+=3D"stylesheet" type=3D"text/css" href=3D"cid:css-ac80a0e5-56f3-4454-965a-5=
+81702dcdddc@mhtml.blink" />
         =20
         <!-- Style sheet references -->
         <link href=3D"https://cloud1756.wfo.five9.com/CommunityWeb/UI/css/b=
@@ -177,7 +177,7 @@ ntentPlaceHolder1_lblTimeZoneName">(GMT-08:00) Pacific Time (US &amp; Canad=
 a); Tijuana</span></h3>
 			<div class=3D"spacerVertical20"></div>
 			<h4><span id=3D"ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_lblR=
-unDate">Friday, 06 Nov 2026 07:24:57 AM</span>&nbsp;<span id=3D"ctl00_ctl00=
+unDate">Monday, 09 Nov 2026 07:49:51 AM</span>&nbsp;<span id=3D"ctl00_ctl00=
 _ContentPlaceHolder1_ContentPlaceHolder1_lblRunUser">Sapico, Regie</span></=
 h4> =20
 		</div>
@@ -1366,8 +1366,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:00:00 PM</td><td class=3D"right">6:15:00 PM</td><td>Work - C=
-IS/Pro</td><td class=3D"right">2.25</td><td class=3D"right">Scheduled Work<=
+gn=3D"right">4:00:00 PM</td><td class=3D"right">4:07:00 PM</td><td>Late</td=
+><td class=3D"right">0.12</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">4:07:00 PM</td><td class=3D"right">6:15:00 PM</td><td>Work - C=
+IS/Pro</td><td class=3D"right">2.13</td><td class=3D"right">Scheduled Work<=
 /td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -3495,19 +3500,8 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">12:00:00 AM</td><td class=3D"right">2:30:00 AM</td><td>Work =
-- CSS/Crisis</td><td class=3D"right">2.50</td><td class=3D"right">Scheduled=
- Work</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:30:00 AM</td><td class=3D"right">2:45:00 AM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:45:00 AM</td><td class=3D"right">3:45:00 AM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">1.00</td><td class=3D"right">Scheduled =
-Work</td>
+lign=3D"right">12:00:00 AM</td><td class=3D"right">3:45:00 AM</td><td>NCNS<=
+/td><td class=3D"right">3.75</td><td class=3D"right">Scheduled Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">3:45:00 AM</td><td class=3D"right">4:15:00 AM</td><td>Lunch<=
@@ -3515,19 +3509,8 @@ lign=3D"right">3:45:00 AM</td><td class=3D"right">4:15:00 AM</td><td>Lunch<=
 >
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:15:00 AM</td><td class=3D"right">5:45:00 AM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled =
-Work</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">5:45:00 AM</td><td class=3D"right">6:00:00 AM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">6:00:00 AM</td><td class=3D"right">8:00:00 AM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled =
-Work</td>
+lign=3D"right">4:15:00 AM</td><td class=3D"right">8:00:00 AM</td><td>NCNS</=
+td><td class=3D"right">3.75</td><td class=3D"right">Scheduled Work</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -3677,6 +3660,11 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">12:00:00 PM</td><td class=3D"right">12:30:00 PM</td><td>Meet=
 ing</td><td class=3D"right">0.50</td><td class=3D"right">1x1</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">4:00:00 PM</td><td class=3D"right">8:00:00 PM</td><td>Work -=
+ CSC/Call</td><td class=3D"right">4.00</td><td class=3D"right">Description<=
+/td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -6919,8 +6907,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">9:00:00 AM</td><td class=3D"right">11:15:00 AM</td><td>Work - =
-CSS/Crisis</td><td class=3D"right">2.25</td><td class=3D"right">Scheduled W=
+gn=3D"right">9:00:00 AM</td><td class=3D"right">9:06:00 AM</td><td>Late</td=
+><td class=3D"right">0.10</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">9:06:00 AM</td><td class=3D"right">11:15:00 AM</td><td>Work - =
+CSS/Crisis</td><td class=3D"right">2.15</td><td class=3D"right">Scheduled W=
 ork</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -6983,8 +6976,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:00:00 AM</td><td class=3D"right">11:30:00 AM</td><td>Work =
-- CSS/Crisis</td><td class=3D"right">2.50</td><td class=3D"right">Scheduled=
+lign=3D"right">9:00:00 AM</td><td class=3D"right">9:20:00 AM</td><td>Late</=
+td><td class=3D"right">0.33</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">9:20:00 AM</td><td class=3D"right">11:30:00 AM</td><td>Work =
+- CSS/Crisis</td><td class=3D"right">2.17</td><td class=3D"right">Scheduled=
  Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -7786,8 +7784,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:00:00 AM</td><td class=3D"right">11:45:00 AM</td><td>Work=
- - CCS/Chat</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled =
+lign=3D"right">10:00:00 AM</td><td class=3D"right">10:05:00 AM</td><td>Late=
+</td><td class=3D"right">0.08</td><td class=3D"right">Created by soft check=
+in monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">10:05:00 AM</td><td class=3D"right">11:45:00 AM</td><td>Work=
+ - CCS/Chat</td><td class=3D"right">1.67</td><td class=3D"right">Scheduled =
 Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -9913,8 +9916,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:00:00 PM</td><td class=3D"right">6:15:00 PM</td><td>Work - C=
-SC/Call</td><td class=3D"right">2.25</td><td class=3D"right">Description</t=
+gn=3D"right">4:00:00 PM</td><td class=3D"right">4:30:00 PM</td><td>Late</td=
+><td class=3D"right">0.50</td><td class=3D"right">arriving late ETA 430pm</=
+td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">4:30:00 PM</td><td class=3D"right">6:15:00 PM</td><td>Work - C=
+SC/Call</td><td class=3D"right">1.75</td><td class=3D"right">Description</t=
 d>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -9967,36 +9975,17 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:00:00 PM</td><td class=3D"right">6:15:00 PM</td><td>Work -=
- CSC/Call</td><td class=3D"right">2.25</td><td class=3D"right">Description<=
-/td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">6:15:00 PM</td><td class=3D"right">6:30:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">6:30:00 PM</td><td class=3D"right">8:30:00 PM</td><td>Work -=
- CSC/Call</td><td class=3D"right">2.00</td><td class=3D"right">Description<=
-/td>
+lign=3D"right">4:00:00 PM</td><td class=3D"right">8:30:00 PM</td><td>Bereav=
+ement</td><td class=3D"right">4.50</td><td class=3D"right">Description</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">8:30:00 PM</td><td class=3D"right">9:00:00 PM</td><td>Lunch<=
 /td><td class=3D"right">0.50</td><td class=3D"right">&nbsp;</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:00:00 PM</td><td class=3D"right">10:15:00 PM</td><td>Work =
-- CSC/Call</td><td class=3D"right">1.25</td><td class=3D"right">Description=
-</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:15:00 PM</td><td class=3D"right">10:30:00 PM</td><td>Brea=
-k</td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:30:00 PM</td><td class=3D"right">12:00:00 AM</td><td>Work=
- - CSC/Call</td><td class=3D"right">1.50</td><td class=3D"right">Descriptio=
-n</td>
+lign=3D"right">9:00:00 PM</td><td class=3D"right">12:00:00 AM</td><td>Berea=
+vement</td><td class=3D"right">3.00</td><td class=3D"right">Description</td=
+>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -10720,12 +10709,20 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Monday, 02 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:00:00 PM</td><td class=3D"right">8:15:00 PM</td><td>UTO</td>=
-<td class=3D"right">4.25</td><td class=3D"right">Pending PFML</td>
+gn=3D"right">4:00:00 PM</td><td class=3D"right">4:00:00 PM</td><td>UTO</td>=
+<td class=3D"right">0.00</td><td class=3D"right">Pending PFML</td>
+								</tr><tr>
+									<td>Monday, 02 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">4:00:00 PM</td><td class=3D"right">8:15:00 PM</td><td>PFML</td=
+><td class=3D"right">4.25</td><td class=3D"right">.</td>
 								</tr><tr>
 									<td>Monday, 02 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
 gn=3D"right">8:15:00 PM</td><td class=3D"right">8:45:00 PM</td><td>Lunch</t=
 d><td class=3D"right">0.50</td><td class=3D"right">Off phone interval</td>
+								</tr><tr>
+									<td>Monday, 02 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">8:45:00 PM</td><td class=3D"right">8:45:00 PM</td><td>PFML</td=
+><td class=3D"right">0.00</td><td class=3D"right">.</td>
 								</tr><tr>
 									<td>Monday, 02 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
 gn=3D"right">8:45:00 PM</td><td class=3D"right">12:00:00 AM</td><td>UTO</td=
@@ -10754,12 +10751,20 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Tuesday, 03 November 2026</td><td class=3D"wfmsg-tiny-text" al=
-ign=3D"right">4:00:00 PM</td><td class=3D"right">9:00:00 PM</td><td>UTO</td=
-><td class=3D"right">5.00</td><td class=3D"right">Pending PFML</td>
+ign=3D"right">4:00:00 PM</td><td class=3D"right">4:00:00 PM</td><td>UTO</td=
+><td class=3D"right">0.00</td><td class=3D"right">Pending PFML</td>
+								</tr><tr>
+									<td>Tuesday, 03 November 2026</td><td class=3D"wfmsg-tiny-text" al=
+ign=3D"right">4:00:00 PM</td><td class=3D"right">9:00:00 PM</td><td>PFML</t=
+d><td class=3D"right">5.00</td><td class=3D"right">.</td>
 								</tr><tr>
 									<td>Tuesday, 03 November 2026</td><td class=3D"wfmsg-tiny-text" al=
 ign=3D"right">9:00:00 PM</td><td class=3D"right">9:30:00 PM</td><td>Lunch</=
 td><td class=3D"right">0.50</td><td class=3D"right">Off phone interval</td>
+								</tr><tr>
+									<td>Tuesday, 03 November 2026</td><td class=3D"wfmsg-tiny-text" al=
+ign=3D"right">9:30:00 PM</td><td class=3D"right">9:30:00 PM</td><td>PFML</t=
+d><td class=3D"right">0.00</td><td class=3D"right">.</td>
 								</tr><tr>
 									<td>Tuesday, 03 November 2026</td><td class=3D"wfmsg-tiny-text" al=
 ign=3D"right">9:30:00 PM</td><td class=3D"right">12:00:00 AM</td><td>UTO</t=
@@ -10816,12 +10821,20 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:00:00 PM</td><td class=3D"right">8:00:00 PM</td><td>UTO</td>=
-<td class=3D"right">4.00</td><td class=3D"right">Pending PFML</td>
+gn=3D"right">4:00:00 PM</td><td class=3D"right">4:00:00 PM</td><td>UTO</td>=
+<td class=3D"right">0.00</td><td class=3D"right">Pending PFML</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">4:00:00 PM</td><td class=3D"right">8:00:00 PM</td><td>PFML</td=
+><td class=3D"right">4.00</td><td class=3D"right">.</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
 gn=3D"right">8:00:00 PM</td><td class=3D"right">8:30:00 PM</td><td>Lunch</t=
 d><td class=3D"right">0.50</td><td class=3D"right">Off phone interval</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">8:30:00 PM</td><td class=3D"right">8:30:00 PM</td><td>PFML</td=
+><td class=3D"right">0.00</td><td class=3D"right">.</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
 gn=3D"right">8:30:00 PM</td><td class=3D"right">12:00:00 AM</td><td>UTO</td=
@@ -10850,13 +10863,21 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:00:00 PM</td><td class=3D"right">8:30:00 PM</td><td>UTO</t=
-d><td class=3D"right">4.50</td><td class=3D"right">Pending PFML</td>
+lign=3D"right">4:00:00 PM</td><td class=3D"right">4:00:00 PM</td><td>UTO</t=
+d><td class=3D"right">0.00</td><td class=3D"right">Pending PFML</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">4:00:00 PM</td><td class=3D"right">8:30:00 PM</td><td>PFML</=
+td><td class=3D"right">4.50</td><td class=3D"right">.</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">8:30:00 PM</td><td class=3D"right">9:00:00 PM</td><td>Lunch<=
 /td><td class=3D"right">0.50</td><td class=3D"right">Off phone interval</td=
 >
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">9:00:00 PM</td><td class=3D"right">9:00:00 PM</td><td>PFML</=
+td><td class=3D"right">0.00</td><td class=3D"right">.</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">9:00:00 PM</td><td class=3D"right">12:00:00 AM</td><td>UTO</=
@@ -12224,8 +12245,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:00:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Work - C=
-SC/Pro</td><td class=3D"right">2.00</td><td class=3D"right">Description</td=
+gn=3D"right">4:00:00 PM</td><td class=3D"right">4:05:00 PM</td><td>Late</td=
+><td class=3D"right">0.08</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">4:05:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Work - C=
+SC/Pro</td><td class=3D"right">1.92</td><td class=3D"right">Description</td=
 >
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -12278,8 +12304,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:00:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Work -=
- CSC/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Descriptio=
+lign=3D"right">4:00:00 PM</td><td class=3D"right">4:11:00 PM</td><td>Late</=
+td><td class=3D"right">0.18</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">4:11:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Work -=
+ CSC/Crisis</td><td class=3D"right">1.82</td><td class=3D"right">Descriptio=
 n</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -14602,19 +14633,8 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:00:00 PM</td><td class=3D"right">4:00:00 PM</td><td>Work -=
- CIS/Chat</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled Wo=
-rk</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:00:00 PM</td><td class=3D"right">4:15:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:15:00 PM</td><td class=3D"right">5:00:00 PM</td><td>Work -=
- CIS/Chat</td><td class=3D"right">0.75</td><td class=3D"right">Scheduled Wo=
-rk</td>
+lign=3D"right">2:00:00 PM</td><td class=3D"right">5:00:00 PM</td><td>UTO</t=
+d><td class=3D"right">3.00</td><td class=3D"right">Scheduled Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">5:00:00 PM</td><td class=3D"right">5:30:00 PM</td><td>Lunch<=
@@ -14622,19 +14642,8 @@ lign=3D"right">5:00:00 PM</td><td class=3D"right">5:30:00 PM</td><td>Lunch<=
 >
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">5:30:00 PM</td><td class=3D"right">7:45:00 PM</td><td>Work -=
- CIS/Chat</td><td class=3D"right">2.25</td><td class=3D"right">Scheduled Wo=
-rk</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">7:45:00 PM</td><td class=3D"right">8:00:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 PM</td><td class=3D"right">10:00:00 PM</td><td>Work =
-- CIS/Chat</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled W=
-ork</td>
+lign=3D"right">5:30:00 PM</td><td class=3D"right">10:00:00 PM</td><td>UTO</=
+td><td class=3D"right">4.50</td><td class=3D"right">Scheduled Work</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -16112,8 +16121,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">8:00:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work - C=
-IS/Disp</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Work=
+gn=3D"right">8:00:00 AM</td><td class=3D"right">8:12:00 AM</td><td>Late</td=
+><td class=3D"right">0.20</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">8:12:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work - C=
+IS/Disp</td><td class=3D"right">1.55</td><td class=3D"right">Scheduled Work=
 </td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -16167,8 +16181,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work -=
- CIS/Disp</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wo=
+lign=3D"right">8:00:00 AM</td><td class=3D"right">8:11:00 AM</td><td>Late</=
+td><td class=3D"right">0.18</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">8:11:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work -=
+ CIS/Disp</td><td class=3D"right">1.57</td><td class=3D"right">Scheduled Wo=
 rk</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -16415,8 +16434,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 AM</td><td class=3D"right">10:00:00 AM</td><td>Work =
-- CIS/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled=
+lign=3D"right">8:00:00 AM</td><td class=3D"right">8:10:00 AM</td><td>Late</=
+td><td class=3D"right">0.17</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">8:10:00 AM</td><td class=3D"right">10:00:00 AM</td><td>Work =
+- CIS/Crisis</td><td class=3D"right">1.83</td><td class=3D"right">Scheduled=
  Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -16980,18 +17004,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">8:00:00 AM</td><td class=3D"right">10:00:00 AM</td><td>Work - =
-CSS/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled W=
-ork</td>
+gn=3D"right">8:00:00 AM</td><td class=3D"right">10:45:00 AM</td><td>Late</t=
+d><td class=3D"right">2.75</td><td class=3D"right">Created by soft checkin =
+monitor</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">10:00:00 AM</td><td class=3D"right">10:15:00 AM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">10:15:00 AM</td><td class=3D"right">12:00:00 PM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled =
+gn=3D"right">10:45:00 AM</td><td class=3D"right">12:00:00 PM</td><td>Work -=
+ CSS/Crisis</td><td class=3D"right">1.25</td><td class=3D"right">Scheduled =
 Work</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -19907,8 +19926,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:00:00 PM</td><td class=3D"right">4:30:00 PM</td><td>Work -=
- CIS/Pro</td><td class=3D"right">0.50</td><td class=3D"right">Scheduled Wor=
+lign=3D"right">4:00:00 PM</td><td class=3D"right">4:08:00 PM</td><td>Late</=
+td><td class=3D"right">0.13</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">4:08:00 PM</td><td class=3D"right">4:30:00 PM</td><td>Work -=
+ CIS/Pro</td><td class=3D"right">0.37</td><td class=3D"right">Scheduled Wor=
 k</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -21558,17 +21582,17 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">2:00:00 PM</td><td class=3D"right">4:30:00 PM</td><td>Work - C=
-CS/Call</td><td class=3D"right">2.50</td><td class=3D"right">Description</t=
-d>
+gn=3D"right">2:00:00 PM</td><td class=3D"right">2:52:00 PM</td><td>Late</td=
+><td class=3D"right">0.87</td><td class=3D"right">arriving late ETA 6pm</td=
+>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:30:00 PM</td><td class=3D"right">4:45:00 PM</td><td>Break</t=
-d><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
+gn=3D"right">2:52:00 PM</td><td class=3D"right">4:45:00 PM</td><td>UTO</td>=
+<td class=3D"right">1.88</td><td class=3D"right">internet outage</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:45:00 PM</td><td class=3D"right">6:45:00 PM</td><td>Work - C=
-CS/Call</td><td class=3D"right">2.00</td><td class=3D"right">Description</t=
+gn=3D"right">5:45:00 PM</td><td class=3D"right">6:45:00 PM</td><td>Work - C=
+CS/Call</td><td class=3D"right">1.00</td><td class=3D"right">Description</t=
 d>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -21914,9 +21938,13 @@ lign=3D"right">2:30:00 PM</td><td class=3D"right">2:45:00 PM</td><td>Break<=
 /td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:45:00 PM</td><td class=3D"right">4:00:00 PM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">1.25</td><td class=3D"right">Descriptio=
+lign=3D"right">2:45:00 PM</td><td class=3D"right">3:45:00 PM</td><td>Work -=
+ CSS/Crisis</td><td class=3D"right">1.00</td><td class=3D"right">Descriptio=
 n</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">3:45:00 PM</td><td class=3D"right">4:00:00 PM</td><td>Left E=
+arly</td><td class=3D"right">0.25</td><td class=3D"right">left early</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -22120,8 +22148,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">8:00:00 AM</td><td class=3D"right">10:15:00 AM</td><td>Work - =
-CSS/Crisis</td><td class=3D"right">2.25</td><td class=3D"right">Description=
+gn=3D"right">8:00:00 AM</td><td class=3D"right">8:11:00 AM</td><td>Late</td=
+><td class=3D"right">0.18</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">8:11:00 AM</td><td class=3D"right">10:15:00 AM</td><td>Work - =
+CSS/Crisis</td><td class=3D"right">2.07</td><td class=3D"right">Description=
 </td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -22693,19 +22726,8 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">12:00:00 AM</td><td class=3D"right">1:30:00 AM</td><td>Work =
-- CCS/Chat</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled W=
-ork</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">1:30:00 AM</td><td class=3D"right">1:45:00 AM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">1:45:00 AM</td><td class=3D"right">3:30:00 AM</td><td>Work -=
- CCS/Chat</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wo=
-rk</td>
+lign=3D"right">12:00:00 AM</td><td class=3D"right">3:30:00 AM</td><td>UTO</=
+td><td class=3D"right">3.50</td><td class=3D"right">Scheduled Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">3:30:00 AM</td><td class=3D"right">4:00:00 AM</td><td>Lunch<=
@@ -22713,19 +22735,8 @@ lign=3D"right">3:30:00 AM</td><td class=3D"right">4:00:00 AM</td><td>Lunch<=
 >
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:00:00 AM</td><td class=3D"right">5:45:00 AM</td><td>Work -=
- CCS/Chat</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wo=
-rk</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">5:45:00 AM</td><td class=3D"right">6:00:00 AM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">6:00:00 AM</td><td class=3D"right">8:00:00 AM</td><td>Work -=
- CCS/Chat</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled Wo=
-rk</td>
+lign=3D"right">4:00:00 AM</td><td class=3D"right">8:00:00 AM</td><td>UTO</t=
+d><td class=3D"right">4.00</td><td class=3D"right">Scheduled Work</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -24259,8 +24270,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:00:00 PM</td><td class=3D"right">5:30:00 PM</td><td>Work - C=
-SC/Crisis</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled Wo=
+gn=3D"right">4:00:00 PM</td><td class=3D"right">4:17:00 PM</td><td>Late</td=
+><td class=3D"right">0.28</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">4:17:00 PM</td><td class=3D"right">5:30:00 PM</td><td>Work - C=
+SC/Crisis</td><td class=3D"right">1.22</td><td class=3D"right">Scheduled Wo=
 rk</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -24313,19 +24329,8 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:00:00 PM</td><td class=3D"right">5:45:00 PM</td><td>Work -=
- CSC/Crisis</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled =
-Work</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">5:45:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">6:00:00 PM</td><td class=3D"right">7:00:00 PM</td><td>Work -=
- CSC/Crisis</td><td class=3D"right">1.00</td><td class=3D"right">Scheduled =
-Work</td>
+lign=3D"right">4:00:00 PM</td><td class=3D"right">7:00:00 PM</td><td>UTO</t=
+d><td class=3D"right">3.00</td><td class=3D"right">Scheduled Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">7:00:00 PM</td><td class=3D"right">7:30:00 PM</td><td>Lunch<=
@@ -24333,19 +24338,8 @@ lign=3D"right">7:00:00 PM</td><td class=3D"right">7:30:00 PM</td><td>Lunch<=
 >
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">7:30:00 PM</td><td class=3D"right">9:45:00 PM</td><td>Work -=
- CSC/Crisis</td><td class=3D"right">2.25</td><td class=3D"right">Scheduled =
-Work</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:45:00 PM</td><td class=3D"right">10:00:00 PM</td><td>Break=
-</td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</t=
-d>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:00:00 PM</td><td class=3D"right">12:00:00 AM</td><td>Work=
- - CSC/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Schedule=
-d Work</td>
+lign=3D"right">7:30:00 PM</td><td class=3D"right">12:00:00 AM</td><td>UTO</=
+td><td class=3D"right">4.50</td><td class=3D"right">Scheduled Work</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -27770,18 +27764,8 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:00:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Meetin=
-g</td><td class=3D"right">2.00</td><td class=3D"right">committee</td>
-								</tr><tr>
-									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">6:00:00 PM</td><td class=3D"right">6:15:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">6:15:00 PM</td><td class=3D"right">8:00:00 PM</td><td>Work -=
- CSC/Disp</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wo=
-rk</td>
+lign=3D"right">4:00:00 PM</td><td class=3D"right">8:00:00 PM</td><td>PTO</t=
+d><td class=3D"right">4.00</td><td class=3D"right">Scheduled Work</td>
 								</tr><tr>
 									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">8:00:00 PM</td><td class=3D"right">8:30:00 PM</td><td>Lunch<=
@@ -27789,19 +27773,8 @@ lign=3D"right">8:00:00 PM</td><td class=3D"right">8:30:00 PM</td><td>Lunch<=
 >
 								</tr><tr>
 									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:30:00 PM</td><td class=3D"right">10:15:00 PM</td><td>Work =
-- CSC/Disp</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled W=
-ork</td>
-								</tr><tr>
-									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:15:00 PM</td><td class=3D"right">10:30:00 PM</td><td>Brea=
-k</td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</=
-td>
-								</tr><tr>
-									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:30:00 PM</td><td class=3D"right">12:00:00 AM</td><td>Work=
- - CSC/Disp</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled =
-Work</td>
+lign=3D"right">8:30:00 PM</td><td class=3D"right">12:00:00 AM</td><td>PTO</=
+td><td class=3D"right">3.50</td><td class=3D"right">Scheduled Work</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -27826,36 +27799,16 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:00:00 PM</td><td class=3D"right">5:45:00 PM</td><td>Work - C=
-SC/Disp</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Work=
-</td>
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">5:45:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Break</t=
-d><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td>
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">6:00:00 PM</td><td class=3D"right">8:00:00 PM</td><td>Work - C=
-SC/Disp</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled Work=
-</td>
+gn=3D"right">4:00:00 PM</td><td class=3D"right">8:00:00 PM</td><td>PTO</td>=
+<td class=3D"right">4.00</td><td class=3D"right">Scheduled Work</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
 gn=3D"right">8:00:00 PM</td><td class=3D"right">8:30:00 PM</td><td>Lunch</t=
 d><td class=3D"right">0.50</td><td class=3D"right">Off phone interval</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">8:30:00 PM</td><td class=3D"right">9:45:00 PM</td><td>Work - C=
-SC/Disp</td><td class=3D"right">1.25</td><td class=3D"right">Scheduled Work=
-</td>
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">9:45:00 PM</td><td class=3D"right">10:00:00 PM</td><td>Break</=
-td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td>
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">10:00:00 PM</td><td class=3D"right">12:00:00 AM</td><td>Work -=
- CSC/Disp</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled Wo=
-rk</td>
+gn=3D"right">8:30:00 PM</td><td class=3D"right">12:00:00 AM</td><td>PTO</td=
+><td class=3D"right">3.50</td><td class=3D"right">Scheduled Work</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -29679,36 +29632,16 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 AM</td><td class=3D"right">10:15:00 AM</td><td>Work =
-- Peer Support</td><td class=3D"right">2.25</td><td class=3D"right">Descrip=
-tion</td>
-								</tr><tr>
-									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:15:00 AM</td><td class=3D"right">10:30:00 AM</td><td>Brea=
-k</td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:30:00 AM</td><td class=3D"right">12:30:00 PM</td><td>Work=
- - Peer Support</td><td class=3D"right">2.00</td><td class=3D"right">Descri=
-ption</td>
+lign=3D"right">8:00:00 AM</td><td class=3D"right">12:30:00 PM</td><td>UTO</=
+td><td class=3D"right">4.50</td><td class=3D"right">Pending leave</td>
 								</tr><tr>
 									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">12:30:00 PM</td><td class=3D"right">1:00:00 PM</td><td>Lunch=
 </td><td class=3D"right">0.50</td><td class=3D"right">&nbsp;</td>
 								</tr><tr>
 									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">1:00:00 PM</td><td class=3D"right">2:45:00 PM</td><td>Work -=
- Peer Support</td><td class=3D"right">1.75</td><td class=3D"right">Descript=
-ion</td>
-								</tr><tr>
-									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:45:00 PM</td><td class=3D"right">3:00:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Thursday, 05 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">3:00:00 PM</td><td class=3D"right">4:00:00 PM</td><td>Work -=
- Peer Support</td><td class=3D"right">1.00</td><td class=3D"right">Descript=
-ion</td>
+lign=3D"right">1:00:00 PM</td><td class=3D"right">4:00:00 PM</td><td>UTO</t=
+d><td class=3D"right">3.00</td><td class=3D"right">Pending leave</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -30011,8 +29944,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">7:00:00 AM</td><td class=3D"right">9:30:00 AM</td><td>Work -=
- CIS/Pro</td><td class=3D"right">2.50</td><td class=3D"right">Scheduled Wor=
+lign=3D"right">7:00:00 AM</td><td class=3D"right">7:05:00 AM</td><td>Late</=
+td><td class=3D"right">0.08</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">7:05:00 AM</td><td class=3D"right">9:30:00 AM</td><td>Work -=
+ CIS/Pro</td><td class=3D"right">2.42</td><td class=3D"right">Scheduled Wor=
 k</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -32632,8 +32570,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">8:00:00 AM</td><td class=3D"right">10:00:00 AM</td><td>Work - =
-CSS/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Description=
+gn=3D"right">8:00:00 AM</td><td class=3D"right">8:16:00 AM</td><td>Late</td=
+><td class=3D"right">0.27</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">8:16:00 AM</td><td class=3D"right">10:00:00 AM</td><td>Work - =
+CSS/Crisis</td><td class=3D"right">1.73</td><td class=3D"right">Description=
 </td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -32686,8 +32629,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 AM</td><td class=3D"right">9:30:00 AM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">1.50</td><td class=3D"right">Descriptio=
+lign=3D"right">8:00:00 AM</td><td class=3D"right">8:21:00 AM</td><td>Late</=
+td><td class=3D"right">0.35</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">8:21:00 AM</td><td class=3D"right">9:30:00 AM</td><td>Work -=
+ CSS/Crisis</td><td class=3D"right">1.15</td><td class=3D"right">Descriptio=
 n</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -34331,18 +34279,27 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">12:00:00 AM</td><td class=3D"right">1:45:00 AM</td><td>Work =
-- CCS/Call</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled W=
-ork</td>
+lign=3D"right">12:00:00 AM</td><td class=3D"right">12:00:00 AM</td><td>Late=
+</td><td class=3D"right">0.00</td><td class=3D"right">Created by soft check=
+in monitor</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">1:45:00 AM</td><td class=3D"right">2:00:00 AM</td><td>Break<=
+lign=3D"right">12:00:00 AM</td><td class=3D"right">1:25:00 AM</td><td>UTO</=
+td><td class=3D"right">1.42</td><td class=3D"right">uto</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">1:27:00 AM</td><td class=3D"right">3:00:00 AM</td><td>Work -=
+ CCS/Call</td><td class=3D"right">1.55</td><td class=3D"right">Scheduled Wo=
+rk</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">3:00:00 AM</td><td class=3D"right">3:15:00 AM</td><td>Break<=
 /td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
 >
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:00:00 AM</td><td class=3D"right">4:45:00 AM</td><td>Work -=
- CCS/Call</td><td class=3D"right">2.75</td><td class=3D"right">Scheduled Wo=
+lign=3D"right">3:15:00 AM</td><td class=3D"right">4:45:00 AM</td><td>Work -=
+ CCS/Call</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled Wo=
 rk</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -35275,19 +35232,8 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">3:00:00 PM</td><td class=3D"right">5:30:00 PM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">2.50</td><td class=3D"right">Scheduled =
-Work</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">5:30:00 PM</td><td class=3D"right">5:45:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">5:45:00 PM</td><td class=3D"right">6:45:00 PM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">1.00</td><td class=3D"right">Scheduled =
-Work</td>
+lign=3D"right">3:00:00 PM</td><td class=3D"right">6:45:00 PM</td><td>UTO</t=
+d><td class=3D"right">3.75</td><td class=3D"right">not feeling well</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">6:45:00 PM</td><td class=3D"right">7:15:00 PM</td><td>Lunch<=
@@ -35295,19 +35241,8 @@ lign=3D"right">6:45:00 PM</td><td class=3D"right">7:15:00 PM</td><td>Lunch<=
 >
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">7:15:00 PM</td><td class=3D"right">9:15:00 PM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled =
-Work</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:15:00 PM</td><td class=3D"right">9:30:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:30:00 PM</td><td class=3D"right">11:00:00 PM</td><td>Work =
-- CSS/Crisis</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled=
- Work</td>
+lign=3D"right">7:15:00 PM</td><td class=3D"right">11:00:00 PM</td><td>UTO</=
+td><td class=3D"right">3.75</td><td class=3D"right">not feeling well</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -37115,8 +37050,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:00:00 PM</td><td class=3D"right">4:00:00 PM</td><td>Work -=
- CIS/Disp</td><td class=3D"right">2.00</td><td class=3D"right">Picked up 11=
+lign=3D"right">2:00:00 PM</td><td class=3D"right">2:34:00 PM</td><td>Late</=
+td><td class=3D"right">0.57</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">2:34:00 PM</td><td class=3D"right">4:00:00 PM</td><td>Work -=
+ CIS/Disp</td><td class=3D"right">1.43</td><td class=3D"right">Picked up 11=
 /2</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -38283,27 +38223,18 @@ gn=3D"right">8:00:00 AM</td><td class=3D"right">9:30:00 AM</td><td>PTO</td>=
 td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">9:30:00 AM</td><td class=3D"right">11:00:00 AM</td><td>Work - =
-CIS/Disp</td><td class=3D"right">1.50</td><td class=3D"right">Description</=
+gn=3D"right">9:30:00 AM</td><td class=3D"right">11:45:00 AM</td><td>Work - =
+CIS/Disp</td><td class=3D"right">2.25</td><td class=3D"right">Description</=
 td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">11:00:00 AM</td><td class=3D"right">11:15:00 AM</td><td>Break<=
+gn=3D"right">11:45:00 AM</td><td class=3D"right">12:00:00 PM</td><td>Break<=
 /td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">11:15:00 AM</td><td class=3D"right">1:00:00 PM</td><td>Work - =
-CIS/Disp</td><td class=3D"right">1.75</td><td class=3D"right">Description</=
+gn=3D"right">12:00:00 PM</td><td class=3D"right">2:00:00 PM</td><td>Work - =
+CIS/Disp</td><td class=3D"right">2.00</td><td class=3D"right">Description</=
 td>
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">1:00:00 PM</td><td class=3D"right">1:30:00 PM</td><td>Lunch</t=
-d><td class=3D"right">0.50</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">1:30:00 PM</td><td class=3D"right">2:00:00 PM</td><td>Work - C=
-IS/Disp</td><td class=3D"right">0.50</td><td class=3D"right">Description</t=
-d>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
 gn=3D"right">2:00:00 PM</td><td class=3D"right">4:00:00 PM</td><td>PTO</td>=
@@ -38750,12 +38681,25 @@ ing-left:5px;">No Schedule Intervals</span>
 										<div class=3D"copyTitle4"><span id=3D"ctl00_ctl00_ContentPlaceHol=
 der1_ContentPlaceHolder1_AgentReportGrid_ctl143_DateReportGrid_ctl08_lblDat=
 eSection">Saturday, November 07, 2026</span></div>
-										<span id=3D"ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_A=
-gentReportGrid_ctl143_DateReportGrid_ctl08_lblNoIntervalsMsg" style=3D"padd=
-ing-left:5px;">No Schedule Intervals</span>
+									=09
 										<div class=3D"spacerVertical4"></div>
 										<div>
-
+							<table class=3D"wfmsg-table-view wfmsg-tiny-text" cellspacing=3D"0" =
+cellpadding=3D"4" border=3D"0" id=3D"ctl00_ctl00_ContentPlaceHolder1_Conten=
+tPlaceHolder1_AgentReportGrid_ctl143_DateReportGrid_ctl08_IntervalReportGri=
+d" style=3D"width:100%;border-collapse:collapse;">
+								<tbody><tr>
+									<th scope=3D"col">Schedule Date</th><th class=3D"right" scope=3D"c=
+ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
+=3D"col">Type</th><th class=3D"right" scope=3D"col">Duration (In Hours)</th=
+><th class=3D"right" scope=3D"col">Description</th>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">12:00:00 AM</td><td class=3D"right">5:00:00 AM</td><td>Work =
+- CSC/Pro</td><td class=3D"right">5.00</td><td class=3D"right">picked up ho=
+urs per JR</td>
+								</tr>
+							</tbody></table>
 						</div>																		=09
 										<div class=3D"spacerVertical20"></div>
 									</td>
@@ -39069,6 +39013,15 @@ d><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
 gn=3D"right">2:15:00 PM</td><td class=3D"right">4:00:00 PM</td><td>Work - C=
 SC/Pro</td><td class=3D"right">1.75</td><td class=3D"right">Description</td=
 >
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">4:00:00 PM</td><td class=3D"right">4:30:00 PM</td><td>Lunch</t=
+d><td class=3D"right">0.50</td><td class=3D"right">lunch</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">4:30:00 PM</td><td class=3D"right">8:00:00 PM</td><td>Work - C=
+SC/Pro</td><td class=3D"right">3.50</td><td class=3D"right">Description</td=
+>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -39335,8 +39288,8 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">3:00:00 PM</td><td class=3D"right">5:00:00 PM</td><td>Work -=
- CSC/Pro</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled Wor=
-k</td>
+ CSC/Pro</td><td class=3D"right">2.00</td><td class=3D"right">picked up hou=
+rs per JR</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">5:00:00 PM</td><td class=3D"right">5:15:00 PM</td><td>Break<=
@@ -39345,8 +39298,8 @@ lign=3D"right">5:00:00 PM</td><td class=3D"right">5:15:00 PM</td><td>Break<=
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">5:15:00 PM</td><td class=3D"right">7:00:00 PM</td><td>Work -=
- CSC/Pro</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wor=
-k</td>
+ CSC/Pro</td><td class=3D"right">1.75</td><td class=3D"right">picked up hou=
+rs per JR</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">7:00:00 PM</td><td class=3D"right">7:30:00 PM</td><td>Lunch<=
@@ -39355,8 +39308,8 @@ lign=3D"right">7:00:00 PM</td><td class=3D"right">7:30:00 PM</td><td>Lunch<=
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">7:30:00 PM</td><td class=3D"right">8:45:00 PM</td><td>Work -=
- CSC/Pro</td><td class=3D"right">1.25</td><td class=3D"right">Scheduled Wor=
-k</td>
+ CSC/Pro</td><td class=3D"right">1.25</td><td class=3D"right">picked up hou=
+rs per JR</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">8:45:00 PM</td><td class=3D"right">9:00:00 PM</td><td>Break<=
@@ -39364,9 +39317,9 @@ lign=3D"right">8:45:00 PM</td><td class=3D"right">9:00:00 PM</td><td>Break<=
 >
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:00:00 PM</td><td class=3D"right">1:00:00 AM</td><td>Work -=
- CSC/Pro</td><td class=3D"right">4.00</td><td class=3D"right">Scheduled Wor=
-k</td>
+lign=3D"right">9:00:00 PM</td><td class=3D"right">3:30:00 AM</td><td>Work -=
+ CSC/Pro</td><td class=3D"right">6.50</td><td class=3D"right">picked up hou=
+rs per JR</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -40268,36 +40221,16 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:00:00 AM</td><td class=3D"right">11:00:00 AM</td><td>Work =
-- CCS/Call</td><td class=3D"right">2.00</td><td class=3D"right">Description=
-</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">11:00:00 AM</td><td class=3D"right">11:15:00 AM</td><td>Brea=
-k</td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">11:15:00 AM</td><td class=3D"right">1:00:00 PM</td><td>Work =
-- CCS/Call</td><td class=3D"right">1.75</td><td class=3D"right">Description=
-</td>
+lign=3D"right">9:00:00 AM</td><td class=3D"right">1:00:00 PM</td><td>UTO</t=
+d><td class=3D"right">4.00</td><td class=3D"right">Description</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">1:00:00 PM</td><td class=3D"right">1:30:00 PM</td><td>Lunch<=
 /td><td class=3D"right">0.50</td><td class=3D"right">&nbsp;</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">1:30:00 PM</td><td class=3D"right">3:00:00 PM</td><td>Work -=
- CCS/Call</td><td class=3D"right">1.50</td><td class=3D"right">Description<=
-/td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">3:00:00 PM</td><td class=3D"right">3:15:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">3:15:00 PM</td><td class=3D"right">5:00:00 PM</td><td>Work -=
- CCS/Call</td><td class=3D"right">1.75</td><td class=3D"right">Description<=
-/td>
+lign=3D"right">1:30:00 PM</td><td class=3D"right">5:00:00 PM</td><td>UTO</t=
+d><td class=3D"right">3.50</td><td class=3D"right">Description</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -42423,6 +42356,11 @@ d><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td>
 gn=3D"right">8:30:00 PM</td><td class=3D"right">10:00:00 PM</td><td>Work - =
 CIS/PPC</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled Work=
 </td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">10:00:00 PM</td><td class=3D"right">12:00:00 AM</td><td>Work -=
+ CIS/Disp</td><td class=3D"right">2.00</td><td class=3D"right">Description<=
+/td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -42604,12 +42542,30 @@ ing-left:5px;">No Schedule Intervals</span>
 										<div class=3D"copyTitle4"><span id=3D"ctl00_ctl00_ContentPlaceHol=
 der1_ContentPlaceHolder1_AgentReportGrid_ctl157_DateReportGrid_ctl08_lblDat=
 eSection">Saturday, November 07, 2026</span></div>
-										<span id=3D"ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_A=
-gentReportGrid_ctl157_DateReportGrid_ctl08_lblNoIntervalsMsg" style=3D"padd=
-ing-left:5px;">No Schedule Intervals</span>
+									=09
 										<div class=3D"spacerVertical4"></div>
 										<div>
-
+							<table class=3D"wfmsg-table-view wfmsg-tiny-text" cellspacing=3D"0" =
+cellpadding=3D"4" border=3D"0" id=3D"ctl00_ctl00_ContentPlaceHolder1_Conten=
+tPlaceHolder1_AgentReportGrid_ctl157_DateReportGrid_ctl08_IntervalReportGri=
+d" style=3D"width:100%;border-collapse:collapse;">
+								<tbody><tr>
+									<th scope=3D"col">Schedule Date</th><th class=3D"right" scope=3D"c=
+ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
+=3D"col">Type</th><th class=3D"right" scope=3D"col">Duration (In Hours)</th=
+><th class=3D"right" scope=3D"col">Description</th>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">4:00:00 PM</td><td class=3D"right">5:30:00 PM</td><td>Work -=
+ CCS/Call</td><td class=3D"right">1.50</td><td class=3D"right">Description<=
+/td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">6:00:00 PM</td><td class=3D"right">7:00:00 PM</td><td>Work -=
+ CCS/Call</td><td class=3D"right">1.00</td><td class=3D"right">Description<=
+/td>
+								</tr>
+							</tbody></table>
 						</div>																		=09
 										<div class=3D"spacerVertical20"></div>
 									</td>
@@ -43395,8 +43351,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:00:00 PM</td><td class=3D"right">4:15:00 PM</td><td>Work -=
- CIS/Crisis</td><td class=3D"right">2.25</td><td class=3D"right">Scheduled =
+lign=3D"right">2:00:00 PM</td><td class=3D"right">2:13:00 PM</td><td>Late</=
+td><td class=3D"right">0.22</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">2:13:00 PM</td><td class=3D"right">4:15:00 PM</td><td>Work -=
+ CIS/Crisis</td><td class=3D"right">2.03</td><td class=3D"right">Scheduled =
 Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -45640,19 +45601,28 @@ lign=3D"right">3:00:00 AM</td><td class=3D"right">3:30:00 AM</td><td>Lunch<=
 >
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">3:30:00 AM</td><td class=3D"right">5:30:00 AM</td><td>Work -=
- CIS/Call</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled Wo=
+lign=3D"right">3:30:00 AM</td><td class=3D"right">3:45:00 AM</td><td>Work -=
+ CIS/Call</td><td class=3D"right">0.25</td><td class=3D"right">Scheduled Wo=
 rk</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">5:30:00 AM</td><td class=3D"right">5:45:00 AM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
+lign=3D"right">3:45:00 AM</td><td class=3D"right">8:00:00 AM</td><td>Left E=
+arly</td><td class=3D"right">4.25</td><td class=3D"right">left early per Na=
+da H.</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">5:45:00 AM</td><td class=3D"right">8:00:00 AM</td><td>Work -=
- CIS/Call</td><td class=3D"right">2.25</td><td class=3D"right">Scheduled Wo=
-rk</td>
+lign=3D"right">8:00:00 PM</td><td class=3D"right">10:00:00 PM</td><td>Work =
+- CIS/Call</td><td class=3D"right">2.00</td><td class=3D"right">Description=
+</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">10:00:00 PM</td><td class=3D"right">10:15:00 PM</td><td>Brea=
+k</td><td class=3D"right">0.25</td><td class=3D"right">break</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">10:15:00 PM</td><td class=3D"right">12:00:00 AM</td><td>Work=
+ - CIS/Call</td><td class=3D"right">1.75</td><td class=3D"right">Descriptio=
+n</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -47068,8 +47038,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">6:00:00 AM</td><td class=3D"right">7:30:00 AM</td><td>Work -=
- CIS/PPC</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled Wor=
+lign=3D"right">6:00:00 AM</td><td class=3D"right">6:19:00 AM</td><td>Late</=
+td><td class=3D"right">0.32</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">6:19:00 AM</td><td class=3D"right">7:30:00 AM</td><td>Work -=
+ CIS/PPC</td><td class=3D"right">1.18</td><td class=3D"right">Scheduled Wor=
 k</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -49167,8 +49142,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:00:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Work - C=
-IS/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Description<=
+gn=3D"right">4:00:00 PM</td><td class=3D"right">4:14:00 PM</td><td>Late</td=
+><td class=3D"right">0.23</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">4:14:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Work - C=
+IS/Crisis</td><td class=3D"right">1.77</td><td class=3D"right">Description<=
 /td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -49444,24 +49424,12 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">11:00:00 PM</td><td class=3D"right">1:15:00 AM</td><td>Work =
-- CCS/Call</td><td class=3D"right">2.25</td><td class=3D"right">Description=
-</td>
+lign=3D"right">11:00:00 PM</td><td class=3D"right">3:45:00 AM</td><td>UTO</=
+td><td class=3D"right">4.75</td><td class=3D"right">Description</td>
 								</tr><tr>
 									<td>Sunday, 08 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">1:30:00 AM</td><td class=3D"right">3:45:00 AM</td><td>Work - C=
-CS/Call</td><td class=3D"right">2.25</td><td class=3D"right">Description</t=
-d>
-								</tr><tr>
-									<td>Sunday, 08 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:15:00 AM</td><td class=3D"right">6:15:00 AM</td><td>Work - C=
-CS/Call</td><td class=3D"right">2.00</td><td class=3D"right">Description</t=
-d>
-								</tr><tr>
-									<td>Sunday, 08 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">6:30:00 AM</td><td class=3D"right">9:00:00 AM</td><td>Work - C=
-CS/Call</td><td class=3D"right">2.50</td><td class=3D"right">Description</t=
-d>
+gn=3D"right">4:15:00 AM</td><td class=3D"right">9:00:00 AM</td><td>UTO</td>=
+<td class=3D"right">4.75</td><td class=3D"right">Description</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -50287,8 +50255,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">8:00:00 AM</td><td class=3D"right">9:30:00 AM</td><td>Work - C=
-SC/Disp</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled Work=
+gn=3D"right">8:00:00 AM</td><td class=3D"right">8:07:00 AM</td><td>Late</td=
+><td class=3D"right">0.12</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">8:07:00 AM</td><td class=3D"right">9:30:00 AM</td><td>Work - C=
+SC/Disp</td><td class=3D"right">1.38</td><td class=3D"right">Scheduled Work=
 </td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -50342,8 +50315,12 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work -=
- CSC/Disp</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wo=
+lign=3D"right">8:00:00 AM</td><td class=3D"right">8:15:00 AM</td><td>Late</=
+td><td class=3D"right">0.25</td><td class=3D"right">late, eta 8:15am </td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">8:15:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work -=
+ CSC/Disp</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled Wo=
 rk</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -50687,38 +50664,38 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">6:00:00 AM</td><td class=3D"right">7:45:00 AM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled =
-Work</td>
+lign=3D"right">6:00:00 AM</td><td class=3D"right">8:30:00 AM</td><td>Late</=
+td><td class=3D"right">2.50</td><td class=3D"right">arriving alte; eta 8:30=
+am</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">7:45:00 AM</td><td class=3D"right">8:00:00 AM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
+lign=3D"right">8:30:00 AM</td><td class=3D"right">8:45:00 AM</td><td>Late</=
+td><td class=3D"right">0.25</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 AM</td><td class=3D"right">9:00:00 AM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">1.00</td><td class=3D"right">Scheduled =
-Work</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:00:00 AM</td><td class=3D"right">9:30:00 AM</td><td>Lunch<=
-/td><td class=3D"right">0.50</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:30:00 AM</td><td class=3D"right">12:00:00 PM</td><td>Work =
-- CSS/Crisis</td><td class=3D"right">2.50</td><td class=3D"right">Scheduled=
+lign=3D"right">8:45:00 AM</td><td class=3D"right">10:00:00 AM</td><td>Work =
+- CSS/Crisis</td><td class=3D"right">1.25</td><td class=3D"right">Scheduled=
  Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">12:00:00 PM</td><td class=3D"right">12:15:00 PM</td><td>Brea=
+lign=3D"right">10:00:00 AM</td><td class=3D"right">10:15:00 AM</td><td>Brea=
 k</td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</=
 td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">12:15:00 PM</td><td class=3D"right">2:00:00 PM</td><td>Work =
-- CSS/Crisis</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled=
+lign=3D"right">10:15:00 AM</td><td class=3D"right">11:30:00 AM</td><td>Work=
+ - CSS/Crisis</td><td class=3D"right">1.25</td><td class=3D"right">Schedule=
+d Work</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">11:30:00 AM</td><td class=3D"right">12:00:00 PM</td><td>Lunc=
+h</td><td class=3D"right">0.50</td><td class=3D"right">Off phone interval</=
+td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">12:00:00 PM</td><td class=3D"right">2:00:00 PM</td><td>Work =
+- CSS/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled=
  Work</td>
 								</tr>
 							</tbody></table>
@@ -51289,28 +51266,28 @@ lign=3D"right">5:45:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Break<=
 >
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">6:00:00 PM</td><td class=3D"right">8:00:00 PM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled =
+lign=3D"right">6:00:00 PM</td><td class=3D"right">8:30:00 PM</td><td>Work -=
+ CSS/Crisis</td><td class=3D"right">2.50</td><td class=3D"right">Scheduled =
 Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 PM</td><td class=3D"right">8:30:00 PM</td><td>Lunch<=
+lign=3D"right">8:30:00 PM</td><td class=3D"right">9:00:00 PM</td><td>Lunch<=
 /td><td class=3D"right">0.50</td><td class=3D"right">Off phone interval</td=
 >
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:30:00 PM</td><td class=3D"right">10:30:00 PM</td><td>Work =
-- CSS/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled=
+lign=3D"right">9:00:00 PM</td><td class=3D"right">10:45:00 PM</td><td>Work =
+- CSS/Crisis</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled=
  Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:30:00 PM</td><td class=3D"right">10:45:00 PM</td><td>Brea=
+lign=3D"right">10:45:00 PM</td><td class=3D"right">11:00:00 PM</td><td>Brea=
 k</td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</=
 td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:45:00 PM</td><td class=3D"right">12:00:00 AM</td><td>Work=
- - CSS/Crisis</td><td class=3D"right">1.25</td><td class=3D"right">Schedule=
+lign=3D"right">11:00:00 PM</td><td class=3D"right">12:00:00 AM</td><td>Work=
+ - CSS/Crisis</td><td class=3D"right">1.00</td><td class=3D"right">Schedule=
 d Work</td>
 								</tr>
 							</tbody></table>
@@ -53860,18 +53837,18 @@ lign=3D"right">11:00:00 PM</td><td class=3D"right">12:45:00 AM</td><td>Work=
 ork</td>
 								</tr><tr>
 									<td>Sunday, 08 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">1:00:00 AM</td><td class=3D"right">3:45:00 AM</td><td>Work - C=
-SC/Pro</td><td class=3D"right">2.75</td><td class=3D"right">Scheduled Work<=
+gn=3D"right">1:00:00 AM</td><td class=3D"right">3:15:00 AM</td><td>Work - C=
+SC/Pro</td><td class=3D"right">2.25</td><td class=3D"right">Scheduled Work<=
 /td>
 								</tr><tr>
 									<td>Sunday, 08 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:15:00 AM</td><td class=3D"right">5:45:00 AM</td><td>Work - C=
-SC/Pro</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled Work<=
+gn=3D"right">3:45:00 AM</td><td class=3D"right">5:30:00 AM</td><td>Work - C=
+SC/Pro</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Work<=
 /td>
 								</tr><tr>
 									<td>Sunday, 08 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">6:00:00 AM</td><td class=3D"right">9:00:00 AM</td><td>Work - C=
-SC/Pro</td><td class=3D"right">3.00</td><td class=3D"right">Scheduled Work<=
+gn=3D"right">5:45:00 AM</td><td class=3D"right">9:00:00 AM</td><td>Work - C=
+SC/Pro</td><td class=3D"right">3.25</td><td class=3D"right">Scheduled Work<=
 /td>
 								</tr>
 							</tbody></table>
@@ -55935,8 +55912,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">7:00:00 PM</td><td class=3D"right">10:00:00 PM</td><td>Work =
-- CSC/Disp</td><td class=3D"right">3.00</td><td class=3D"right">Description=
+lign=3D"right">7:00:00 PM</td><td class=3D"right">7:36:00 PM</td><td>Late</=
+td><td class=3D"right">0.60</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">7:36:00 PM</td><td class=3D"right">10:00:00 PM</td><td>Work =
+- CSC/Disp</td><td class=3D"right">2.40</td><td class=3D"right">Description=
 </td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -56730,8 +56712,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">12:00:00 AM</td><td class=3D"right">1:45:00 AM</td><td>Work =
-- CIS/Pro</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wo=
+lign=3D"right">12:00:00 AM</td><td class=3D"right">12:17:00 AM</td><td>Late=
+</td><td class=3D"right">0.28</td><td class=3D"right">Created by soft check=
+in monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">12:17:00 AM</td><td class=3D"right">1:45:00 AM</td><td>Work =
+- CIS/Pro</td><td class=3D"right">1.47</td><td class=3D"right">Scheduled Wo=
 rk</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -60201,13 +60188,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">11:00:00 PM</td><td class=3D"right">1:30:00 AM</td><td>Work =
-- CSC/Chat</td><td class=3D"right">2.50</td><td class=3D"right">Description=
+lign=3D"right">11:00:00 PM</td><td class=3D"right">1:15:00 AM</td><td>Work =
+- CSC/Chat</td><td class=3D"right">2.25</td><td class=3D"right">Description=
 </td>
 								</tr><tr>
 									<td>Sunday, 08 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">1:45:00 AM</td><td class=3D"right">3:45:00 AM</td><td>Work - C=
-SC/Chat</td><td class=3D"right">2.00</td><td class=3D"right">Description</t=
+gn=3D"right">1:30:00 AM</td><td class=3D"right">3:45:00 AM</td><td>Work - C=
+SC/Chat</td><td class=3D"right">2.25</td><td class=3D"right">Description</t=
 d>
 								</tr><tr>
 									<td>Sunday, 08 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -61349,8 +61336,13 @@ lign=3D"right">5:15:00 AM</td><td class=3D"right">5:30:00 AM</td><td>Break<=
 /td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:00:00 PM</td><td class=3D"right">12:30:00 AM</td><td>Work=
- - CIS/Pro</td><td class=3D"right">2.50</td><td class=3D"right">Description=
+lign=3D"right">10:00:00 PM</td><td class=3D"right">10:13:00 PM</td><td>Late=
+</td><td class=3D"right">0.22</td><td class=3D"right">Created by soft check=
+in monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">10:13:00 PM</td><td class=3D"right">12:30:00 AM</td><td>Work=
+ - CIS/Pro</td><td class=3D"right">2.28</td><td class=3D"right">Description=
 </td>
 								</tr><tr>
 									<td>Sunday, 08 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -62354,19 +62346,8 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work -=
- CCS/Call</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wo=
-rk</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:45:00 AM</td><td class=3D"right">10:00:00 AM</td><td>Break=
-</td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</t=
-d>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:00:00 AM</td><td class=3D"right">11:00:00 AM</td><td>Work=
- - CCS/Call</td><td class=3D"right">1.00</td><td class=3D"right">Scheduled =
-Work</td>
+lign=3D"right">8:00:00 AM</td><td class=3D"right">11:00:00 AM</td><td>UTO</=
+td><td class=3D"right">3.00</td><td class=3D"right">Scheduled Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">11:00:00 AM</td><td class=3D"right">11:30:00 AM</td><td>Lunc=
@@ -62374,19 +62355,8 @@ h</td><td class=3D"right">0.50</td><td class=3D"right">Off phone interval</=
 td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">11:30:00 AM</td><td class=3D"right">2:00:00 PM</td><td>Work =
-- CCS/Call</td><td class=3D"right">2.50</td><td class=3D"right">Scheduled W=
-ork</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:00:00 PM</td><td class=3D"right">2:15:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:15:00 PM</td><td class=3D"right">4:00:00 PM</td><td>Work -=
- CCS/Call</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wo=
-rk</td>
+lign=3D"right">11:30:00 AM</td><td class=3D"right">4:00:00 PM</td><td>UTO</=
+td><td class=3D"right">4.50</td><td class=3D"right">Scheduled Work</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -64534,8 +64504,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">12:00:00 AM</td><td class=3D"right">2:15:00 AM</td><td>Work =
-- CSC/Pro</td><td class=3D"right">2.25</td><td class=3D"right">Description<=
+lign=3D"right">12:00:00 AM</td><td class=3D"right">12:11:00 AM</td><td>Late=
+</td><td class=3D"right">0.18</td><td class=3D"right">Created by soft check=
+in monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">12:11:00 AM</td><td class=3D"right">2:15:00 AM</td><td>Work =
+- CSC/Pro</td><td class=3D"right">2.07</td><td class=3D"right">Description<=
 /td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -64780,8 +64755,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">8:00:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work - C=
-IS/Pro</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Work<=
+gn=3D"right">8:00:00 AM</td><td class=3D"right">8:10:00 AM</td><td>Late</td=
+><td class=3D"right">0.17</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">8:10:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work - C=
+IS/Pro</td><td class=3D"right">1.58</td><td class=3D"right">Scheduled Work<=
 /td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -64835,19 +64815,8 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work -=
- CIS/Pro</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wor=
-k</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:45:00 AM</td><td class=3D"right">10:00:00 AM</td><td>Break=
-</td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</t=
-d>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">10:00:00 AM</td><td class=3D"right">11:30:00 AM</td><td>Work=
- - CIS/Pro</td><td class=3D"right">1.50</td><td class=3D"right">Scheduled W=
-ork</td>
+lign=3D"right">8:00:00 AM</td><td class=3D"right">11:30:00 AM</td><td>FMLA<=
+/td><td class=3D"right">3.50</td><td class=3D"right">Scheduled Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">11:30:00 AM</td><td class=3D"right">12:00:00 PM</td><td>Lunc=
@@ -64855,19 +64824,8 @@ h</td><td class=3D"right">0.50</td><td class=3D"right">Off phone interval</=
 td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">12:00:00 PM</td><td class=3D"right">2:00:00 PM</td><td>Work =
-- CIS/Pro</td><td class=3D"right">2.00</td><td class=3D"right">Scheduled Wo=
-rk</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:00:00 PM</td><td class=3D"right">2:15:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">Off phone interval</td=
->
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">2:15:00 PM</td><td class=3D"right">4:00:00 PM</td><td>Work -=
- CIS/Pro</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wor=
-k</td>
+lign=3D"right">12:00:00 PM</td><td class=3D"right">4:00:00 PM</td><td>FMLA<=
+/td><td class=3D"right">4.00</td><td class=3D"right">Scheduled Work</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -67556,8 +67514,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">7:00:00 AM</td><td class=3D"right">8:45:00 AM</td><td>Work -=
- CSS/Crisis</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled =
+lign=3D"right">7:00:00 AM</td><td class=3D"right">7:05:00 AM</td><td>Late</=
+td><td class=3D"right">0.08</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">7:05:00 AM</td><td class=3D"right">8:45:00 AM</td><td>Work -=
+ CSS/Crisis</td><td class=3D"right">1.67</td><td class=3D"right">Scheduled =
 Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -67814,8 +67777,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">4:00:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Work - C=
-IS/Pro</td><td class=3D"right">2.00</td><td class=3D"right">Description</td=
+gn=3D"right">4:00:00 PM</td><td class=3D"right">4:13:00 PM</td><td>Late</td=
+><td class=3D"right">0.22</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">4:13:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Work - C=
+IS/Pro</td><td class=3D"right">1.78</td><td class=3D"right">Description</td=
 >
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -67872,8 +67840,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:00:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Work -=
- CIS/Pro</td><td class=3D"right">2.00</td><td class=3D"right">Description</=
+lign=3D"right">4:00:00 PM</td><td class=3D"right">4:14:00 PM</td><td>Late</=
+td><td class=3D"right">0.23</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">4:14:00 PM</td><td class=3D"right">6:00:00 PM</td><td>Work -=
+ CIS/Pro</td><td class=3D"right">1.77</td><td class=3D"right">Description</=
 td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -68639,36 +68612,16 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">4:00:00 PM</td><td class=3D"right">5:30:00 PM</td><td>Work -=
- CCS/Chat</td><td class=3D"right">1.50</td><td class=3D"right">Description<=
-/td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">5:30:00 PM</td><td class=3D"right">5:45:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">5:45:00 PM</td><td class=3D"right">7:30:00 PM</td><td>Work -=
- CCS/Chat</td><td class=3D"right">1.75</td><td class=3D"right">Description<=
-/td>
+lign=3D"right">4:00:00 PM</td><td class=3D"right">7:30:00 PM</td><td>UTO</t=
+d><td class=3D"right">3.50</td><td class=3D"right">Description</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
 lign=3D"right">7:30:00 PM</td><td class=3D"right">8:00:00 PM</td><td>Lunch<=
 /td><td class=3D"right">0.50</td><td class=3D"right">&nbsp;</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 PM</td><td class=3D"right">9:30:00 PM</td><td>Work -=
- CCS/Chat</td><td class=3D"right">1.50</td><td class=3D"right">Description<=
-/td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:30:00 PM</td><td class=3D"right">9:45:00 PM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">9:45:00 PM</td><td class=3D"right">12:00:00 AM</td><td>Work =
-- CCS/Chat</td><td class=3D"right">2.25</td><td class=3D"right">Description=
-</td>
+lign=3D"right">8:00:00 PM</td><td class=3D"right">12:00:00 AM</td><td>UTO</=
+td><td class=3D"right">4.00</td><td class=3D"right">Description</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -68919,8 +68872,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">12:00:00 AM</td><td class=3D"right">2:45:00 AM</td><td>Work =
-- CIS/Pro</td><td class=3D"right">2.75</td><td class=3D"right">Description<=
+lign=3D"right">12:00:00 AM</td><td class=3D"right">12:17:00 AM</td><td>Late=
+</td><td class=3D"right">0.28</td><td class=3D"right">Created by soft check=
+in monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">12:17:00 AM</td><td class=3D"right">2:45:00 AM</td><td>Work =
+- CIS/Pro</td><td class=3D"right">2.47</td><td class=3D"right">Description<=
 /td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -69303,8 +69261,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">8:00:00 AM</td><td class=3D"right">10:00:00 AM</td><td>Work - =
-CSC/Crisis</td><td class=3D"right">2.00</td><td class=3D"right">Description=
+gn=3D"right">8:00:00 AM</td><td class=3D"right">8:07:00 AM</td><td>Late</td=
+><td class=3D"right">0.12</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">8:07:00 AM</td><td class=3D"right">10:00:00 AM</td><td>Work - =
+CSC/Crisis</td><td class=3D"right">1.88</td><td class=3D"right">Description=
 </td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -69829,36 +69792,16 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">9:00:00 AM</td><td class=3D"right">10:45:00 AM</td><td>Work - =
-CIS/Disp</td><td class=3D"right">1.75</td><td class=3D"right">Description</=
-td>
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">10:45:00 AM</td><td class=3D"right">11:00:00 AM</td><td>Break<=
-/td><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">11:00:00 AM</td><td class=3D"right">12:30:00 PM</td><td>Work -=
- CIS/Disp</td><td class=3D"right">1.50</td><td class=3D"right">Description<=
-/td>
+gn=3D"right">9:00:00 AM</td><td class=3D"right">12:30:00 PM</td><td>UTO</td=
+><td class=3D"right">3.50</td><td class=3D"right">Description</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
 gn=3D"right">12:30:00 PM</td><td class=3D"right">1:00:00 PM</td><td>Lunch</=
 td><td class=3D"right">0.50</td><td class=3D"right">&nbsp;</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">1:00:00 PM</td><td class=3D"right">3:00:00 PM</td><td>Work - C=
-IS/Disp</td><td class=3D"right">2.00</td><td class=3D"right">Description</t=
-d>
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">3:00:00 PM</td><td class=3D"right">3:15:00 PM</td><td>Break</t=
-d><td class=3D"right">0.25</td><td class=3D"right">&nbsp;</td>
-								</tr><tr>
-									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">3:15:00 PM</td><td class=3D"right">5:00:00 PM</td><td>Work - C=
-IS/Disp</td><td class=3D"right">1.75</td><td class=3D"right">Description</t=
-d>
+gn=3D"right">1:00:00 PM</td><td class=3D"right">5:00:00 PM</td><td>UTO</td>=
+<td class=3D"right">4.00</td><td class=3D"right">Description</td>
 								</tr>
 							</tbody></table>
 						</div>																		=09
@@ -71607,8 +71550,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
-gn=3D"right">8:00:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work - C=
-IS/Crisis</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled Wo=
+gn=3D"right">8:00:00 AM</td><td class=3D"right">8:07:00 AM</td><td>Late</td=
+><td class=3D"right">0.12</td><td class=3D"right">Created by soft checkin m=
+onitor</td>
+								</tr><tr>
+									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
+gn=3D"right">8:07:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work - C=
+IS/Crisis</td><td class=3D"right">1.63</td><td class=3D"right">Scheduled Wo=
 rk</td>
 								</tr><tr>
 									<td>Friday, 06 November 2026</td><td class=3D"wfmsg-tiny-text" ali=
@@ -71661,8 +71609,13 @@ ol">Start Time</th><th class=3D"right" scope=3D"col">End Time</th><th scope=
 ><th class=3D"right" scope=3D"col">Description</th>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
-lign=3D"right">8:00:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work -=
- CIS/Crisis</td><td class=3D"right">1.75</td><td class=3D"right">Scheduled =
+lign=3D"right">8:00:00 AM</td><td class=3D"right">8:06:00 AM</td><td>Late</=
+td><td class=3D"right">0.10</td><td class=3D"right">Created by soft checkin=
+ monitor</td>
+								</tr><tr>
+									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
+lign=3D"right">8:06:00 AM</td><td class=3D"right">9:45:00 AM</td><td>Work -=
+ CIS/Crisis</td><td class=3D"right">1.65</td><td class=3D"right">Scheduled =
 Work</td>
 								</tr><tr>
 									<td>Saturday, 07 November 2026</td><td class=3D"wfmsg-tiny-text" a=
@@ -71765,7 +71718,7 @@ px;">
 <div id=3D"tiptip_holder" style=3D"max-width:200px;"><div id=3D"tiptip_arro=
 w"><div id=3D"tiptip_arrow_inner"></div></div><div id=3D"tiptip_content"></=
 div></div></body></html>
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: image/png
 Content-Transfer-Encoding: base64
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/Images/icons/m/white/64/Menu.png
@@ -71779,7 +71732,7 @@ fT8hDlNK02H3nyPXjlyfiE1icUA8sJjV5xLI+YvhLJVSliR/NG5roQhvUYBvCjCpe3LiK9DXuaRM
 OAzNiAvmpxwOZO4JMsRBqI2W2DWJXw5PxFCIRRTgQ+XN/0UBtu4J1lFW9ARf6lwOua+jJ3jLJFpE
 Usg5rgW2v9flp0Rcl5e5M0y+zznn97o0MzMzOU3zAwB5or53DvxOAAAAAElFTkSuQmCC
 
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: img/png
 Content-Transfer-Encoding: base64
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/WebResource.axd?d=fcol6s44we-2njW_vE1akM0ySZWX_aKRqjMVtWsDq_I4GZb4i1M6aPouu5S9uOEcTbNou-mZGfH3g_WXCUtkxcOKoPKC7dvdsV0rFwTlT2-hUamQ2zfocxi_cin4ZsysYLUE4HhVwpo5pKYQuuFE3lQ7A2eRrd28NKos2KUdl6XdY9fTFb70RuEXN8VaFE8k3Sb-3rSc0dWWCCi5e4tGymYRLSE1&t=638976044740000000
@@ -71790,7 +71743,7 @@ cwAAHsIAAB7CAW7QdT4AAAAEZ0FNQQAAsY8L/GEFAAAAWklEQVR42u3PAQ3AIADAMI4lbN7ONd0G
 MlhIp2B93u9f44Lm6QEQkHggtUBqgdQCqQVSC6QWSC2QWiC1QGqB1AKpBVILpBZILZBaILVAaoHU
 AqkFUguk1jWQDUsBAr//SxRfAAAAAElFTkSuQmCC
 
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: img/gif
 Content-Transfer-Encoding: base64
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/WebResource.axd?d=aAqekCj0NkYcCJ9i3ugutOEYjYWiMXnEkTc6WZj8X2oiGeNNSBOi6KZZIXF6lPs7apCSr-9TsoHu42bxIkR0d6wHCHFINLYjclPIGK8ZCWnV1k348EKMSvEO6B-XgzZ_O18FRC2mCV8V5Rzaut2OEh0_cb3X8saYcR2P3ac3DVPERzzyBBdeKn2lksaphf_igMCBOpSOmmKy3CJ6MYYSj7G0G4k1&t=638976044740000000
@@ -71870,7 +71823,7 @@ DUq3glYWOBgAcEmUaNI+DBjwAY+dS0USGJg4wABEXMYyJNvE8UOGISKVCNClah4xjg60WUKyINOC
 UwrMzVRARMGENWQ4n/jpNTKTm15J/CTK2e0MoD+UKmHEs4onVDVVmyqdpAbNR4cKTjqNSots07Ej
 zzJh1S0IADsAAAAAAAAAAAA=
 
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/WebResource.axd?d=jl3b_HBl-aZrlJTTWcSHkXo3OKTVqtbLDrwuWdAwxMfXrYA7LH-jki81gBHafQ8ai1b0ojYsLcnFR40UKDB9ryqSfdw3n5CK_LBbbFOlt1M_JqgmJQ7lEG1Ib3_U794qCZxwBDsuRX7ytQQbY-pCJ6LqvX_Z6NKwTyTpIb9CV3pissSB0eEc1jfxta31ppxk3HtpaMXUxXDKuemAK2k7V3TiEfY1&t=638976044740000000
@@ -72264,7 +72217,7 @@ or: rgb(66, 66, 66); }
 
 .wfmsg-context-menu-source { outline: rgb(1, 88, 131) solid 1px; z-index: 9=
 998; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/WebResource.axd?d=zNFoiF7Sv5-XH65SnQbgJ4K4L04wRsfFv_G3AAVwTaUSREtD19-2kmxoGmkbL94Lqm24JZ4mA6Z3p_RIWazMvbtFO0v2R_--RvIzxoWP37WqUQ8K2hHfA2ZibzH8G0Lbb9lmDZ29qV5dFqFcmoBoWvho52RTFKVStNQi7tqysl-fzn4k8iE1j3qHzunR8Z7euU7tXQ2&t=638976041420000000
@@ -72421,7 +72374,7 @@ t: -5px; border-right-color: rgba(25, 25, 25, 0.92); }
   #tiptip_holder.tip_top #tiptip_arrow_inner { border-top-color: rgba(20, 2=
 0, 20, 0.92); }
 }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/App_Themes/Five9/styles.css
@@ -73011,7 +72964,7 @@ lor: rgb(68, 68, 68); border-color: rgb(238, 238, 238) !important; }
 
 #licenseBadMessage, #licenseGoodMessage, #actualLicensesRemainingContainer,=
  #actualLicenseCountContainer { display: none !important; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/css/editions/5541b32d-f559-40f3-b567-bc9e8f77fe07.css
@@ -73033,7 +72986,7 @@ g") 0% 0% / 283px 50px no-repeat; }
 
 .wfmsg-welcome-title { background-image: linear-gradient(to right bottom, r=
 gb(253, 183, 19), rgb(247, 146, 29)); }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/ScriptLibrary/wfmsg.ui/wfmsg.ui.export.css
@@ -73077,7 +73030,7 @@ div.wfmsg-export-menu-spacer { height: 20px; display: block; width: 100%; }
 .wfmsg-export-important { }
 
 .dovebar.wfmsg-export-menu { top: 0px; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/ScriptLibrary/jquery.zebra-datepicker/css/bootstrap.css
@@ -73172,7 +73125,7 @@ abled.png"); }
 button.Zebra_DatePicker_Icon { margin: 0px 0px 0px 3px; }
 
 button.Zebra_DatePicker_Icon_Inside { margin: 0px 3px 0px 0px; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/css/WFMSGElementStyles.css
@@ -73187,7 +73140,7 @@ idth: 250px; }
 .EventTypeUserInputPanel { height: 323px; }
 
 .EventTypeAgentAssignmentPanel { height: 500px; overflow: auto; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/css/wfmsg-theme-core.css
@@ -73379,7 +73332,7 @@ input[type=3D"text"], input[type=3D"password"], textarea, select { border: =
 { text-decoration: none; color: rgb(1, 88, 131); }
 
 a:hover { color: red; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/css/wfmsg-ui.css
@@ -73465,7 +73418,7 @@ x; padding-right: 2px; }
  32px; border-top-left-radius: 5px; border-top-right-radius: 5px; }
 
 .wfmsg-square { border-radius: unset; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/css/wfmsg-metro.css
@@ -73897,7 +73850,7 @@ le { float: none; margin-left: auto; margin-right: auto; }
 
 .halo.wfmsg-round-tile .tile-content { height: 80%; width: 80%; background-=
 color: white; margin-left: 10%; margin-top: 10%; border-radius: 50%; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&display=swap
@@ -74733,7 +74686,7 @@ roboto/v51/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2") format("woff2"); =
 unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+=
 304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2=
 215, U+FEFF, U+FFFD; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/css/WFMSGStyles.css
@@ -75992,7 +75945,7 @@ er-bottom-right-radius: 10px; }
 .bold.wfmsg-validation-text { font-weight: bold; }
 
 .wfmsg-invalid-text { text-decoration: line-through; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/css/jquery.ui/jquery-ui-1.12.1.css
@@ -76946,7 +76899,7 @@ bottom-left-radius: 4px; }
 6_40x40.png") 50% 50% repeat rgb(102, 102, 102); opacity: 0.5; }
 
 .ui-widget-shadow { box-shadow: rgb(0, 0, 0) -5px -5px 5px; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
 Content-Location: https://cloud1756.wfo.five9.com/CommunityWeb/UI/css/bootstrap/bootstrap.min.css
@@ -77008,12 +76961,12 @@ right-width: 0px; border-left-color: rgba(0, 0, 0, 0.25); }
 
 .popover.left > .arrow::after { right: 1px; bottom: -10px; content: " "; bo=
 rder-right-width: 0px; border-left-color: rgb(255, 255, 255); }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o----
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz----
 Content-Type: text/css
 Content-Transfer-Encoding: quoted-printable
-Content-Location: cid:css-c8524f8b-0b4e-4095-8079-2d1ddca7b546@mhtml.blink
+Content-Location: cid:css-ac80a0e5-56f3-4454-965a-581702dcdddc@mhtml.blink
 
 @charset "utf-8";
 
 body { background-color: white; }
-------MultipartBoundary--dPPsoJc0yke6Bz5gWutmUYTSQgSEsIRD4fAO8hF85o------
+------MultipartBoundary--fS7940oQNE2d2DXX9h74eR44jY8jUFK7K6piPDrxWz------
